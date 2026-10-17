@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四科路线图</title>
+<style>
+:root{
+  --bg:#fbfaf7; --fg:#1f2328; --muted:#6b7280; --line:#e5e0d8; --card:#fff;
+  --accent:#8a5a2b; --accent2:#c9a227; --code:#f4f1ea; --mark:#ffe9a8;
+  --side:#f5f2ec;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#15171a; --fg:#e6e3dd; --muted:#9aa3ad; --line:#2b2f35; --card:#1c1f24;
+         --accent:#e0b072; --accent2:#d4b445; --code:#22262c; --mark:#5a4a10; --side:#1a1d21; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.75 -apple-system,"Segoe UI","Noto Sans SC","Microsoft YaHei",sans-serif;}
+#bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;z-index:90;transition:width .1s}
+header{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;gap:12px;
+  padding:0 18px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);z-index:80}
+#menu{display:none;background:none;border:1px solid var(--line);border-radius:8px;color:var(--fg);
+  font-size:18px;padding:2px 10px;cursor:pointer}
+header h1{font-size:15px;margin:0;font-weight:650;letter-spacing:.02em;white-space:nowrap}
+#q{flex:1;max-width:420px;margin-left:auto;padding:7px 12px;border-radius:9px;border:1px solid var(--line);
+  background:var(--card);color:var(--fg);font-size:14px;outline:none}
+#q:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+#hits{position:absolute;top:52px;right:18px;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;max-height:60vh;overflow:auto;width:min(460px,90vw);display:none;z-index:85;
+  box-shadow:0 12px 32px rgba(0,0,0,.14)}
+#hits a{display:block;padding:8px 13px;text-decoration:none;color:var(--fg);font-size:13.5px;border-bottom:1px solid var(--line)}
+#hits a:hover{background:var(--side)}
+#hits .sec{color:var(--muted);font-size:11px;margin-right:6px}
+#wrap{display:flex;padding-top:56px}
+nav{position:fixed;top:56px;bottom:0;width:290px;overflow-y:auto;background:var(--side);
+  border-right:1px solid var(--line);padding:16px 10px 60px}
+nav .grp{margin-bottom:6px}
+nav .grp>a{display:block;font-weight:650;font-size:13.5px;color:var(--fg);text-decoration:none;
+  padding:6px 8px;border-radius:7px}
+nav .grp>a:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+nav .sub a{display:block;font-size:12.8px;color:var(--muted);text-decoration:none;padding:3px 8px 3px 20px;
+  border-radius:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav .sub a:hover,nav .sub a.on{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+main{margin-left:290px;max-width:1000px;padding:22px 40px 120px;width:100%}
+h2{font-size:1.55em;margin:2.2em 0 .7em;padding-bottom:.28em;border-bottom:1px solid var(--line)}
+h3{font-size:1.2em;margin:1.7em 0 .5em}
+h4{font-size:1.04em;margin:1.4em 0 .4em}
+h2:first-child,h1:first-child{margin-top:.2em}
+h1,h2,h3,h4{line-height:1.4;scroll-margin-top:70px}
+h1{font-size:1.9em;margin:1.2em 0 .6em}
+.anchor{opacity:0;margin-left:8px;color:var(--accent);font-weight:400;text-decoration:none;font-size:.72em}
+h1:hover .anchor,h2:hover .anchor,h3:hover .anchor,h4:hover .anchor{opacity:.6}
+p{margin:.6em 0}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 34%,transparent)}
+a:hover{border-bottom-color:var(--accent)}
+strong{font-weight:680}
+hr{border:0;border-top:1px solid var(--line);margin:2em 0}
+blockquote{margin:1em 0;padding:.7em 1em;border-left:3px solid var(--accent2);
+  background:color-mix(in srgb,var(--accent2) 7%,var(--card));border-radius:0 9px 9px 0}
+blockquote p{margin:.35em 0}
+blockquote blockquote{background:color-mix(in srgb,var(--accent2) 10%,var(--card))}
+blockquote.callout{padding:.5em .9em}
+.tw{overflow-x:auto;margin:1em 0;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:14.4px}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:color-mix(in srgb,var(--accent) 8%,var(--card));font-weight:660;position:sticky;top:0;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:color-mix(in srgb,var(--accent) 4%,transparent)}
+code{background:var(--code);padding:1.5px 5px;border-radius:5px;font-size:.9em;
+  font-family:"Cascadia Code",Consolas,monospace}
+pre.code{background:var(--code);padding:14px 16px;border-radius:10px;overflow-x:auto;margin:1em 0;
+  border:1px solid var(--line)}
+pre.code code{background:none;padding:0;font-size:13.5px;line-height:1.6}
+ul,ol{margin:.5em 0;padding-left:1.5em}
+li{margin:.22em 0}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 2px}
+#top{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;display:none;
+  align-items:center;justify-content:center;background:var(--card);border:1px solid var(--line);
+  color:var(--accent);font-size:18px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.13);z-index:70}
+.tag{display:inline-block;font-size:11px;color:var(--muted);border:1px solid var(--line);
+  border-radius:20px;padding:0 8px;margin-left:8px}
+@media(max-width:900px){
+  #menu{display:block}
+  nav{transform:translateX(-100%);transition:transform .2s;z-index:86;width:270px}
+  nav.open{transform:none}
+  main{margin-left:0;padding:18px 18px 100px}
+  header h1{font-size:13px}
+  #q{max-width:150px}
+  th{white-space:normal}
+}
+</style></head><body>
+<div id="bar"></div>
+<header>
+  <button id="menu" aria-label="目录">☰</button>
+  <h1>四科路线图<span class="tag" id="meta"></span></h1>
+  <input id="q" placeholder="搜索全文… (Ctrl+K)" autocomplete="off">
+  <div id="hits"></div>
+</header>
+<div id="wrap">
+<nav id="nav"></nav>
+<main id="main"><h1 id="四科路线图">四科路线图<a class="anchor" href="#四科路线图" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><h2 id="2026-10-16-追加的重大修正-你的四科不是并列的">⚠️ 2026-10-16 追加的重大修正：<strong>你的四科不是并列的</strong><a class="anchor" href="#2026-10-16-追加的重大修正-你的四科不是并列的" aria-hidden="true">#</a></h2>
+<p>你说明了真实意图：<strong>打算报考数学专业</strong>，数学与逻辑都是要深入的方向， <strong>计算机与语言学是"学有余力"</strong>；且<strong>不在意应试体系，以素养提升为主</strong>。</p>
+<p>这推翻了本文初稿的一个默认前提——<strong>我把数学放在"支撑位"，那是错的</strong>：</p>
+<div class="tw"><table><thead><tr><th>科</th><th><strong>修正后的定位</strong></th><th>原稿的定位</th></tr></thead><tbody><tr><td><strong>数学</strong></td><td><strong>主科</strong>（独立，不是逻辑的附庸）</td><td>❌ 支撑位</td></tr><tr><td><strong>逻辑</strong></td><td><strong>主科</strong></td><td>✔ 主干</td></tr><tr><td><strong>计算机</strong></td><td>支线（<strong>且你说的"对就业有帮助"是另一条路</strong>）</td><td>✔ 主干之一</td></tr><tr><td><strong>语言学</strong></td><td>支线</td><td>✔ 主干之一</td></tr></tbody></table></div>
+<h3 id="两件随之而来的事">两件随之而来的事<a class="anchor" href="#两件随之而来的事" aria-hidden="true">#</a></h3>
+<p><strong>① 深度与标记已并入本文</strong>（附录 F）——每条线现在停在哪一层（D0–D6）、 想深入时接什么、【铺】的标记、三条「回来信号」，全都在那里。 <strong>你说"未来会忘记自己需要什么"——那一部分就是为这个写的。</strong></p>
+<p><strong>② 本文仍有用，但角色变了</strong>：它是<strong>长期素养视野</strong>，不是考研计划。 数学专业的<strong>课程骨架</strong>（分析／代数／几何拓扑）已补进<strong>附录 A</strong>， 那里按<strong>真知识</strong>排，不按考纲。</p>
+<p>⚠️ <strong>诚实提醒</strong>：素养路线<strong>能覆盖</strong>考研内容，只是<strong>覆盖得慢</strong>。 你说后年或更晚再考、且以素养为主——时间够。 <strong>若时间提前，需要重新取舍。</strong></p></blockquote>
+<blockquote class="quote"><h2 id="再往前-三处我在初稿里说错的地方">⚠️ 再往前：三处我在初稿里说错的地方<a class="anchor" href="#再往前-三处我在初稿里说错的地方" aria-hidden="true">#</a></h2>
+<p>你睡着后我又做了三轮深度核实（三个独立代理，实际下载 PDF、抓取页面、调用 API）。 <strong>它们推翻了我初稿里的几处判断</strong>：</p>
+<div class="tw"><table><thead><tr><th>#</th><th>我原先说</th><th>实际是</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>路径把 <strong>Velleman 放最后</strong>是设计错误（我说对了）</td><td>但<strong>漏了更重要的一点</strong>：<strong>Leary &amp; Kristiansen《A Friendly Introduction to Mathematical Logic》</strong> 才是最适合当<strong>第一本元逻辑</strong>的书——<strong>免费、有题、大部分有答案</strong>，Smith 亲口说新版加了 75 页解答"makes the book even more suitable for self-study"</td></tr><tr><td><strong>2</strong></td><td><strong>Partee《Mathematical Methods in Linguistics》</strong> 是参考手册（我说对了）</td><td>但同一批里 <strong>Chang &amp; Keisler 不是手册</strong>——<strong>Peter Smith 把它当作模型论第一本</strong>，说它"proceeds at an engagingly leisurely pace... still remains a good route in"。我把 Marker 当第一本是<strong>错的顺序</strong></td></tr><tr><td><strong>3</strong></td><td><strong>Winter《Elements of Formal Semantics》</strong> 副标题写错、且<strong>只有第 1–3 章开放获取</strong>（不是全书免费）</td><td>更要紧：<strong>Heim &amp; Kratzer 没有答案，网上也没有</strong>（有人专门提问，零回答）。<strong>语言学这一科的答案缺口比我说的更严重</strong></td></tr></tbody></table></div>
+<h3 id="还有两条你没问但对你最有用的发现">还有两条<strong>你没问但对你最有用</strong>的发现<a class="anchor" href="#还有两条你没问但对你最有用的发现" aria-hidden="true">#</a></h3>
+<p><strong>A. 你正在读的 Smith，答案就在网上，而且是免费的。</strong> <a href="https://logicmatters.net/ifl/" target="_blank" rel="noopener">logicmatters.net/ifl</a> 有 IFL 2nd ed 的<strong>修正版免费 PDF</strong>，以及<strong>逐章习题与详解答</strong>。 你前面 432 道题是自己做的——<strong>如果有答案对照，效率会高一档。</strong></p>
+<p><strong>B. 有一条「有逻辑基础、语言学零基础」的桥，我原先完全不知道：</strong> <a href="http://www.christopherpotts.net/ling/teaching/lsa108P/" target="_blank" rel="noopener">Chris Potts《Logic for Linguists》</a> —— <strong>60 道题 + 作者自己的答案</strong>，内容正是 λ 演算与内涵性预备。</p>
+<p>详细的核实报告在：[_verify_logic/逻辑学自学路径_书目核实报告.md](_verify_logic/逻辑学自学路径_书目核实报告.md)（44 KB） 与 [形式语义学与语言学_材料核实报告.md](形式语义学与语言学_材料核实报告.md)（59 KB）</p></blockquote>
+<blockquote class="quote"><p><strong>标注约定</strong> <code>✔</code> = 已联网核实 · <code>△</code> = 搜索确认存在但未逐项核实 · <code>?</code> = 待核实 📝 = 有习题 · ✅ = 有答案或公开解答 · 🇨🇳 = 有中文材料</p></blockquote>
+<blockquote class="quote"><h3 id="你主要看这三部分2026-10-16-你说会主要看这些">🔖 你主要看这三部分（2026-10-16 你说会主要看这些）<a class="anchor" href="#你主要看这三部分2026-10-16-你说会主要看这些" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>你主要看</th><th>在哪</th><th>为什么</th></tr></thead><tbody><tr><td><strong>① 时间轴</strong></td><td><strong>第一部分</strong></td><td>逐季安排 + <strong>每季打开哪些门</strong>（1.2 深入索引）</td></tr><tr><td><strong>② 怎么维护</strong></td><td><strong>第二部分</strong></td><td>你说一句，我改哪里</td></tr><tr><td><strong>③ 里程碑系统</strong></td><td><strong>第三部分</strong></td><td>五个标志性里程碑 + 三种里程碑</td></tr></tbody></table></div>
+<p><strong>其余是「需要时查」</strong>，不必通读：</p>
+<div class="tw"><table><thead><tr><th>附录</th><th>内容</th><th>什么时候查</th></tr></thead><tbody><tr><td><strong>F</strong></td><td><strong>深度地图 + 深入方向</strong>（每线在哪层、【铺】标记、三条「回来信号」、研究方向入口）</td><td>想深入某方向时</td></tr><tr><td><strong>A</strong></td><td><strong>数学骨架书单</strong>（七门骨架课；含你已有的 Amann 三卷）</td><td>换书 / 选书时</td></tr><tr><td><strong>B</strong></td><td><strong>七层判据</strong>（每层怎么测 + 什么时候能进下一阶段 + 四种「假进步」）</td><td>不确定自己水平时</td></tr><tr><td>C</td><td>选书铁律 + 「参考手册 ≠ 教科书」的警告</td><td>选书时</td></tr><tr><td>D</td><td>没有答案时怎么办</td><td>遇到没答案的书时</td></tr><tr><td>E</td><td>风险与应对</td><td>卡住时</td></tr><tr><td>G / H</td><td>核实状态 · 诚实声明</td><td>想查某个结论的依据时</td></tr><tr><td><strong>I</strong></td><td>框架（为什么这四科是一个知识体）</td><td>想看"为什么这样设计"时</td></tr></tbody></table></div>
+<h3 id="这个对话怎么用2026-10-16-定">这个对话怎么用（2026-10-16 定）<a class="anchor" href="#这个对话怎么用2026-10-16-定" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>事项</th><th>在哪里</th></tr></thead><tbody><tr><td><strong>更新学习路线</strong></td><td><strong>就在这个对话</strong>（说「更新深度地图」或「我要铺开 X」）</td></tr><tr><td><strong>做习题</strong></td><td><strong>你自己做</strong>；做完想讨论时再来找我</td></tr><tr><td>其余两份 markdown</td><td>[<code>研究档案-口令便签.md</code>](研究档案-口令便签.md)（你的口令）· <code>工作区清单.md</code>（<strong>给我读的工具清单</strong>，你不必看）</td></tr><tr><td>两份原始核实报告</td><td>[_verify_logic/](_verify_logic/) · [形式语义学与语言学_材料核实报告.md](形式语义学与语言学_材料核实报告.md)（<strong>供查证，平时不必读</strong>）</td></tr></tbody></table></div>
+<p><strong>⇒ 不需要再开新对话。</strong> 这份文件是活的，每次回来我改它，不改开新的。</p></blockquote>
+<hr>
+<hr>
+<h1 id="第一部分-时间轴">第一部分 · 时间轴<a class="anchor" href="#第一部分-时间轴" aria-hidden="true">#</a></h1>
+<h2 id="1-1-刻度与节奏">1.1 刻度与节奏<a class="anchor" href="#1-1-刻度与节奏" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>选择</th><th>理由</th></tr></thead><tbody><tr><td><strong>季度（3 个月）为刻度</strong></td><td>按"月"数学书读不了一章；按"年"看不见进度</td></tr><tr><td><strong>一季一本主书（上限）</strong></td><td>这是上限不是目标</td></tr><tr><td><strong>每季最多一主科 + 一副科</strong></td><td>防止四科失控</td></tr><tr><td><strong>每 4 季留 1 季缓冲</strong></td><td>不写缓冲 = 计划必然失败</td></tr></tbody></table></div>
+<p><strong>命名</strong>：<code>Y1Q1</code> = 第 1 年第 1 季。</p>
+<h3 id="1-1-1-主科-vs-副科-时间怎么分你-2026-10-16-的问题">1.1.1 主科 vs 副科：时间怎么分（<strong>你 2026-10-16 的问题</strong>）<a class="anchor" href="#1-1-1-主科-vs-副科-时间怎么分你-2026-10-16-的问题" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>你说</strong>：「一季一本主书（上限）是不是意味着我最好集中精力掌握最主要的， 副科做一下复习或简单了解一下就可以？毕竟人的时间精力是有限的。」</p>
+<p><strong>对，但"副科"要分四类——不是都一样。</strong></p></blockquote>
+<div class="tw"><table><thead><tr><th>类型</th><th>例子</th><th>该怎么待它</th></tr></thead><tbody><tr><td><strong>A. 会融入主科的</strong></td><td><strong>计算机</strong>：Lean 4 / 类型论 / 可计算性</td><td><strong>不用单独分配时间</strong>——主科走到那一步时，这扇门<strong>自己就开了</strong>（那是五个汇合点的意义）</td></tr><tr><td><strong>B. 完全独立的手艺</strong></td><td><strong>编程 / 就业线</strong></td><td><strong>与理论路线无关</strong>，单独安排，<strong>别混进时间轴</strong></td></tr><tr><td><strong>C. 主科的真正前置</strong></td><td>数学分析之于拓扑；交换代数之于代数几何</td><td>⚠️ <strong>这一类别"轻轻带过"</strong>——它是前置，不是副科</td></tr><tr><td><strong>D. 保持接触就行的</strong></td><td><strong>语言学</strong>（对你）</td><td><strong>"了解"级别正确</strong>：知道它在问什么、读得懂术语即可</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 只有 D 类该"轻轻带过"</strong>：A 类不用管它（会自己汇合）； B 类放进另一条路；<strong>C 类不能轻</strong>（轻了主科会塌）。</p></blockquote>
+<h3 id="1-1-2-一季一本限的是深度-不是广度">1.1.2 "一季一本"限的是深度，不是广度<a class="anchor" href="#1-1-2-一季一本限的是深度-不是广度" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>打勾</th><th>含义</th></tr></thead><tbody><tr><td><strong>一本主书</strong></td><td><strong>要真正学透</strong>——做题、写证明、到 D2–D3</td></tr><tr><td>副科材料</td><td>可以是<strong>一节、一章、一篇讲义</strong>，目标是"<strong>知道它在说什么</strong>"，<strong>不到 D2</strong></td></tr><tr><td>额外读物</td><td>想读几本都行，<strong>只要不挤占主书的时间</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="主科-你要能写出来的">主科 = 你要"<strong>能写出来</strong>"的。<a class="anchor" href="#主科-你要能写出来的" aria-hidden="true">#</a></h3>
+<h3 id="副科-你要能听懂的">副科 = 你要"<strong>能听懂</strong>"的。<a class="anchor" href="#副科-你要能听懂的" aria-hidden="true">#</a></h3>
+<p><strong>能写出来</strong>的东西，一季一本是上限——因为写不出来就是没学会。 <strong>能听懂</strong>的东西，可以同时碰好几样。</p></blockquote>
+<blockquote class="quote"><p><strong>⚠️ 一句该记住的</strong>：「精力有限」不是妥协，是<strong>能走完五年计划的前提</strong>。 一份不考虑精力上限的路径，写得再全也走不到。</p></blockquote>
+<h3 id="每季标一个深度层d0d6">🔖 每季标一个深度层（D0–D6）<a class="anchor" href="#每季标一个深度层d0d6" aria-hidden="true">#</a></h3>
+<p><strong>这是"标记"落到时间轴上的方式。</strong> 每季结束时问自己一句： <strong>"这一季我在哪条线上从 D? 走到了 D?"</strong></p>
+<div class="tw"><table><thead><tr><th>层</th><th>判据</th></tr></thead><tbody><tr><td><strong>D1 会算</strong></td><td>照公式算，说不清为什么</td></tr><tr><td><strong>D2 会证</strong></td><td>能写严格证明，读懂教材</td></tr><tr><td><strong>D3 懂结构</strong></td><td>知道它<strong>为什么被发明</strong></td></tr><tr><td><strong>D4 会用</strong></td><td>能在<strong>新问题</strong>里用它</td></tr><tr><td><strong>D5 能教</strong></td><td>能不看书写出骨架、能讲清</td></tr><tr><td><strong>D6 能做研究</strong></td><td>能读论文、能提问</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>下表的"目标层"是各季结束时该达到的水平。</strong> 达不到不要紧——<strong>记录真实值才有用</strong>，它让你看见真实的曲线。</p></blockquote>
+<h2 id="1-2-深入索引-每一季打开哪些门">1.2 深入索引：<strong>每一季打开哪些门</strong><a class="anchor" href="#1-2-深入索引-每一季打开哪些门" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>这张表是本文最该先看的东西。</strong></p>
+<p>你指出的问题（2026-10-16）：「数学骨架的学习路径可以在适当时机插入到时间轴里面…… <strong>这样我在学到对应的时候，如果感兴趣可以直接往下深入。</strong>」</p>
+<p><strong>你说得对，这是整合的真问题。</strong> 合并四份文件只是把信息放到一处； <strong>真正的整合是让"什么时候可以往哪里深入"长在时间轴上。</strong></p>
+<p>读法：<strong>"本季打开"= 学完这一季你有资格进入的方向；"入口"= 第一本该读什么。</strong></p></blockquote>
+<div class="tw"><table><thead><tr><th>完成</th><th><strong>本季打开的门</strong></th><th>入口</th><th>通往</th></tr></thead><tbody><tr><td><strong>Y1Q2</strong></td><td>数学分析的<strong>地基</strong></td><td>你手上已有 <strong>Amann &amp; Escher《分析》I</strong></td><td>分析学全线</td></tr><tr><td><strong>Y1Q3–Q4</strong></td><td><strong>元逻辑</strong>的门</td><td>Leary &amp; Kristiansen（免费+有答案）</td><td>模型论 · 可计算性 · 证明论</td></tr><tr><td><strong>Y2Q1–Q2</strong></td><td><strong>集合论</strong>的门</td><td>Enderton《Elements of Set Theory》</td><td>序数与基数 · <strong>力迫与大基数</strong> · 描述集合论</td></tr><tr><td><strong>Y2Q4</strong></td><td><strong>可计算性 / 复杂度</strong>的门</td><td>Sipser</td><td>度理论 · 算法随机性 · 描述复杂性</td></tr><tr><td><strong>Y3Q1–Q2</strong></td><td><strong>模型论</strong>的门</td><td>Chang &amp; Keisler Ch.1–3</td><td><strong>稳定性与分类理论</strong> · 模型论代数几何</td></tr><tr><td><strong>Y3Q3–Q4</strong></td><td><strong>语言学</strong>的门</td><td>Potts → Winter</td><td>形式语义学 · CCG · 计算语言学</td></tr><tr><td><strong>Y4Q1–Q2</strong></td><td><strong>抽象代数</strong>的门</td><td>Pinter → Dummit &amp; Foote</td><td><strong>代数几何</strong>（需交换代数）· 代数数论 · 稳定性理论</td></tr><tr><td><strong>Y4Q4</strong></td><td><strong>点集拓扑</strong>的门</td><td>Munkres</td><td><strong>描述集合论</strong> · 代数拓扑 · 微分几何</td></tr><tr><td><strong>Y5Q1</strong></td><td><strong>可计算性 + 不完全性</strong>的门</td><td>Cutland → Peter Smith《IGT》（免费）</td><td>可证性逻辑 · 二阶逻辑 · 度理论</td></tr><tr><td><strong>Y5Q2–Q3</strong></td><td><strong>证明论 + λ 演算</strong>的门</td><td>Negri &amp; von Plato；Selinger 讲义</td><td>序数分析 · <strong>类型论</strong> · 线性逻辑</td></tr><tr><td><strong>Y5Q4</strong></td><td><strong>类型论 / Curry–Howard</strong> 的门</td><td>Lean 4（NNG4 → TPIL4 → MIL）</td><td>类型论 · 形式验证 · <strong>四科合一</strong></td></tr><tr><td><strong>Y6Q1</strong></td><td><strong>PL / 类型系统</strong>的门</td><td>Pierce《TAPL》</td><td>编程语言理论</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⚠️ 两条重要提醒（来自核实）</strong></p>
+<ol><li><strong>代数几何的前置最长</strong>：抽象代数 → <strong>交换代数</strong> → 拓扑 → 代数几何。</li></ol>
+<p>它的第一本不是 Hartshorne，而是 <strong>Vakil《The Rising Sea》</strong>（<strong>免费</strong>，以大量习题著称）。</p>
+<ol><li><strong>想做描述集合论，点集拓扑不能跳</strong>（需 Polish 空间、Baire 空间）。</li></ol></blockquote>
+<h2 id="1-3-全图核心-56-年-之后按兴趣分叉">1.3 全图（核心 5–6 年，之后按兴趣分叉）<a class="anchor" href="#1-3-全图核心-56-年-之后按兴趣分叉" aria-hidden="true">#</a></h2>
+<pre class="code"><code>Y1 ── 地基：证明手艺 + 逻辑入门 + 计算机入门
+Y2 ── 元逻辑 + 集合论
+Y3 ── 模型论 → 语言学开门 ／ 可计算性 → 计算机开门
+Y4 ── 抽象代数 + 可计算性
+Y5 ── 证明论 → 类型论 → Lean 4（四科合一）
+Y6+ ─ 哲学逻辑 / 数学哲学 / 专题分叉</code></pre>
+<h2 id="1-4-逐季安排">1.4 逐季安排<a class="anchor" href="#1-4-逐季安排" aria-hidden="true">#</a></h2>
+<h3 id="y1-地基年">Y1 · 地基年<a class="anchor" href="#y1-地基年" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>季</th><th>主科</th><th>材料</th><th>副科</th><th>目标层</th><th>里程碑</th></tr></thead><tbody><tr><td><strong>Y1Q1</strong></td><td>数学</td><td><strong>MIT 6.042J</strong> <code>✔</code> <a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/pages/readings/" target="_blank" rel="noopener">OCW 2024</a> 配 <code>✔</code> <a href="https://courses.csail.mit.edu/6.042/spring18/mcs.pdf" target="_blank" rel="noopener">现行 PDF</a></td><td>逻辑（Smith 收尾）</td><td><strong>D1</strong></td><td>做完 6.042J 前 1/3 的题</td></tr><tr><td><strong>Y1Q2</strong></td><td>数学</td><td><strong>Velleman《How to Prove It》3rd ed</strong> <code>✅书后 p.397</code>；或 <code>✔</code> <strong>Hammack《Book of Proof》3.4</strong>（<strong>免费</strong>，Solutions 专章）</td><td>计算机</td><td><strong>D2</strong></td><td>能不看书写出"归纳法证明"的骨架</td></tr><tr><td><strong>Y1Q3–Q4</strong></td><td><strong>数学</strong></td><td><strong>🎯 你已有的：Amann &amp; Escher《分析》I</strong>（352 页，从集合论与数系构造开始，含线代基础）——<strong>卡住处用 Abbott 或 Tao 对照</strong></td><td>逻辑</td><td><strong>D2</strong></td><td>独立证出实数完备性的等价刻画</td></tr><tr><td><strong>Y1Q3–Q4</strong></td><td>逻辑</td><td><strong>★ Leary &amp; Kristiansen</strong> <code>✔</code><a href="https://textbooks.aimath.org/textbooks/approved-textbooks/leary-kristiansen/" target="_blank" rel="noopener">AIM 核准页</a> —— <strong>免费 PDF、8 章、有题、大部分有答案、写给自学</strong>；并行 <code>✔</code> <strong>Open Logic Project《Sets, Logic, Computation》</strong></td><td>数学</td><td><strong>D3</strong></td><td><strong>★ L1：独立写出一阶逻辑完备性的 Henkin 构造</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="y1-最重要的修正-第一本元逻辑不是-enderton-是-leary-kristiansen">🔑 Y1 最重要的修正：<strong>第一本元逻辑不是 Enderton，是 Leary &amp; Kristiansen</strong><a class="anchor" href="#y1-最重要的修正-第一本元逻辑不是-enderton-是-leary-kristiansen" aria-hidden="true">#</a></h3>
+<p>我初稿把 Enderton 当第一本——<strong>这是错的</strong>。核实（含 Peter Smith 的专家意见）显示：</p>
+<div class="tw"><table><thead><tr><th>书</th><th>定位</th><th>免费</th><th>答案</th></tr></thead><tbody><tr><td><strong>Leary &amp; Kristiansen</strong></td><td><strong>最适合自学</strong>（Smith：新版加 75 页解答，"makes the book <strong>even more suitable for self-study</strong>"）</td><td>✅ <strong>免费</strong></td><td>✅ <strong>大部分有</strong></td></tr><tr><td>Chiswell &amp; Hodges</td><td>Smith 评：完全性证明的清晰度 <strong>"second to none"</strong></td><td>✗</td><td>?</td></tr><tr><td><strong>Enderton《MITL》</strong></td><td>Smith：<strong>"not the most approachable first pass"</strong>，比入门<strong>高一个档</strong></td><td>✗</td><td>?</td></tr></tbody></table></div>
+<p>⇒ <strong>正确顺序：Leary &amp; Kristiansen →（加固）Chiswell &amp; Hodges → Enderton 当复习/巩固。</strong> Enderton 仍是你路径的核心，但<strong>它是第二遍，不是第一遍</strong>。</p>
+<h3 id="另一个免费主干-open-logic-project">🔑 另一个免费主干：Open Logic Project<a class="anchor" href="#另一个免费主干-open-logic-project" aria-hidden="true">#</a></h3>
+<p><code>✔</code> <a href="https://openlogicproject.org/" target="_blank" rel="noopener">openlogicproject.org</a>——<strong>不是一本书，是可定制的模块化集合</strong>（CC BY 4.0，LaTeX 源码开放）。 成品 PDF 在 <a href="https://builds.openlogicproject.org/" target="_blank" rel="noopener">builds.openlogicproject.org</a>：</p>
+<ul><li><strong>《Sets, Logic, Computation》</strong>——集合论 + 一阶逻辑 + 图灵机，<strong>"Problems are collected at the end of chapters"</strong> ← <strong>这就是你缺的免费题源</strong></li><li><strong>《Incompleteness and Computability》</strong>——递归函数、Gödel、二阶逻辑、lambda</li><li>⚠️ 官方明说<strong>完整版 "It's not intended as a textbook"</strong>，别通读；用 remix 本</li><li>⚠️ <strong>它有中文版</strong>，但记录页自述"<strong>翻译与排版为 AI 生成，未经人工中文审校</strong>"——<strong>定理陈述以英文版为准</strong>（详见附录 A）</li></ul></blockquote>
+<h3 id="y2-集合论年">Y2 · 集合论年<a class="anchor" href="#y2-集合论年" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>季</th><th>主科</th><th>材料</th><th>副科</th><th>目标层</th><th>里程碑</th></tr></thead><tbody><tr><td><strong>Y2Q1</strong></td><td>数学</td><td><strong>Halmos《Naive Set Theory》</strong> <code>📝</code> <code>?答案</code> <code>🇨🇳?</code></td><td>逻辑</td><td><strong>D3</strong></td><td>做完 Halmos 全部章末习题</td></tr><tr><td><strong>Y2Q2</strong></td><td>数学</td><td><strong>Enderton《Elements of Set Theory》</strong> 或 Kunen 第 1 章 <code>?</code></td><td>逻辑</td><td><strong>D3</strong></td><td>能讲清序数、超限归纳、Zorn 引理</td></tr><tr><td><strong>Y2Q3</strong></td><td>逻辑</td><td>Enderton 第 3 章（不可判定性）</td><td>计算机</td><td><strong>D3</strong></td><td>能说明"为什么一阶逻辑不可判定"</td></tr><tr><td><strong>Y2Q4</strong></td><td>计算机</td><td><strong>Sipser《Introduction to the Theory of Computation》</strong> <code>📝</code> <code>?答案</code></td><td>逻辑</td><td><strong>D2</strong></td><td>独立画出"自动机 → 可计算性"的层次图</td></tr><tr><td><strong>Y2Q5</strong></td><td><strong>数学</strong></td><td><strong>高等代数</strong>（证明导向）：<code>✔</code> <strong>Axler《Linear Algebra Done Right》4th ed</strong>——<strong>ⓕ <a href="https://link.springer.com/book/10.1007/978-3-031-41026-0" target="_blank" rel="noopener">Springer 开放获取，免费</a></strong></td><td>逻辑</td><td><strong>D2</strong></td><td>独立证出谱定理的一个特例</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【汇合点 2】在此打开</strong>：Enderton 第 3 章（逻辑视角）与 Sipser（计算机视角）<strong>讲同一件事</strong>。 两本对照读，收获是双倍。</p></blockquote>
+<h3 id="y3-模型论年语言学开门">Y3 · 模型论年（语言学开门）<a class="anchor" href="#y3-模型论年语言学开门" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>季</th><th>主科</th><th>材料</th><th>副科</th><th>目标层</th><th>里程碑</th></tr></thead><tbody><tr><td><strong>Y3Q0</strong>（穿插）</td><td>语言学</td><td><strong>Yule《The Study of Language》</strong> <code>🇨🇳</code> 中译《语言研究》商务 2023 —— 语言学零基础的地图</td><td>—</td><td>能说出语言学各分支在问什么</td></tr><tr><td><strong>Y3Q0.5</strong>（穿插）</td><td>语言学</td><td><strong>★ Carnie《Syntax: A Generative Introduction》4th ed + 《The Syntax Workbook》2nd ed</strong> <code>✔</code> Workbook 官方摘要：<strong>"over 120 problem sets with answers"</strong></td><td>—</td><td>能画基础句法树</td></tr><tr><td><strong>Y3Q1</strong></td><td>逻辑</td><td><strong>★ Chang &amp; Keisler《Model Theory》Ch.1–3</strong> <code>✔</code> —— <strong>Peter Smith 的模型论第一本</strong>（"the Old Testament, the first systematic text... proceeds at an engagingly leisurely pace... <strong>still remains a good route in</strong>"）</td><td>数学</td><td><strong>D3</strong></td><td>能证明紧致性定理的应用（如非标准分析模型）</td></tr><tr><td><strong>Y3Q2</strong></td><td>逻辑</td><td><strong>Hodges《A Shorter Model Theory》Ch.1–3</strong> → 之后才 <strong>Marker</strong> <code>✔</code>（Smith 警告：Marker <em>"would surely be hard going if you haven't already tackled some model theory"</em>）</td><td>数学</td><td><strong>D3</strong></td><td>独立证明 ACF 或 RCF 的量词消去</td></tr><tr><td><strong>Y3Q3</strong></td><td><strong>语言学</strong></td><td><strong>★ Chris Potts《Logic for Linguists》</strong> <code>✔</code><a href="http://www.christopherpotts.net/ling/teaching/lsa108P/" target="_blank" rel="noopener">60 题 + 作者答案</a> —— <strong>λ 演算与内涵性预备</strong>，正是"有逻辑基础、语言学零基础"的桥</td><td>逻辑</td><td><strong>D2</strong></td><td>能写出几个英语句子的 λ 演算语义</td></tr><tr><td><strong>Y3Q4</strong></td><td>语言学</td><td><strong>Winter《Elements of Formal Semantics》Ch.1–3</strong>（<code>✔</code> <strong>免费开放获取</strong>）→ 量词章需买书；<strong>Kroeger《Analyzing Meaning》第 3 版</strong> <code>✔</code><a href="https://zenodo.org/records/6855854" target="_blank" rel="noopener">免费</a>（但<strong>描写取向、非形式化</strong>，不能替代 Winter）</td><td>逻辑</td><td><strong>D3</strong></td><td><strong>★ 里程碑 L4：用类型驱动语义分析一段自然语言的量词辖域</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="语言学有个不能跳的前置-句法">🔑 语言学有个"不能跳"的前置：<strong>句法</strong><a class="anchor" href="#语言学有个不能跳的前置-句法" aria-hidden="true">#</a></h3>
+<p>核实报告的原话：<strong>不做句法，Heim &amp; Kratzer / Winter 的组合规则会卡在句法而非语义上。</strong> 所以 <strong>Y3Q0 / Y3Q0.5 不是可选项</strong>——先用 Yule 拿到地图，再用 Carnie 拿到句法骨架。 <code>✔</code> <strong>Carnie 的 Workbook 明确"含答案"</strong>（官方摘要原文 <em>"over 120 problem sets with answers"</em>）， 这在语言学里<strong>极其罕见</strong>。 ⚠️ 但注意：该摘要对应 Workbook <strong>第 1 版</strong>；<strong>第 2 版是否同样含答案未核实</strong>， 且答案可能属教师资源，买前须确认。</p></blockquote>
+<blockquote class="quote"><h3 id="模型论顺序要反过来我初稿错了">🔑 模型论顺序要反过来（我初稿错了）<a class="anchor" href="#模型论顺序要反过来我初稿错了" aria-hidden="true">#</a></h3>
+<p>我初稿把 <strong>Marker 当第一本</strong>。核实显示 Smith 的推荐顺序是： <strong>Chang &amp; Keisler → Hodges《A Shorter Model Theory》→ Poizat → Tent &amp; Ziegler → 最后才 Marker</strong>。 <code>✔</code> <strong>Hodges《Model Theory》1993 只作查阅</strong>（772 页，encyclopedic，不是教材）。</p>
+<h3 id="语言学有一个免费且带答案的入口">🔑 语言学有一个<strong>免费且带答案</strong>的入口<a class="anchor" href="#语言学有一个免费且带答案的入口" aria-hidden="true">#</a></h3>
+<p><strong>Potts 那 60 道题带作者自己的答案</strong>——这在语言学里是<strong>罕见的</strong>（见附录 D）。 先走它，再进 Winter。</p>
+<p>⚠️ <strong>Winter 不是全书免费</strong>：爱丁堡 OA 的<strong>只有第 1–3 章</strong>， <strong>第 4 章（量词）没有 OA</strong>——而量词恰是形式语义学的核心，必须买书。</p></blockquote>
+<h3 id="y4-抽象代数-点集拓扑数学年">Y4 · 抽象代数 + 点集拓扑（<strong>数学年</strong>）<a class="anchor" href="#y4-抽象代数-点集拓扑数学年" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>季</th><th>主科</th><th>材料</th><th>副科</th><th>目标层</th><th>里程碑</th></tr></thead><tbody><tr><td><strong>Y4Q1</strong></td><td><strong>数学</strong></td><td><strong>抽象代数（一）</strong>：<code>✔</code> <strong>Pinter《A Book of Abstract Algebra》</strong>（Dover；<a href="https://github.com/narodnik/abstract-algebra-pinter-solutions" target="_blank" rel="noopener">社区解答</a>）——<strong>群、环、域的第一遍</strong>；⚠️ <strong>抽象概念需要时间发酵，不要赶</strong></td><td>逻辑</td><td><strong>D2</strong></td><td>能讲清"同态、商群、理想"</td></tr><tr><td><strong>Y4Q2</strong></td><td><strong>数学</strong></td><td><strong>抽象代数（二）</strong>：<code>✔</code> <strong>Dummit &amp; Foote</strong>（<a href="https://github.com/gkikola/sol-dummit-foote" target="_blank" rel="noopener">两份社区解答</a>）——<strong>理想、商环、域扩张、Galois 初步</strong></td><td>逻辑</td><td><strong>D2</strong></td><td>独立证出「域扩张的次数公式」或同构定理之一</td></tr><tr><td><strong>Y4Q3</strong></td><td><strong>数学</strong></td><td><strong>点集拓扑（一）</strong>：<code>✔</code> <strong>Munkres 前 3 章</strong>（<a href="https://github.com/kyp44/Topology" target="_blank" rel="noopener">公开解答</a>）——拓扑空间、开闭集、连续、连通、<strong>紧致</strong></td><td>逻辑</td><td><strong>D2</strong></td><td>做出 Munkres 前 3 章的题</td></tr><tr><td><strong>Y4Q4</strong></td><td><strong>数学</strong></td><td><strong>点集拓扑（二）</strong>：Munkres 后续——可数性、分离公理、<strong>完备性、度量化</strong>、基本群初步</td><td>逻辑</td><td><strong>D2</strong></td><td>独立证出「紧致空间上的连续函数有界」或 Tychonoff 的一个特例</td></tr><tr><td><strong>Y4 逻辑（副科）</strong></td><td>逻辑</td><td><code>?</code> <strong>Cutland《Computability》</strong> 或 <strong>Boolos《Computability and Logic》</strong>——<strong>降到副科，只读不深做</strong></td><td>数学</td><td>—</td><td>知道可计算性的基本图景即可</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>M4（抽象代数）是唯一"不补就会真卡"的地方</strong>——它必须在此完成， 因为 Y5–Y6 的稳定性理论需要它。</p>
+<h3 id="2026-10-16-重组说明-抽象概念需要时间">⚠️ 2026-10-16 重组说明：抽象概念需要时间<a class="anchor" href="#2026-10-16-重组说明-抽象概念需要时间" aria-hidden="true">#</a></h3>
+<p><strong>你问「群／域／拓扑空间在路线图里有吗」时发现的问题</strong>： 原先抽象代数与拓扑<strong>各只给一个季度</strong>，而 Pinter + Dummit &amp; Foote 一季推完只能到 <strong>D1（会算）</strong>， 到不了 <strong>D2（会证）</strong>。<strong>抽象概念恰恰需要时间发酵</strong>——而附录 K 的修正版测试 1 （「在抽象对象上还能不能工作」）<strong>需要这段发酵时间才有答案</strong>。</p>
+<p><strong>所以改成</strong>：抽象代数 <strong>两个季度</strong>（Pinter 一季 → Dummit &amp; Foote 一季，含域扩张与 Galois）， 点集拓扑 <strong>两个季度</strong>（Munkres 完整，含紧致与完备）。 <strong>代价</strong>：逻辑主线在此年<strong>降为副科</strong>，可计算性顺延到 Y5Q1。</p>
+<p><strong>交换代数</strong>（代数几何前置）顺延到 <strong>Y5Q1 之后</strong>——见附录 F.3 的 D1 入口卡。</p></blockquote>
+<h3 id="y5-可计算性-证明论-类型论-lean-4四科合一">Y5 · 可计算性 → 证明论 → 类型论 → Lean 4（四科合一）<a class="anchor" href="#y5-可计算性-证明论-类型论-lean-4四科合一" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>季</th><th>主科</th><th>材料</th><th>副科</th><th>目标层</th><th>里程碑</th></tr></thead><tbody><tr><td><strong>Y5Q1</strong></td><td><strong>逻辑</strong></td><td><strong>可计算性 + 不完全性</strong>：<code>?</code> <strong>Cutland《Computability》</strong> 或 <strong>Boolos《Computability and Logic》</strong> → <code>📝</code> <strong>Peter Smith《An Introduction to Gödel's Theorems》</strong>（免费）</td><td>计算机</td><td><strong>D3</strong></td><td>能构造不可判定问题并给出归约；讲清第一不完备定理的证明思路</td></tr><tr><td><strong>Y5Q2</strong></td><td><strong>逻辑</strong></td><td><strong>证明论</strong>：Mancosu/Galvan/Zach《An Introduction to Proof Theory》 或 Troelstra &amp; Schwichtenberg <code>?</code></td><td>计算机</td><td><strong>D3</strong></td><td>写出自然演绎与相继式演算的对应</td></tr><tr><td><strong>Y5Q3</strong></td><td><strong>逻辑</strong></td><td><strong>λ 演算</strong>：<code>?</code>（Hindley &amp; Seldin；或 <code>✔</code> <a href="https://arxiv.org/abs/0804.3434" target="_blank" rel="noopener">Selinger 免费讲义</a>）</td><td>计算机</td><td><strong>D3</strong></td><td>手写一个 λ 项求值器</td></tr><tr><td><strong>Y5Q4</strong></td><td><strong>计算机</strong></td><td><strong>Lean 4</strong>：<code>✔</code> <a href="https://lean-lang.org/theorem_proving_in_lean4/" target="_blank" rel="noopener">Theorem Proving in Lean 4</a> · <code>✔</code> <a href="https://leanprover-community.github.io/mathematics_in_lean/" target="_blank" rel="noopener">Mathematics in Lean</a> · <code>✔</code> <a href="https://adam.math.hhu.de/#/g/hhu-adam/NNG4" target="_blank" rel="noopener">NNG4</a> · <strong>前置：VS Code + Lean 4 扩展</strong>（见 2.6）</td><td>逻辑</td><td><strong>D4</strong></td><td><strong>★ 里程碑 L3：用 Lean 4 形式化命题逻辑的可靠性</strong></td></tr><tr><td><strong>Y6Q1</strong></td><td><strong>计算机</strong></td><td><strong>Pierce《Types and Programming Languages》</strong> <code>?</code>（<a href="https://github.com/mr-infty/tapl" target="_blank" rel="noopener">解答</a>）</td><td>语言学</td><td><strong>D4</strong></td><td>实现一个简单类型检查器</td></tr><tr><td><strong>Y5Q1–Q2</strong></td><td><strong>数学</strong></td><td><strong>Amann &amp; Escher《分析》II</strong>（360 页）：积分、傅里叶级数、<strong>流形</strong>、变分法</td><td>逻辑</td><td><strong>D2</strong></td><td>独立证出「微积分基本定理」的一般形式</td></tr><tr><td><strong>Y5Q3–Q4</strong></td><td><strong>数学</strong></td><td><strong>实分析</strong>：先用 <code>✔</code> <strong>Abbott</strong>（<a href="https://github.com/UlisseMini/understanding-analysis-solutions" target="_blank" rel="noopener">解答</a>）打底 → 上 <strong>Folland</strong> <code>?</code></td><td>逻辑</td><td><strong>D3</strong></td><td>独立构建 Lebesgue 测度并证出单调收敛定理</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【汇合点 1、3、5】全部在此打开。</strong></p>
+<h3 id="lean-4-的现行入口-全部现场核实-2026-10">Lean 4 的现行入口（<code>✔</code> 全部现场核实，2026-10）<a class="anchor" href="#lean-4-的现行入口-全部现场核实-2026-10" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>资源</th><th>链接</th><th>备注</th></tr></thead><tbody><tr><td><strong>Theorem Proving in Lean 4</strong></td><td><a href="https://lean-lang.org/theorem_proving_in_lean4/" target="_blank" rel="noopener">lean-lang.org/theorem_proving_in_lean4</a></td><td>12 章；<strong>正文针对 Lean 4.33.0</strong>；旧地址仍可用但社区已改指这里</td></tr><tr><td><strong>Mathematics in Lean</strong></td><td><a href="https://leanprover-community.github.io/mathematics_in_lean/" target="_blank" rel="noopener">leanprover-community.github.io/mathematics_in_lean</a></td><td>13 章；⚠️ 标注 <strong>v4.19.0</strong>，落后于 Lean 4.33 → 注意版本兼容</td></tr><tr><td><strong>Natural Number Game (NNG4)</strong></td><td><a href="https://adam.math.hhu.de/#/g/hhu-adam/NNG4" target="_blank" rel="noopener">adam.math.hhu.de/#/g/hhu-adam/NNG4</a></td><td><strong>先玩这个</strong>；旧 Imperial 地址是 Lean 3 占位页，<strong>别用</strong></td></tr><tr><td>安装</td><td><a href="https://lean-lang.org/documentation/setup/" target="_blank" rel="noopener">lean-lang.org/documentation/setup</a> ／ 中文 <a href="https://www.leanprover.cn/tutorial/install/" target="_blank" rel="noopener">leanprover.cn/tutorial/install</a></td><td></td></tr><tr><td>在线试用（免安装）</td><td><a href="https://live.lean-lang.org/" target="_blank" rel="noopener">live.lean-lang.org</a></td><td></td></tr><tr><td><strong>mathlib4 规模</strong></td><td><a href="https://leanprover-community.github.io/mathlib_stats.html" target="_blank" rel="noopener">mathlib_stats</a></td><td><strong>138,028 定义 / 290,462 定理 / 772 贡献者</strong></td></tr><tr><td><strong>The Mechanics of Proof</strong></td><td><a href="https://hrmacbeth.github.io/math2001/" target="_blank" rel="noopener">hrmacbeth.github.io/math2001</a></td><td><strong>专治"没系统训练过证明书写"</strong>——把严格证明写法与 Lean 绑在一起，<strong>和你的痛点完全对口</strong></td></tr></tbody></table></div>
+<h3 id="lean-4-中文材料比预想的丰富">🇨🇳 Lean 4 中文材料（比预想的丰富）<a class="anchor" href="#lean-4-中文材料比预想的丰富" aria-hidden="true">#</a></h3>
+<p><code>✔</code> <a href="https://www.leanprover.cn/" target="_blank" rel="noopener">leanprover.cn</a> 有：TPIL4 中译（针对 4.26.0）、 Mathematics in Lean 中译（Mathlib 停在 2024.10.16，<strong>有版本坑</strong>）、 函数式编程／元编程／类型检查中译、<a href="https://github.com/Lean-zh/LoVe-zh" target="_blank" rel="noopener">逻辑验证漫游指南</a>。</p>
+<p><strong>⇒ 以英文版为准，中文版当译文参考</strong>（版本落后是主要风险）。</p>
+<h3 id="software-foundations-的岔路必须现在决定">⚠️ Software Foundations 的岔路（必须现在决定）<a class="anchor" href="#software-foundations-的岔路必须现在决定" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>选项</th><th>现状</th></tr></thead><tbody><tr><td><strong>官方 Rocq/Coq 版</strong></td><td><code>✔</code> <a href="https://softwarefoundations.cis.upenn.edu/" target="_blank" rel="noopener">softwarefoundations.cis.upenn.edu</a> —— <strong>LF 7.1，需 Coq 9.0.0+</strong>，7 卷，<strong>成熟、有中文版</strong></td></tr><tr><td><strong>Lean 版（SF-in-Lean）</strong></td><td><code>✔</code> <a href="https://reservoir.lean-lang.org/@plclub/SFL" target="_blank" rel="noopener">reservoir.lean-lang.org/@plclub/SFL</a> —— <strong>alpha</strong>，<em>"not ready for ordinary readers quite yet"</em>，目标 2026 秋</td></tr></tbody></table></div>
+<p><strong>⇒ 你已选 Lean 4，所以今年不要用 SF 当主线</strong>；主线是 <strong>NNG4 → TPIL4 → Mathematics in Lean</strong>。</p></blockquote>
+<h3 id="y6-数学收尾">Y6 · 数学收尾<a class="anchor" href="#y6-数学收尾" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>季</th><th>主科</th><th>材料</th><th>副科</th><th>目标层</th><th>里程碑</th></tr></thead><tbody><tr><td><strong>Y6Q1</strong></td><td><strong>数学</strong></td><td><strong>交换代数</strong>（<strong>代数几何的前置</strong>）：Atiyah &amp; Macdonald《Introduction to Commutative Algebra》<code>?答案</code></td><td>计算机</td><td><strong>D2</strong></td><td>独立证出「极大理想存在性」（用 Zorn）</td></tr><tr><td><strong>Y6Q2</strong></td><td><strong>数学</strong></td><td><strong>复分析</strong>：<code>?</code>（Ahlfors / Stein &amp; Shakarchi，<strong>待核实</strong>）</td><td>逻辑</td><td><strong>D2</strong></td><td>独立证明 Cauchy 积分定理的一个特例</td></tr><tr><td><strong>Y6Q3–Q4</strong></td><td><strong>数学</strong></td><td><strong>Amann &amp; Escher《分析》III</strong>（422 页）：<strong>测度论、Lebesgue 空间、Fubini、卷积、傅里叶变换、微分形式</strong></td><td>逻辑</td><td><strong>D3</strong></td><td>独立证出 Fourier 变换的反演定理</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 至此七门骨架课全部走完</strong>（数学分析 / 高等代数 / 抽象代数 / 点集拓扑 / 交换代数 / 实分析 / 复分析）。</p>
+<p>⚠️ <strong>2026-10-16 调整</strong>：<strong>交换代数</strong>原排在 Y4Q2.5（虚构编号），重组后<strong>移到 Y6Q1</strong>。 它<strong>不是骨架课的必需项</strong>，而是<strong>代数几何的前置</strong>——所以放在最后，<strong>你要走代数几何时才真正需要它</strong>。</p></blockquote>
+<h3 id="y6-分叉">Y6+ · 分叉<a class="anchor" href="#y6-分叉" aria-hidden="true">#</a></h3>
+<p><strong>主干完成。</strong> 之后按兴趣选专题——<strong>完整清单在附录 J</strong>（你收到的那份 8 阶段路径的存档）： 哲学逻辑、数学哲学、稳定性理论、描述集合论、度理论、算法随机性、可证性逻辑、 类型论与 HoTT、范畴逻辑、线性逻辑……</p>
+<blockquote class="quote"><p><strong>要选哪个，看附录 F 的 F.3 深入方向总表</strong>——那里有每个方向的前置链与入口书。</p></blockquote>
+<p><strong>这一阶段不再设统一时间轴。</strong></p>
+<hr>
+<hr>
+<h2 id="1-5-核心困惑-按时间轴走-还是按兴趣立刻铺开">1.5 核心困惑：按时间轴走，还是按兴趣立刻铺开？<a class="anchor" href="#1-5-核心困惑-按时间轴走-还是按兴趣立刻铺开" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>你 2026-10-16 提的问题</strong>： 「我是应该按时间轴顺序往下打好基础一步一步前进呢， 还是学到自己感兴趣的地方……就立刻往这个方向铺开呢？」</p>
+<p><strong>这不是二选一——真相是：有些"深入"现在就能铺，有些铺了会塌。</strong></p></blockquote>
+<h3 id="1-5-1-四种情形判据全在这里">1.5.1 四种情形（判据全在这里）<a class="anchor" href="#1-5-1-四种情形判据全在这里" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>情形</th><th>例子</th><th>能不能立刻铺</th></tr></thead><tbody><tr><td><strong>同科纵深</strong></td><td>Amann 停在"完备性"，你想一路走到测度、泛函</td><td>✅ <strong>能，而且应该</strong>——同一棵树的主干</td></tr><tr><td><strong>横向分支，前置已备</strong></td><td>分析 → 微分几何、常微分方程</td><td>✅ <strong>能</strong>，用主线时间换</td></tr><tr><td><strong>横向分支，前置缺</strong></td><td>分析 → 描述集合论（需拓扑）／→ 代数几何（需交换代数）</td><td>❌ <strong>铺了会塌</strong>——但<strong>值得记下来</strong></td></tr><tr><td><strong>逃避型"深入"</strong></td><td>基础没稳就冲测度论</td><td>❌ <strong>假进步</strong>（见附录 B.3）</td></tr></tbody></table></div>
+<h3 id="1-5-2-三条判据按顺序问">1.5.2 三条判据（按顺序问）<a class="anchor" href="#1-5-2-三条判据按顺序问" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>#</th><th>问题</th><th>若答"是"</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>我想深入的方向，<strong>前置现在我手上吗</strong>？</td><td>若有 → <strong>可以铺</strong>（兴趣是燃料，别压它）</td></tr><tr><td><strong>2</strong></td><td>前置缺的话，<strong>现在能不能补</strong>？</td><td>只需几周 → <strong>补了再铺</strong></td></tr><tr><td><strong>3</strong></td><td>前置缺口很大（一年以上），<strong>这兴趣值得改主线吗</strong>？</td><td>值得 → <strong>改时间轴</strong>；不值得 → <strong>记进附录 F，等时机</strong></td></tr></tbody></table></div>
+<h3 id="1-5-3-第三条路-记下来">1.5.3 ⭐ 第三条路：「记下来」<a class="anchor" href="#1-5-3-第三条路-记下来" aria-hidden="true">#</a></h3>
+<p><strong>你不必在「立刻铺」和「放弃」之间选——可以存起来。</strong></p>
+<p><strong>这正是【铺】标记与附录 F 的 F.3 的用途：它们是「兴趣的暂存区」。</strong></p>
+<h3 id="1-5-4-我会怎么处理你说一句就行">1.5.4 我会怎么处理（你说一句就行）<a class="anchor" href="#1-5-4-我会怎么处理你说一句就行" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>你说</strong>：「我要铺开数学分析」/「我要深入实分析」</p></blockquote>
+<div class="tw"><table><thead><tr><th>步</th><th>我做什么</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>读你当前深度</strong>（从对话、笔记、附录 F 的 F.0 快照）——<strong>不靠猜</strong></td></tr><tr><td><strong>2</strong></td><td><strong>做前置判断</strong>——明确告诉你「<strong>能铺</strong>」还是「<strong>先补 X</strong>」</td></tr><tr><td><strong>3</strong></td><td><strong>能铺</strong> → 联网核实书目，<strong>在时间轴上长出新季度</strong>（<strong>不重排，只插入</strong>）<br><strong>不能铺</strong> → 说清缺什么、要多久，<strong>并记进 F.3</strong></td></tr><tr><td><strong>4</strong></td><td>更新 <strong>F.0 快照</strong> + <strong>F.3 入口卡</strong>，在<strong>更新记录</strong>里留一行</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>我会明确说"能"或"不能"，不糊弄。</strong> 因为那些前置链是<strong>核实过的</strong>——「代数几何前置最长」「描述集合论要先有拓扑」 都是查证结论，不是我随口说的。</p></blockquote>
+<h3 id="1-5-5-原则一句话">1.5.5 原则（一句话）<a class="anchor" href="#1-5-5-原则一句话" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><h3 id="时间轴定前置顺序-不定学什么">时间轴定<strong>前置顺序</strong>，不定<strong>学什么</strong>。<a class="anchor" href="#时间轴定前置顺序-不定学什么" aria-hidden="true">#</a></h3>
+<h3 id="兴趣决定同一层里往哪走">兴趣决定<strong>同一层里往哪走</strong>。<a class="anchor" href="#兴趣决定同一层里往哪走" aria-hidden="true">#</a></h3>
+<h3 id="前置缺-记下来-不要硬冲">前置缺 → <strong>记下来，不要硬冲</strong>。<a class="anchor" href="#前置缺-记下来-不要硬冲" aria-hidden="true">#</a></h3></blockquote>
+<ul><li><strong>不要</strong>为守时间轴而压住兴趣——那会毁掉最难那部分的动力</li><li><strong>不要</strong>为追兴趣而跳过前置——那会让你在深水区发现脚下没底</li><li><strong>「记下来」是第三条路</strong>，附录 F 就是那个存放处</li></ul>
+<h3 id="1-5-6-范例-如果你说我要铺开数学分析">1.5.6 范例：如果你说「我要铺开数学分析」<a class="anchor" href="#1-5-6-范例-如果你说我要铺开数学分析" aria-hidden="true">#</a></h3>
+<p>Amann I 只到"数列与级数 + 中值定理"。<strong>"深入数学分析"至少有六条路，前置要求不同</strong>：</p>
+<div class="tw"><table><thead><tr><th>方向</th><th>前置</th><th>落点</th></tr></thead><tbody><tr><td>一路走到现代分析全集（测度→泛函→傅里叶）</td><td><strong>无</strong>（Amann II/III 本就是这条）</td><td><strong>把 Y5–Y6 的数学加深，不新增分支</strong></td></tr><tr><td>实分析纵深（测度、Lebesgue 积分）</td><td>无</td><td><strong>Y5Q3–Q4 已排</strong></td></tr><tr><td>复分析</td><td>无</td><td><strong>Y6Q1–Q2 已排</strong></td></tr><tr><td>微分几何 / 流形</td><td>数学分析 + 线代</td><td><strong>可插入</strong>（Amann II 有"流形"章）</td></tr><tr><td>泛函分析</td><td>数学分析 + 线代 + <strong>拓扑</strong></td><td>⚠️ 需先有拓扑 → <strong>记进 F.3</strong></td></tr><tr><td>描述集合论</td><td>集合论 + 拓扑</td><td>⚠️ 前置缺 → <strong>记进 F.3</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>注意前三条：它们已经在时间轴里了。</strong> <strong>⇒ "想深入数学分析"这件事，时间轴本身已经承接——你不必另开一条线。</strong> <strong>这正是时间轴的意义：它不是"教科书顺序"，是前置关系的骨架。</strong></p></blockquote>
+<h3 id="1-5-7-提前完成之后怎么办你-2026-10-16-问的情形">1.5.7 「提前完成」之后怎么办（<strong>你 2026-10-16 问的情形</strong>）<a class="anchor" href="#1-5-7-提前完成之后怎么办你-2026-10-16-问的情形" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>你的情形</strong>：在时间轴处打开了某扇门（如集合论），完成了那一年的任务， <strong>发现还有很多时间、精力允许、也有往下走的兴趣</strong>。</p>
+<p><strong>⇒ 这是正常情况，不是例外。</strong> 「一季一本」是<strong>节拍</strong>，不是精确刻度——有的书快、有的慢。 <strong>所以每个季末都面临一个选择。</strong></p></blockquote>
+<h4 id="三种走法-各有代价后两条是你可能没意识到的">三种走法，各有代价（<strong>后两条是你可能没意识到的</strong>）<a class="anchor" href="#三种走法-各有代价后两条是你可能没意识到的" aria-hidden="true">#</a></h4>
+<div class="tw"><table><thead><tr><th>走法</th><th>好处</th><th>⚠️ 代价</th></tr></thead><tbody><tr><td><strong>① 深入当前科目</strong></td><td>前置刚备好，<strong>最顺</strong></td><td><strong>容易陷在一个科目里</strong>——集合论可以吃掉三年，而那不在原计划里</td></tr><tr><td><strong>② 提前开下一季</strong></td><td>进度前移</td><td><strong>会吃掉缓冲</strong>——缓冲是用来吸收"卡住"的，不是富余。提前开 = 花掉缓冲，后面一卡就整链延后</td></tr><tr><td><strong>③ 补别的线的欠账</strong></td><td>补短板</td><td>最少人选，但<strong>常常最值</strong>（尤其数学侧欠账）</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>建议：优先 ①，但给它一个上限</strong>——比如"深到下一季开始前"， <strong>不要让它无限展开</strong>。</p></blockquote>
+<h4 id="四个没意识到的点">四个没意识到的点<a class="anchor" href="#四个没意识到的点" aria-hidden="true">#</a></h4>
+<p><strong>① "铺开集合论"之后，前置会立刻缺口。</strong></p>
+<p>你在 Y2 学完 Halmos + Enderton《Elements of Set Theory》，D 大概到 <strong>D2–D3</strong>。 但集合论的深入方向<strong>前置要求完全不同</strong>：</p>
+<div class="tw"><table><thead><tr><th>方向</th><th>前置</th><th>Y2 结束时你有吗</th></tr></thead><tbody><tr><td><strong>力迫法 / 独立性证明</strong></td><td>集合论 + <strong>模型论</strong></td><td>❌ <strong>模型论在 Y3</strong></td></tr><tr><td><strong>集合论模型论</strong></td><td>集合论 + 模型论</td><td>❌ Y3</td></tr><tr><td><strong>描述集合论</strong></td><td>集合论 + <strong>点集拓扑</strong></td><td>❌ <strong>拓扑在 Y4</strong></td></tr><tr><td><strong>大基数</strong></td><td>集合论 + 组合</td><td>⚠️ 部分</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 你"有时间想深入"，但可能"该先补模型论"。</strong> 所以我会先做前置判断，<strong>很可能告诉你"先去把 Y3 的模型论做了"</strong>—— 而那正是原计划。</p></blockquote>
+<p><strong>② "读论文"和"读书"是两回事——中间有一个断崖。</strong></p>
+<blockquote class="quote"><p>从"做课后题"到"读懂研究论文"，需要的东西完全不同： <strong>定理依赖图 + 本文相对已有工作的贡献 + 未解决问题 + 能否复现关键步骤</strong>。</p>
+<p><strong>这是你原路径里完全没有的一环。</strong> ⇒ 所以"铺开 X"到某个程度，会变成"<strong>我需要学怎么读论文</strong>"—— 那是另一件事，不是找更多书。</p></blockquote>
+<p><strong>③ D 等级不是"一条线一个数"，而是多个子方向各有一个。</strong></p>
+<pre class="code"><code>集合论
+├── ZFC 基础        D2
+├── 序数与基数      D3
+├── 组合集合论      D0     ← 深入后这里会动
+├── 力迫法          D0     ← 这里也会
+└── 描述集合论      D0     ← 这里也会</code></pre>
+<blockquote class="quote"><p><strong>⇒ 所以我会问你"哪个子方向"，而不是笼统问"集合论多深了"。</strong></p></blockquote>
+<p><strong>④ "往下的时间"不是免费的——它是机会成本。</strong></p>
+<p>那半年深集合论，<strong>时间是从别处来的</strong>：</p>
+<div class="tw"><table><thead><tr><th>被挤占的</th><th>后果</th></tr></thead><tbody><tr><td>数学分析 / 代数（主科）</td><td>数学骨架延后 → <strong>考研与读研准备延后</strong></td></tr><tr><td>计算机</td><td>Lean 4 那条线延后 → 汇合点延后</td></tr><tr><td>语言学</td><td>支线延后（无所谓）</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ "铺开 X"真正在问的是"什么样的机会成本我愿意付"。</strong> 我会把这个摆给你看，而不只是"好的，我铺"。</p></blockquote>
+<h4 id="完整流程比我-1-6-4-写的多一步">完整流程（<strong>比我 1.6.4 写的多一步</strong>）<a class="anchor" href="#完整流程比我-1-6-4-写的多一步" aria-hidden="true">#</a></h4>
+<div class="tw"><table><thead><tr><th>步</th><th>做什么</th></tr></thead><tbody><tr><td>1</td><td><strong>读你当前深度</strong>（对话、笔记、F.0 快照）——不靠猜</td></tr><tr><td>2</td><td><strong>前置判断</strong>：<strong>可能告诉你"先去补模型论"</strong></td></tr><tr><td>3</td><td><strong>机会成本提示</strong>：这半年从哪来</td></tr><tr><td>4</td><td><strong>能铺</strong> → 联网核实书目 + <strong>在时间轴上插入</strong>（不重排）；<strong>不能铺</strong> → 记进 F.3</td></tr><tr><td>5</td><td>更新 <strong>F.0 快照</strong>（含<strong>子方向</strong>的 D）+ <strong>F.3</strong> + <strong>更新记录</strong></td></tr></tbody></table></div>
+<hr>
+<h1 id="第二部分-怎么维护这份路线图">第二部分 · 怎么维护这份路线图<a class="anchor" href="#第二部分-怎么维护这份路线图" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><p><strong>这一部分不是"任务清单"，是"维护手册"。</strong></p>
+<p>2026-10-16 你定了这个对话的主题：<strong>主要用来更新学习路线</strong>， 而不是讨论具体习题（习题你自己做，做完再一起谈）。 所以这里写的是：<strong>你什么时候该回来、回来时说哪一句、我会做什么。</strong></p></blockquote>
+<h2 id="2-1-你说一句-我做一件事">2.1 你说一句，我做一件事<a class="anchor" href="#2-1-你说一句-我做一件事" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>你说</th><th>我做什么</th><th>什么时候说</th></tr></thead><tbody><tr><td><strong>「更新深度地图」</strong></td><td>问你几个问题（哪条线推进了、卡在哪、到了哪一层），<strong>增量更新</strong>第一部分与附录 F</td><td>每季结束时</td></tr><tr><td><strong>「我要铺开 X」</strong></td><td><strong>重新联网核实</strong> X 的书目（<strong>不凭记忆</strong>），把入口卡从 △ 升为 ✔，更新附录 F</td><td>学到某季、发现对某方向感兴趣时</td></tr><tr><td><strong>「这条我改主意了」</strong></td><td>改标记，<strong>保留历史</strong>（你要能看见自己怎么变的）</td><td>随时</td></tr><tr><td><strong>「核实 X 的书单」</strong></td><td>用同一套方法核实（版次 / 习题 / 答案 / 免费在线）</td><td>换书、或某本读不下去时</td></tr><tr><td><strong>「我现在到哪一层了」</strong></td><td>用 附录 B 的测试帮你判（<strong>但最终以你能交出的东西为准</strong>）</td><td>不确定自己的水平时</td></tr></tbody></table></div>
+<h2 id="2-2-一处变动-牵动哪些防止只改时间轴-附录留旧数据">2.2 ⚠️ 一处变动，牵动哪些（<strong>防止"只改时间轴、附录留旧数据"</strong>）<a class="anchor" href="#2-2-一处变动-牵动哪些防止只改时间轴-附录留旧数据" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>这一节是 2026-10-16 你问出来的</strong>： 「我还以为只会更新时间轴，其他地方不会随着一起更新。」</p>
+<p><strong>你的担心是对的</strong>——如果只改时间轴、不同步附录， 这份文件会<strong>内部自相矛盾</strong>（时间轴说 X，附录 F 的深度地图还说 D0）。</p>
+<p><strong>所以下面是硬规则</strong>：任何一次更新，<strong>必须同时检查右列</strong>。</p></blockquote>
+<div class="tw"><table><thead><tr><th>你触发的更新</th><th><strong>必须同步的地方</strong></th></tr></thead><tbody><tr><td><strong>「更新深度地图」</strong>（某条线推进了）</td><td>① 第一部分逐季安排里的<strong>目标层</strong> ② <strong>附录 F 的 F.2 各线位置</strong> ③ <strong>附录 F 的 F.0 进度快照</strong>（加日期）④ 附录 B 若层级定义有变</td></tr><tr><td><strong>「我要铺开 X」</strong></td><td>① 第一部分时间轴<strong>新增/细化该方向</strong> ② <strong>附录 F 的 F.3 入口卡</strong>（△→✔）③ <strong>附录 F 的 F.0 快照</strong> ④ 附录 A 若涉及新书 ⑤ 附录 G 核实状态</td></tr><tr><td><strong>「核实 X 的书单」</strong></td><td>① <strong>附录 A 对应章节</strong>（版次/习题/答案）② 第一部分时间轴若换书 ③ 附录 C 选书铁律若规律有变</td></tr><tr><td><strong>「这条我改主意了」</strong></td><td>① 附录 F 的标记 ② <strong>附录 F 的 F.0 的「更新记录」</strong>（只增不改，保留历史）</td></tr><tr><td><strong>「我现在到哪一层了」</strong></td><td>① <strong>附录 F 的 F.0 快照</strong> ② 附录 F 的 F.2 位置列</td></tr><tr><td><strong>发现路线图某处不对</strong></td><td>视情况；<strong>改动后必查</strong>：① 有无残留旧章节号 ② 有无死链接 ③ 附录 F 的 F.0 是否需记一笔</td></tr></tbody></table></div>
+<h3 id="每次更新后我会做的三件固定检查">每次更新后我会做的三件固定检查<a class="anchor" href="#每次更新后我会做的三件固定检查" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>#</th><th>检查</th><th>为什么</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>章节号一致性</strong></td><td>重排/插入后容易出现"第五部分"这类残留旧编号（<strong>已经发生过一次，8 处</strong>）</td></tr><tr><td><strong>2</strong></td><td><strong>死链接检查</strong></td><td>合并/删除文件后，<code>[](某文件.md)</code> 会失效</td></tr><tr><td><strong>3</strong></td><td><strong>附录 F 的 F.0 加一行</strong></td><td><strong>更新记录只增不改</strong>——你要能看见自己怎么变的</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 所以答案是：不会只更新时间轴。</strong> 三样东西（<strong>时间轴 / 深度地图 / 进度快照</strong>）是<strong>联动</strong>的， 而"联动关系"就写在上表里——<strong>你可以拿它来核对我有没有漏改</strong>。</p></blockquote>
+<h2 id="2-3-一份什么时候该回来的对照">2.3 一份"什么时候该回来"的对照<a class="anchor" href="#2-3-一份什么时候该回来的对照" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>信号</th><th>说明</th></tr></thead><tbody><tr><td><strong>一季结束了</strong></td><td>来做「更新深度地图」——<strong>记录真实值，不要记希望达到的值</strong></td></tr><tr><td><strong>某本教材连续三页看不懂</strong></td><td>来看 <strong>附录 B.2</strong>「什么时候必须停下来补前置」</td></tr><tr><td><strong>感觉在"假进步"</strong></td><td>来看 <strong>附录 B.3</strong> 的四种假象</td></tr><tr><td><strong>对某个方向产生兴趣</strong></td><td>「我要铺开 X」——<strong>附录 F</strong> 看看它现在开不开门</td></tr><tr><td><strong>发现路线图的某处不对</strong></td><td>直接说，我改（<strong>这份文件是活的</strong>）</td></tr></tbody></table></div>
+<h2 id="2-4-已知的待补完项">2.4 ⚠️ 已知的待补完项<a class="anchor" href="#2-4-已知的待补完项" aria-hidden="true">#</a></h2>
+<p>本文里有明确标 <code>?</code> 的地方，<strong>用之前可以让我补</strong>：</p>
+<ol><li><strong>Rudin / Spivak / Apostol / Zorich / Friedberg / Hoffman &amp; Kunze</strong> 的答案情况</li><li><strong>Axler</strong> 的习题答案来源</li><li><strong>抽象代数</strong>"只学群环域+理想+域扩张"各书读哪几章（<strong>我不猜章号</strong>）</li><li><strong>复分析</strong>的具体推荐（本轮未做）</li><li><strong>Amann 三卷的习题答案情况</strong>（⚠️ <strong>你已决定自己做，所以这条可以不做</strong>）</li></ol>
+<h2 id="2-5-早期8-条方向清单的处置记录">2.5 早期「8 条方向清单」的处置记录<a class="anchor" href="#2-5-早期8-条方向清单的处置记录" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>为什么记这一条</strong>：2026-10-16 你问「一开始那个 7 件事的 markdown 是不是没必要了」。 那条清单出自 <code>math-logic-suite-design.md</code> 第 3 节（<strong>实为 8 条</strong>）。 <strong>记下处置决定，免得将来重新问一遍。</strong></p></blockquote>
+<div class="tw"><table><thead><tr><th>#</th><th>原条目</th><th><strong>处置</strong></th><th>状态（2026-10-16 核实）</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>形式化验证（Lean 4 + mathlib）</td><td><strong>已排期</strong> → <strong>Y5Q3</strong>，是<strong>里程碑 L3</strong> 与<strong>五号汇合点</strong></td><td>✗ 未装（<code>lean</code>/<code>lake</code>/<code>elan</code> 全无）</td></tr><tr><td><strong>2</strong></td><td>SMT 求解器（Z3）</td><td><strong>需要时再说</strong>。功能被 <code>counterexample-hunt</code> 的穷举脚本<strong>部分替代</strong></td><td>✗ 未装</td></tr><tr><td><strong>3</strong></td><td><strong>LaTeX + 论文写作</strong></td><td>⚠️ <strong>建议提前</strong>——见下方说明</td><td>✗ 未装（<code>pdflatex</code>/<code>xelatex</code>/<code>pandoc</code> 全无）</td></tr><tr><td><strong>4</strong></td><td>论文阅读流水线</td><td><strong>Y4 之后再评估</strong>（真正开始读论文时）</td><td>✗ 未做</td></tr><tr><td><strong>5</strong></td><td>文献管理（Zotero 类）</td><td><strong>Y4 之后再评估</strong></td><td>✗ 未做</td></tr><tr><td><strong>6</strong></td><td>数学史与动机线</td><td><strong>已部分融入</strong>——附录 B 的 D2→D3 测试第 1 问就是"这个概念<strong>为什么被发明</strong>"</td><td>⚠️ 无独立动机线</td></tr><tr><td><strong>7</strong></td><td><strong>自学路线与能力地图</strong></td><td>✅ <strong>已被本文完全取代</strong></td><td><strong>已完成</strong></td></tr><tr><td><strong>8</strong></td><td>英语术语对照表</td><td><strong>已部分融入</strong>（附录 A 的英文优先策略；形式逻辑工程里已有术语脚本）</td><td>⚠️ 无通用术语表</td></tr></tbody></table></div>
+<h3 id="关于第-3-条latex为什么建议提前">关于第 3 条（LaTeX）——为什么建议提前<a class="anchor" href="#关于第-3-条latex为什么建议提前" aria-hidden="true">#</a></h3>
+<p>不是为写论文，而是<strong>为学数学本身</strong>：</p>
+<blockquote class="quote"><p><strong>数学分析、抽象代数这类课，"能写出规范证明"就是目标之一。</strong> LaTeX 让你<strong>边写边校验符号</strong>（<code>\neq</code>、<code>\Rightarrow</code> 打错会报错）， 比手写更早暴露"<strong>我其实没搞清这个符号</strong>"。</p></blockquote>
+<p><strong>代价低</strong>（装一次），<strong>收益早</strong>（从第一门课就用得上）。</p>
+<h3 id="关于第-1-条lean-4已在路线图里-不必重复">关于第 1 条（Lean 4）——已在路线图里，不必重复<a class="anchor" href="#关于第-1-条lean-4已在路线图里-不必重复" aria-hidden="true">#</a></h3>
+<p>它<strong>不是"待办"，是 Y5Q3 的内容</strong>，且承担两个角色： <strong>里程碑 L3</strong>（形式化命题逻辑可靠性）+ <strong>五号汇合点</strong>（四科合一）。</p>
+<h2 id="2-6-环境准备状态2026-10-16-实测">2.6 环境准备状态（2026-10-16 实测）<a class="anchor" href="#2-6-环境准备状态2026-10-16-实测" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p>2026-10-16 你问「VS Code 和 LaTeX 作用是否差不多」——<strong>不一样</strong>： <strong>VS Code 是编辑器（写东西的地方），LaTeX 是排版系统（把源码变 PDF）。</strong> <strong>在 VS Code 里写 <code>.tex</code>，用 LaTeX 编译成 PDF。</strong> 不是二选一。</p>
+<p><strong>而且对 Lean 4，VS Code 几乎是必需的</strong>——官方扩展提供<strong>交互式证明状态</strong> （当前目标、可用假设）。没有它，学习体验会差很多。</p></blockquote>
+<div class="tw"><table><thead><tr><th>工具</th><th>状态</th><th>什么时候需要</th></tr></thead><tbody><tr><td><strong>VS Code</strong></td><td>✅ <strong>已装</strong>（<code>C:\Users\27417\AppData\Local\Programs\Microsoft VS Code\</code>，227 MB；<code>code</code> 命令可用）</td><td><strong>现在</strong>——你最近在用</td></tr><tr><td>VS Code 扩展：Markdown Preview Enhanced</td><td>✅ 已装（唯一一个）</td><td>——</td></tr><tr><td><strong>VS Code 扩展：Lean 4</strong>（<code>leanprover.lean4</code>）</td><td>✗ 未装</td><td><strong>Y5Q3 之前</strong>；想现在玩 NNG4 也可以</td></tr><tr><td><strong>VS Code 扩展：LaTeX Workshop</strong></td><td>✗ 未装</td><td>第一门数学课开始</td></tr><tr><td><strong>Lean 4 工具链</strong>（<code>elan</code> + <code>lean</code> + <code>lake</code>）</td><td>✗ 未装</td><td>同上</td></tr><tr><td><strong>TeX 发行版</strong>（MiKTeX 或 TeX Live）</td><td>✗ 未装</td><td>同上</td></tr><tr><td>Pandoc</td><td>✗ 未装</td><td>需要 md ↔ tex 转换时</td></tr><tr><td>Z3（SMT 求解器）</td><td>✗ 未装</td><td>需要时再说（见 8.4 第 2 条）</td></tr></tbody></table></div>
+<h3 id="安装必须你在桌面端做实测发现">⚠️ 安装必须你在桌面端做（实测发现）<a class="anchor" href="#安装必须你在桌面端做实测发现" aria-hidden="true">#</a></h3>
+<p><strong>这个 sandbox 连不上外网</strong>——我从 shell 试过，以下全部 SSL 握手失败：</p>
+<pre class="code"><code>marketplace.visualstudio.com   ✗
+lean-lang.org                  ✗
+github.com/leanprover/elan     ✗
+leanprover-community.github.io ✗</code></pre>
+<p>（我平时用的 <code>web_search</code> / <code>web_fetch</code> 走的是 harness 代理，<strong>但那只读网页，不能装东西</strong>。）</p>
+<p><strong>⇒ 三条命令层面的做法（你在自己桌面端执行）</strong>：</p>
+<div class="tw"><table><thead><tr><th>要做的事</th><th>怎么做</th></tr></thead><tbody><tr><td>装 VS Code 扩展</td><td>VS Code 内 <code>Ctrl+Shift+X</code> 搜 <code>Lean 4</code> / <code>LaTeX Workshop</code></td></tr><tr><td>⚠️ 若市场连不上</td><td>从 <a href="https://open-vsx.org/" target="_blank" rel="noopener">Open VSX</a> 或 GitHub Releases 下 <strong>VSIX 文件</strong>，用 <code>code --install-extension &lt;文件&gt;.vsix</code> 本地安装</td></tr><tr><td>装 Lean 4 工具链</td><td>按 <a href="https://lean-lang.org/documentation/setup/" target="_blank" rel="noopener">lean-lang.org/documentation/setup</a> 装 <code>elan</code>（它会自动管理 Lean 版本）</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>规模参考</strong>：Lean 4 工具链比 mathlib 小得多——<strong>mathlib 才需要 3–5 GB 和长时间首次编译</strong>。 先用 Lean 玩命题逻辑与皮亚诺算术即可，<strong>不要一上来碰 mathlib</strong>。</p></blockquote>
+<h2 id="2-7-这份路线图也可以当网页看2026-10-17-加">2.7 这份路线图也可以当网页看（2026-10-17 加）<a class="anchor" href="#2-7-这份路线图也可以当网页看2026-10-17-加" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p>你说"主要是我自己用"——所以做成了<strong>单文件网页</strong>，放在 <code>site\</code> 下。</p></blockquote>
+<h3 id="三种打开方式">三种打开方式<a class="anchor" href="#三种打开方式" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>方式</th><th>怎么开</th><th>网址</th><th>需要什么</th></tr></thead><tbody><tr><td><strong>A. 直接打开</strong></td><td>双击 <code>site\index.html</code></td><td>—</td><td><strong>什么都不用</strong>（零依赖）</td></tr><tr><td><strong>B. 本机网址</strong></td><td>双击 <code>site\启动网址.cmd</code></td><td><strong><a href="http://127.0.0.1:8000/" target="_blank" rel="noopener">http://127.0.0.1:8000/</a></strong></td><td>需要 Python（DSH 自带的够）</td></tr><tr><td><strong>C. 手机/平板</strong></td><td>双击 <code>site\启动网址-手机可访问.cmd</code></td><td>启动后窗口会打印 <code>http://192.168.x.x:8001/</code></td><td>手机与电脑<strong>同一 Wi-Fi</strong>；首次弹防火墙选「允许」</td></tr></tbody></table></div>
+<p><strong>功能</strong>：侧栏目录（15 组）· <strong><code>Ctrl+K</code> 全文搜索</strong> · 阅读进度条 · 标题锚点 · 深色模式 · 窄屏自适应。</p>
+<h3 id="换电脑怎么办这是个关键区别">⚠️ 换电脑怎么办（<strong>这是个关键区别</strong>）<a class="anchor" href="#换电脑怎么办这是个关键区别" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>东西</th><th>能不能带走</th></tr></thead><tbody><tr><td><strong><code>http://127.0.0.1:8000/</code> 这个网址</strong></td><td>❌ <strong>不能</strong>——<code>127.0.0.1</code> 的意思是"<strong>当前这台机器</strong>"。换台电脑它指向那台电脑，那里没有服务</td></tr><tr><td><strong><code>site\index.html</code> 这个文件</strong></td><td>✅ <strong>能，而且不需要任何安装</strong>——它是<strong>完全自包含</strong>的（已验证：0 外部资源、0 相对路径、0 本机绝对路径）。拷到任何电脑，<strong>双击就能看，不联网也行</strong></td></tr></tbody></table></div>
+<p><strong>⇒ 所以答案是：网址带不走，文件带得走。</strong></p>
+<p><strong>跨设备同步的三种做法</strong>（按省事排序）：</p>
+<div class="tw"><table><thead><tr><th>做法</th><th>说明</th></tr></thead><tbody><tr><td><strong>云盘</strong>（OneDrive / 坚果云 / iCloud）</td><td>把 <code>site</code> 文件夹放进去，<strong>任何设备双击 <code>index.html</code></strong></td></tr><tr><td><strong>U 盘 / 移动硬盘</strong></td><td>同上，临时用最方便</td></tr><tr><td><strong>公网托管</strong>（Netlify Drop 拖文件夹即得网址）</td><td>只有这种方式能"在任何设备输入网址打开"</td></tr></tbody></table></div>
+<blockquote class="quote"><p>⚠️ <strong>但公网托管要谨慎</strong>：这份文件里有你的<strong>学习进度、自我评估、专业方向想法、报考计划</strong>。 <strong>放公网 = 任何拿到链接的人都能读</strong>。若只是多设备查看，<strong>云盘 + 双击</strong>就够了。</p></blockquote>
+<h3 id="改了内容之后">改了内容之后<a class="anchor" href="#改了内容之后" aria-hidden="true">#</a></h3>
+<p><code>四科路线图.md</code> 是<strong>唯一数据源</strong>，网页只是它的渲染结果：</p>
+<pre class="code"><code>改 md  →  双击 site\重新生成.cmd  →  刷新浏览器</code></pre>
+<blockquote class="quote"><p><strong>不用手改 <code>index.html</code></strong>——它会被下次重建覆盖。</p></blockquote>
+<hr>
+<hr>
+<h1 id="第三部分-里程碑系统">第三部分 · 里程碑系统<a class="anchor" href="#第三部分-里程碑系统" aria-hidden="true">#</a></h1>
+<h2 id="3-1-为什么需要它">3.1 为什么需要它<a class="anchor" href="#3-1-为什么需要它" aria-hidden="true">#</a></h2>
+<p>你那份 8 阶段路径给不了"成长感"，因为三个具体缺陷：</p>
+<div class="tw"><table><thead><tr><th>#</th><th>问题</th><th>后果</th></tr></thead><tbody><tr><td>1</td><td>8 阶段<strong>以年计</strong>，没有里程碑</td><td>看不见自己走到哪</td></tr><tr><td>2</td><td><strong>几乎全是讲解型著作，没有题</strong></td><td>不做题无法确认"我会了"</td></tr><tr><td>3</td><td>只有"读什么"，没有"<strong>读完能做什么</strong>"</td><td>无法验证成长</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>"成长感"不是心理需求，是路径质量的指标。</strong></p></blockquote>
+<h2 id="3-2-三种里程碑">3.2 三种里程碑<a class="anchor" href="#3-2-三种里程碑" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>类型</th><th>形式</th><th>特点</th></tr></thead><tbody><tr><td><strong>产出版</strong></td><td>一个文件：证明、程序、笔记、形式化代码</td><td>看得见、能给别人看</td></tr><tr><td><strong>通过版</strong></td><td>做完某本书的题、跑通某个工具</td><td>可自测</td></tr><tr><td><strong>表达版</strong></td><td>能<strong>不看书写出</strong>证明骨架、能向别人讲清概念</td><td><strong>最便宜，最能暴露"假会"</strong></td></tr></tbody></table></div>
+<p><strong>每季至少一个，表达版优先。</strong></p>
+<h2 id="3-3-五个标志性里程碑">3.3 五个标志性里程碑<a class="anchor" href="#3-3-五个标志性里程碑" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>编号</th><th>成果</th><th>落点</th></tr></thead><tbody><tr><td><strong>L1</strong></td><td>独立写出 Enderton 完备性证明（Henkin 构造）</td><td>Y1Q4</td></tr><tr><td><strong>L2</strong></td><td>做完 Halmos 全部章末习题</td><td>Y2Q1</td></tr><tr><td><strong>L3</strong></td><td>用 Lean 4 形式化命题逻辑的可靠性证明</td><td>Y5Q3</td></tr><tr><td><strong>L4</strong></td><td>用类型驱动语义分析一段自然语言的量词辖域</td><td>Y3Q3</td></tr><tr><td><strong>L5</strong></td><td>实现一个简单类型检查器</td><td>Y5Q4</td></tr></tbody></table></div>
+<hr>
+<hr>
+<h1 id="附录-f-深度地图与深入方向">附录 F · 深度地图与深入方向<a class="anchor" href="#附录-f-深度地图与深入方向" aria-hidden="true">#</a></h1>
+<h2 id="f-0-进度快照每次维护时更新-带日期">F.0 进度快照（<strong>每次维护时更新，带日期</strong>）<a class="anchor" href="#f-0-进度快照每次维护时更新-带日期" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>为什么要这一节</strong>：F.2 的「你的位置」列如果是静态的，<strong>一年后就是错的</strong>， 而你会以为它还准。</p>
+<p>2026-10-16 你问：「如果我在另一个对话里学完一本书，你在这里会不会有记录？」 <strong>准确回答</strong>：</p>
+<div class="tw"><table><thead><tr><th>层</th><th>能否跨对话</th></tr></thead><tbody><tr><td><strong>我的对话记忆</strong></td><td>❌ <strong>不会</strong>——每个新对话的我都是全新的</td></tr><tr><td><strong>书本身</strong></td><td>✅ 能——只要书在工作区，我<strong>能直接读</strong>（PyMuPDF），但每次都要重读</td></tr><tr><td><strong>你的进度</strong></td><td>⚠️ <strong>取决于有没有写下来</strong></td></tr></tbody></table></div>
+<p><strong>⇒ 所以这一节必须由「记录」驱动，不能靠我"记得"。</strong></p></blockquote>
+<h3 id="快照表">快照表<a class="anchor" href="#快照表" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>层级</th><th>依据（时间 + 来源）</th></tr></thead><tbody><tr><td>一阶逻辑（Smith IFL）</td><td><strong>D2 可能</strong>（你自述做完 432 道题）</td><td>2026-10-16 · 你在对话里自述</td></tr><tr><td><strong>证明能力（通用）</strong></td><td>⭐ <strong>有正向证据</strong></td><td><strong>2026-10-16 · 你说高中时自学定理攻导数压轴题，第一次学就自己写证明，且"有时给出了不一样的证明角度"</strong></td></tr><tr><td>数学分析</td><td><strong>D0→D1</strong>（已有 Amann 三卷，未系统开始）</td><td>2026-10-16 · 你自述"现在应该处于 D0-D1"</td></tr><tr><td>高等代数 / 抽象代数</td><td><strong>D0</strong></td><td>估计</td></tr><tr><td>点集拓扑</td><td><strong>D0</strong></td><td>估计</td></tr><tr><td>元逻辑</td><td><strong>D0</strong></td><td>估计</td></tr><tr><td>模型论 / 可计算性 / 证明论</td><td><strong>D0</strong></td><td>估计</td></tr><tr><td>Lean 4</td><td><strong>D0</strong></td><td>估计</td></tr><tr><td>语言学</td><td><strong>D0</strong></td><td>估计</td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="关于证明能力那一行的说明2026-10-16-新增">⭐ 关于「证明能力」那一行的说明（2026-10-16 新增）<a class="anchor" href="#关于证明能力那一行的说明2026-10-16-新增" aria-hidden="true">#</a></h3>
+<p><strong>为什么单列一行</strong>：「能在抽象对象上工作」和「能在具体对象上证明」是<strong>两种能力</strong>， 而你的证据目前只覆盖后者。</p>
+<div class="tw"><table><thead><tr><th>你的证据覆盖了</th><th>尚未覆盖（<strong>Y1 起才会显形</strong>）</th></tr></thead><tbody><tr><td><strong>具体对象</strong>上的证明（函数、导数）</td><td><strong>抽象对象</strong>（群／域／拓扑空间）——<strong>直觉会失效</strong></td></tr><tr><td>工具<strong>已给</strong>时选工具</td><td>工具要<strong>自己造</strong></td></tr><tr><td>解答<strong>别人出的</strong>题</td><td>提出<strong>自己的</strong>问题</td></tr></tbody></table></div>
+<p><strong>⇒ 所以这一行的准确读法是</strong>：<strong>"证明这件事你喜欢，且做得不差"</strong>—— 但<strong>"能不能在抽象层面继续"是待验的</strong>（已写进附录 K 的修正版测试 1）。</p>
+<p><strong>旁证</strong>：你的数学入门是<strong>竞赛式／定理式</strong>的（为攻克压轴题而学定理），<strong>不是刷题型</strong>—— 这恰是走数学理论路线的典型起点，<strong>且特别能对上抽象代数与数理逻辑</strong>。</p></blockquote>
+<blockquote class="quote"><p>⚠️ <strong>除了一阶逻辑与证明能力两行，其余都是我的估计，不是测量。</strong> 用 <strong>附录 B</strong> 的测试一验就知道——<strong>测试结果才是数据</strong>。</p></blockquote>
+<h3 id="工作区里的进度证据在哪我该在更新前先读这些">工作区里的"进度证据"在哪（我该在更新前先读这些）<a class="anchor" href="#工作区里的进度证据在哪我该在更新前先读这些" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>证据</th><th>位置</th></tr></thead><tbody><tr><td>数学笔记（另一个对话的产物）</td><td><strong>D:\学习\笔记\毁灭\4.数学</strong>（276 个 md；含 01.集合～26+ 专题）</td></tr><tr><td>工程进度总表</td><td>_outmath\工程进度总表.md</td></tr><tr><td>笔记勘误表</td><td>_outmath\_笔记勘误表.md</td></tr><tr><td>形式逻辑笔记</td><td>D:\学习\笔记\执行（含 50 Question\Smith-IFL 疑问汇总.md）</td></tr><tr><td>你的教材</td><td>_amann\（Amann 三卷）· 桌面 逻辑学\（Smith / Enderton / Boolos）</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 更新路线图前，先读上表——不要只靠你口头描述。</strong> （这一条也写进了</p></blockquote>
+<p>esearch-memory 技能。）</p>
+<h3 id="更新记录只增不改-保留历史">更新记录（<strong>只增不改，保留历史</strong>）<a class="anchor" href="#更新记录只增不改-保留历史" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>日期</th><th>更新了什么</th><th>依据</th></tr></thead><tbody><tr><td>2026-10-16</td><td>建立本节；首份快照</td><td>你自述 + 工作区扫描</td></tr><tr><td>2026-10-16</td><td>加「证明能力」一行；修正附录 K 测试 1</td><td>你说高中时自己写证明且<strong>有时角度与书上不同</strong></td></tr></tbody></table></div>
+<h2 id="f-1-三种标记的分工">F.1 三种标记的分工<a class="anchor" href="#f-1-三种标记的分工" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>概念</th><th>管什么</th></tr></thead><tbody><tr><td><strong>深度层级（D0–D6）</strong></td><td>你在<strong>某个主题</strong>上的深度（测试见 3.4）</td></tr><tr><td><strong>阶段（Y1Q1…）</strong></td><td>你在<strong>时间轴</strong>上的位置</td></tr><tr><td><strong>【铺】标记</strong></td><td><strong>值得铺开</strong>——现在可以停，但将来一定有需要它的时刻</td></tr></tbody></table></div>
+<p><strong>三个标记</strong>：<strong>【主】</strong>主科核心线 · <strong>【铺】</strong>值得铺开 · <strong>【支】</strong>支线</p>
+<h2 id="f-2-每条线现在停在哪深度地图">F.2 每条线现在停在哪（深度地图）<a class="anchor" href="#f-2-每条线现在停在哪深度地图" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>位置是我按你的自述估计的</strong>，不是测量结果。用 附录 B 的测试一验就知道。</p></blockquote>
+<h3 id="f-2-1-数学主科">F.2.1 数学（主科）<a class="anchor" href="#f-2-1-数学主科" aria-hidden="true">#</a></h3>
+<h3 id="2-1-分析学">2.1 分析学<a class="anchor" href="#2-1-分析学" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>你的位置（估计）</th><th>下一层的【门】</th><th>为什么要它</th></tr></thead><tbody><tr><td><strong>微积分/数学分析基础</strong></td><td>D1–D2（Smith 那套训练让你会写证明，但未系统学分析）</td><td>一本<strong>严格</strong>的数学分析教材（Rudin / Tao / 卓里奇 等，<strong>选带答案的</strong>）</td><td><strong>数学专业第一门骨架课</strong>【骨】</td></tr><tr><td><strong>实分析（测度与积分）</strong></td><td>D0</td><td>先完成数学分析；再 Folland / Rudin《Real and Complex Analysis》</td><td>概率、泛函、描述集合论的共同地基</td></tr><tr><td><strong>复分析</strong></td><td>D0</td><td>Ahlfors / Stein &amp; Shakarchi</td><td>分析的另一半；代数几何的入口之一</td></tr><tr><td><strong>泛函分析</strong></td><td>D0</td><td>Rudin / Brezis</td><td>无穷维的线性代数</td></tr><tr><td><strong>点集拓扑</strong> <code>✔</code></td><td>D0</td><td><strong>Munkres 前 3 章</strong>（<code>✔</code> 有中译本与<a href="https://github.com/kyp44/Topology" target="_blank" rel="noopener">公开解答</a>）</td><td><strong>一切现代数学的共同语言</strong>【骨】</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【铺】分析学。</strong> 回来信号：<strong>当你想读任何分析类论文，或发现"极限/连续/紧致"用得心虚时。</strong></p></blockquote>
+<h3 id="2-2-代数学">2.2 代数学<a class="anchor" href="#2-2-代数学" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>你的位置</th><th>下一层的【门】</th><th>为什么要它</th></tr></thead><tbody><tr><td><strong>线性代数</strong></td><td>D1?</td><td>一本<strong>证明导向</strong>的线代（Axler / Friedberg），不是计算导向的</td><td>一切数学的<strong>第一个工作语言</strong>【骨】</td></tr><tr><td><strong>抽象代数（群环域）</strong></td><td>D0</td><td><code>✔</code> <strong>Pinter《A Book of Abstract Algebra》</strong>（Dover，<a href="https://github.com/narodnik/abstract-algebra-pinter-solutions" target="_blank" rel="noopener">社区解答</a>）→ Dummit &amp; Foote</td><td><strong>数学专业第二门骨架课</strong>【骨】；<strong>模型论里 ACF/RCF 的前提</strong></td></tr><tr><td><strong>Galois 理论</strong></td><td>D0</td><td>需先有群环域</td><td>代数与数论的交汇；也是<strong>模型论的好例子来源</strong></td></tr><tr><td><strong>交换代数</strong></td><td>D0</td><td>Atiyah–Macdonald</td><td>代数几何的前提</td></tr><tr><td><strong>代数几何</strong></td><td>D0</td><td>需交换代数 + 拓扑</td><td>现代数学的中心；<strong>模型论与代数几何的交汇</strong>（你的逻辑路径 3.2 列出）</td></tr><tr><td><strong>同调代数 / 范畴论</strong></td><td>D0</td><td>需抽象代数 + 模论</td><td>统一语言；逻辑路径 5.5 会用到</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【铺】抽象代数。</strong> 回来信号：<strong>你要读稳定性理论（模型论 3.1）、或发现证明里到处是"域扩张"时。</strong></p></blockquote>
+<h3 id="2-3-几何与拓扑">2.3 几何与拓扑<a class="anchor" href="#2-3-几何与拓扑" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>你的位置</th><th>下一层的【门】</th></tr></thead><tbody><tr><td>微分几何</td><td>D0</td><td>需数学分析 + 线代；do Carmo</td></tr><tr><td>代数拓扑</td><td>D0</td><td>需抽象代数 + 点集拓扑；Hatcher（免费）</td></tr><tr><td>微分流形</td><td>D0</td><td>需微分几何 + 拓扑；Lee</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【支】整个几何分支。</strong> 除非你的兴趣往那走，<strong>现在不要铺</strong>。</p></blockquote>
+<h3 id="2-4-数理逻辑视角下的数学">2.4 数理逻辑视角下的数学<a class="anchor" href="#2-4-数理逻辑视角下的数学" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>说明</th></tr></thead><tbody><tr><td>集合论（ZFC、序数、基数）</td><td><strong>数学与逻辑的共享地基</strong>，两边都要</td></tr><tr><td>模型论</td><td>逻辑主科，但它<strong>就是数学的一支</strong>（见下节）</td></tr><tr><td>递归论 / 证明论</td><td>同上</td></tr></tbody></table></div>
+<blockquote class="quote"><p>⇒ <strong>你的两个主科在"集合论 + 模型论"处天然合并。</strong> 这是最大的结构性优势。</p></blockquote>
+<hr>
+<h3 id="f-2-2-逻辑主科">F.2.2 逻辑（主科）<a class="anchor" href="#f-2-2-逻辑主科" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>你已有</th><th>下一层的【门】</th></tr></thead><tbody><tr><td><strong>一阶逻辑（命题/量化）</strong></td><td>D2–D3（Smith 全部做完）</td><td>你已在做</td></tr><tr><td><strong>元逻辑（可靠性/完全性/紧致性）</strong></td><td>D0–D1</td><td><code>✔</code> <strong>Leary &amp; Kristiansen</strong>（免费+有答案）→ Chiswell &amp; Hodges → Enderton</td></tr><tr><td><strong>集合论</strong></td><td>D0–D1</td><td>Enderton《Elements of Set Theory》→ Kunen《Foundations of Mathematics》</td></tr><tr><td><strong>模型论</strong></td><td>D0</td><td><strong>Chang &amp; Keisler Ch.1–3</strong> → Hodges《Shorter》 → Poizat → Tent &amp; Ziegler → Marker</td></tr><tr><td><strong>可计算性 / 不完全性</strong></td><td>D0–D1（42-3 那条线你摸过）</td><td><code>✔</code> <strong>Peter Smith《IGT》免费 PDF + 免费答案册</strong>；<code>✔</code> <a href="https://www.logicmatters.net/igt/" target="_blank" rel="noopener">GWT</a></td></tr><tr><td><strong>证明论</strong></td><td>D0</td><td>先修：<strong>序数 + 超限归纳</strong>；第一本用 <strong>Negri &amp; von Plato</strong>（Smith：比 Mancosu "more enjoyable"）</td></tr><tr><td><strong>类型论 / Curry–Howard</strong></td><td>D0</td><td>与你选的 <strong>Lean 4</strong> 天然合流</td></tr><tr><td><strong>模态逻辑 / 非经典逻辑 / 哲学逻辑</strong></td><td>D0</td><td>哲学逻辑阶段</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【铺】模型论 + 集合论。</strong> 回来信号：<strong>当你在数学侧遇到"这个结构能否被一阶刻画"这类问题时</strong>—— 那正是模型论的地盘，也是数学与逻辑<strong>真正交汇</strong>的地方。</p></blockquote>
+<hr>
+<h3 id="f-2-3-计算机支线-但你说过对就业有帮助">F.2.3 计算机（支线，但你说过对就业有帮助）<a class="anchor" href="#f-2-3-计算机支线-但你说过对就业有帮助" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>你的定位</strong>：学有余力；<strong>能自学编程对就业有帮助</strong>。 ⇒ 所以这一节分<strong>两条完全不同的路线</strong>，别混。</p></blockquote>
+<h3 id="4-1铺研究-理论路线与逻辑合流">4.1【铺】研究/理论路线（与逻辑合流）<a class="anchor" href="#4-1铺研究-理论路线与逻辑合流" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>下一层的【门】</th><th>为什么与你的主科相连</th></tr></thead><tbody><tr><td><strong>Lean 4 定理证明</strong></td><td><code>✔</code> <a href="https://adam.math.hhu.de/#/g/hhu-adam/NNG4" target="_blank" rel="noopener">NNG4</a> → <a href="https://lean-lang.org/theorem_proving_in_lean4/" target="_blank" rel="noopener">TPIL4</a> → <a href="https://leanprover-community.github.io/mathematics_in_lean/" target="_blank" rel="noopener">Mathematics in Lean</a></td><td><strong>四科唯一的交汇点</strong>：逻辑+数学+计算+语言</td></tr><tr><td><strong>可计算性 / 复杂度</strong></td><td><code>✔</code> Sipser（<code>✔</code> 有中译本与<a href="https://github.com/gaurangsaini/sipser-computation-3rd-solutions" target="_blank" rel="noopener">完整民间解答</a>）→ <code>✔</code> <a href="https://theory.cs.princeton.edu/complexity/book.pdf" target="_blank" rel="noopener">Arora &amp; Barak 免费 PDF</a></td><td><strong>与逻辑阶段 4 是同一件事的两个视角</strong></td></tr><tr><td><strong>类型论 / PL</strong></td><td><code>✔</code> Pierce《TAPL》（<code>✔</code> 中译本《类型和程序设计语言》）</td><td>Curve–Howard 的那一半</td></tr><tr><td><strong>描述复杂性 / 有限模型论</strong></td><td>需先有复杂度 + 模型论</td><td><strong>逻辑 × 计算机最紧的交汇</strong>（你的路径 3.4 列出）</td></tr></tbody></table></div>
+<blockquote class="quote"><p>⚠️ <strong>Software Foundations 的 Lean 版现在只是 alpha</strong>（官方自述 <em>"not ready for ordinary readers quite yet"</em>）。 <strong>主线用 TPIL4 + MIL，别等它。</strong></p></blockquote>
+<h3 id="4-2支就业路线与理论无关-另算">4.2【支】<strong>就业路线</strong>（与理论无关，另算）<a class="anchor" href="#4-2支就业路线与理论无关-另算" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p>你说"能自学编程对就业有帮助"——<strong>这一条需要的技能和上面完全不同</strong>， 而且<strong>不需要经过理论 CS</strong>。</p></blockquote>
+<div class="tw"><table><thead><tr><th>需要什么</th><th>说明</th></tr></thead><tbody><tr><td>一门工业语言</td><td>Python（你已有）／ Java／ Go／ TypeScript</td></tr><tr><td>工程能力</td><td>Git、测试、调试、读别人的代码</td></tr><tr><td>一个完整项目</td><td><strong>能演示的东西</strong>比证书有用</td></tr><tr><td>数据/算法基础</td><td>面试导向，与 Sipser 那套不是一回事</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>诚实提醒</strong>：<strong>理论 CS 对就业帮助很小</strong>（除非你走研究岗）。 如果你要的是就业，<strong>应该直接做项目，不要先读 Sipser</strong>。 这两条路<strong>别互相耽误</strong>。</p></blockquote>
+<hr>
+<h3 id="f-2-4-语言学支线">F.2.4 语言学（支线）<a class="anchor" href="#f-2-4-语言学支线" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>下一层的【门】</th><th>注意</th></tr></thead><tbody><tr><td>语言学总论地图</td><td><code>✔</code> Yule《The Study of Language》<code>🇨🇳</code> 中译《语言研究》商务 2023</td><td>零基础入口</td></tr><tr><td><strong>句法学</strong>（<strong>不能跳</strong>）</td><td><code>✔</code> Carnie《Syntax》4th ed + <strong>Workbook 2nd ed</strong>（<code>✔</code> 官方摘要："over 120 problem sets <strong>with answers</strong>"）</td><td>核实结论：<strong>不做句法，后面会卡在句法而非语义上</strong></td></tr><tr><td>语义学轻松第一遍</td><td><code>✔</code> Portner《What is Meaning?》（含习题）</td><td></td></tr><tr><td><strong>形式语义学</strong></td><td><code>✔</code> <strong>Winter《Elements of Formal Semantics》Ch.1–3 免费</strong>，量词章需买书</td><td>⚠️ <strong>Heim &amp; Kratzer 没有答案，网上也没有</strong>（提问帖零回答）</td></tr><tr><td>λ 演算与语义的桥</td><td><code>✔</code> <a href="http://www.christopherpotts.net/ling/teaching/lsa108P/" target="_blank" rel="noopener">Chris Potts《Logic for Linguists》</a> —— <strong>60 题 + 作者答案</strong></td><td><strong>最贴合你状态的语言学入口</strong></td></tr><tr><td>组合范畴语法（CCG）</td><td><code>✔</code> 先读 Steedman &amp; Baldridge 免费综述章</td><td></td></tr><tr><td>计算语言学</td><td><code>✔</code> <a href="https://web.stanford.edu/~jurafsky/slp3/" target="_blank" rel="noopener">Jurafsky &amp; Martin SLP3</a> 免费（但形式语义学只在附录 G/H）</td><td>与你的 ML 环境经验接得上</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>【支】整个语言学。</strong> 它与逻辑的接口是<strong>模型论语义</strong>与<strong>类型论</strong>—— 所以你<strong>不需要专门为它铺路</strong>，走到那两个汇合点自然会开门。</p></blockquote>
+<hr>
+<h3 id="f-2-5-你最该记住的三个回来信号">F.2.5 你最该记住的三个「回来信号」<a class="anchor" href="#f-2-5-你最该记住的三个回来信号" aria-hidden="true">#</a></h3>
+<p>如果未来你只记得三件事，记这三条：</p>
+<div class="tw"><table><thead><tr><th>#</th><th>信号</th><th>该回到哪</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>发现"<strong>极限/连续/紧致</strong>"用得心虚</td><td>→ <strong>数学分析 + 点集拓扑</strong>【铺】</td></tr><tr><td><strong>2</strong></td><td>发现证明里到处是"<strong>域扩张 / 理想</strong>"</td><td>→ <strong>抽象代数</strong>【铺】</td></tr><tr><td><strong>3</strong></td><td>想知道"<strong>这个结构能否被一阶刻画</strong>"</td><td>→ <strong>模型论 + 集合论</strong>【铺】，且这是<strong>你的两个主科交汇处</strong></td></tr></tbody></table></div>
+<hr>
+<h2 id="f-3-深入方向总表">F.3 深入方向总表<a class="anchor" href="#f-3-深入方向总表" aria-hidden="true">#</a></h2>
+<h3 id="f-3-1-方向总表">F.3.1 方向总表<a class="anchor" href="#f-3-1-方向总表" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>#</th><th>方向</th><th>前置链</th><th>状态</th></tr></thead><tbody><tr><td><strong>D1</strong></td><td><strong>代数几何</strong></td><td>抽象代数 → 交换代数 → 拓扑 → 代数几何</td><td>✔ 本轮已核实入口</td></tr><tr><td><strong>D2</strong></td><td><strong>模型论 · 稳定性与分类</strong></td><td>一阶逻辑 → 模型论基础 → 抽象代数</td><td>✔ 部分核实</td></tr><tr><td><strong>D3</strong></td><td><strong>描述集合论</strong></td><td>集合论 → 点集拓扑（Polish 空间）</td><td>✔ 部分核实</td></tr><tr><td><strong>D4</strong></td><td><strong>有限模型论与描述复杂性</strong></td><td>一阶逻辑 → 可计算性/复杂度</td><td>✔ 部分核实</td></tr><tr><td><strong>D5</strong></td><td><strong>力迫法与大基数</strong></td><td>集合论（序数/基数）→ 力迫</td><td>△ 待核实</td></tr><tr><td><strong>D6</strong></td><td><strong>证明论 · 序数分析</strong></td><td>序数 + 超限归纳 → 证明论</td><td>△ 待核实</td></tr><tr><td><strong>D7</strong></td><td><strong>类型论与 Curry–Howard</strong></td><td>λ 演算 → 类型系统</td><td>△ 待核实</td></tr><tr><td><strong>D8</strong></td><td><strong>二阶与高阶逻辑</strong></td><td>一阶逻辑 → 模型论</td><td>✔ 前一轮已核实（Shapiro/Väänänen）</td></tr><tr><td><strong>D9</strong></td><td><strong>度理论与算法随机性</strong></td><td>可计算性</td><td>△ 待核实</td></tr><tr><td><strong>D10</strong></td><td><strong>范畴逻辑 / 拓扑斯</strong></td><td>范畴论 → 逻辑</td><td>△ 待核实</td></tr><tr><td><strong>D11</strong></td><td><strong>模态与非经典逻辑</strong></td><td>命题逻辑 → 模态逻辑</td><td>✔ 前一轮已核实（Blackburn 等）</td></tr><tr><td><strong>D12</strong></td><td><strong>形式语义学与 CCG</strong></td><td>语言学导论 → 句法 → 语义</td><td>✔ 前一轮已核实</td></tr><tr><td><strong>D13</strong></td><td><strong>计算语言学 / NLP</strong></td><td>编程 + 统计 + 语言学</td><td>✔ 部分核实</td></tr></tbody></table></div>
+<hr>
+<h3 id="d1-代数几何-你举的例子-路径里确实没有标记">D1 · 代数几何 ✔（你举的例子，路径里确实没有标记）<a class="anchor" href="#d1-代数几何-你举的例子-路径里确实没有标记" aria-hidden="true">#</a></h3>
+<h3 id="①-前置链这步不能跳">① 前置链（<strong>这步不能跳</strong>）<a class="anchor" href="#①-前置链这步不能跳" aria-hidden="true">#</a></h3>
+<pre class="code"><code>抽象代数（群环域）      ← 你的深度地图里已有【铺】
+   ↓
+交换代数（理想、局部化、诺特性）   ← 关键跳板
+   ↓
+点集拓扑（开闭集、紧致、连续）     ← 你的深度地图里已有【铺】
+   ↓
+代数几何</code></pre>
+<blockquote class="quote"><p><strong>诚实提醒</strong>：代数几何是数学里<strong>前置最长</strong>的方向之一。 从零到能读研究论文，<strong>以年计</strong>。这不是劝退，是让你别用错期待。</p></blockquote>
+<h3 id="②-第一本读什么">② 第一本读什么<a class="anchor" href="#②-第一本读什么" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>书</th><th>定位</th><th>核实</th></tr></thead><tbody><tr><td><strong>★ Vakil《The Rising Sea: Foundations of Algebraic Geometry》</strong></td><td><strong>免费开放</strong>，<a href="https://math.stanford.edu/~vakil/216blog/" target="_blank" rel="noopener">Stanford 官方页</a>；<code>✔</code> 免费 PDF 可下载（<a href="http://math.stanford.edu/~vakil/216blog/FOAGmay0623public.pdf" target="_blank" rel="noopener">FOAG 公开版</a>）；<strong>以大量习题著称</strong>——对自学者是关键优势</td><td>✔</td></tr><tr><td>Hartshorne《Algebraic Geometry》</td><td><strong>经典但极难</strong>，是研究生标准教材、也是<strong>参考手册</strong>；习题难且无答案</td><td>△</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 自学者应从 Vakil 入手，不是 Hartshorne。</strong> 这是本卡最实用的一条。</p></blockquote>
+<h3 id="③-除主教材外还有什么3-种">③ 除主教材外还有什么（≥3 种）<a class="anchor" href="#③-除主教材外还有什么3-种" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>类型</th><th>材料</th><th>用途</th></tr></thead><tbody><tr><td><strong>交换代数</strong></td><td>Atiyah &amp; Macdonald《Introduction to Commutative Algebra》</td><td>短、经典、<strong>前置必备</strong></td></tr><tr><td><strong>交换代数（厚版）</strong></td><td>Eisenbud《Commutative Algebra with a View Toward Algebraic Geometry》</td><td>需要时查</td></tr><tr><td><strong>曲线先行</strong></td><td>Fulton《Algebraic Curves》（<strong>免费</strong>）</td><td><strong>先学曲线再学概形</strong>是公认的缓坡</td></tr><tr><td><strong>几何直觉</strong></td><td>Shafarevich《Basic Algebraic Geometry 1》</td><td>补几何直观</td></tr><tr><td><strong>课程</strong></td><td><code>✔</code> <a href="https://www.maths.cam.ac.uk/postgrad/part-iii/files/misc/2020-21%20Guide/Algebraic%20Geometry/Algebraic%20Geometry.pdf" target="_blank" rel="noopener">Cambridge Part III Algebraic Geometry 大纲</a></td><td>看"一门课到底教什么"</td></tr><tr><td><strong>与逻辑的交汇</strong></td><td>Bouscaren (ed.)《Model Theory and Algebraic Geometry》；Hrushovski 的 Mordell–Lang 论文</td><td><strong>你的两个主科在这里交汇</strong></td></tr></tbody></table></div>
+<h3 id="④-免费入口">④ 免费入口<a class="anchor" href="#④-免费入口" aria-hidden="true">#</a></h3>
+<ul><li><code>✔</code> <strong>Vakil 的 Rising Sea</strong>（免费）</li><li><code>✔</code> Fulton《Algebraic Curves》（免费，需确认现行 URL）</li></ul>
+<hr>
+<h4 id="d2-模型论-稳定性与分类">D2 · 模型论 · 稳定性与分类 ✔<a class="anchor" href="#d2-模型论-稳定性与分类" aria-hidden="true">#</a></h4>
+<h3 id="①-前置">① 前置<a class="anchor" href="#①-前置" aria-hidden="true">#</a></h3>
+<p>一阶逻辑 → 模型论基础（紧致性、Löwenheim–Skolem、量词消去）→ <strong>抽象代数</strong></p>
+<h3 id="②-第一本">② 第一本<a class="anchor" href="#②-第一本" aria-hidden="true">#</a></h3>
+<p><code>✔</code> <strong>Chang &amp; Keisler Ch.1–3</strong>（Peter Smith 的模型论第一本） → Hodges《A Shorter Model Theory》→ Poizat → <code>✔</code> <strong>Tent &amp; Ziegler</strong>（<a href="https://www.cambridge.org/es/universitypress/subjects/mathematics/logic-categories-and-sets/course-model-theory?format=HB&amp;isbn=9780521763240" target="_blank" rel="noopener">Cambridge 官方页</a>，ISBN 9780521763240）</p>
+<h3 id="③-深入材料3-种">③ 深入材料（≥3 种）<a class="anchor" href="#③-深入材料3-种" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>材料</th><th>说明</th></tr></thead><tbody><tr><td><strong>Shelah《Classification Theory》</strong></td><td>分类理论的奠基巨著——<strong>这是参考书，不是教材</strong></td></tr><tr><td>Marker《Model Theory: An Introduction》</td><td>标准研究生教材（<strong>读完入门后再读</strong>）</td></tr><tr><td><code>✔</code> <a href="http://arxiv.org/pdf/2010.08791" target="_blank" rel="noopener">Shelish 分类理论与 Quillen 否定的关系（arXiv）</a></td><td>看现代视角</td></tr><tr><td>Bouscaren (ed.)《Model Theory and Algebraic Geometry》</td><td><strong>与 D1 交汇</strong></td></tr></tbody></table></div>
+<h3 id="④-与你的主科的关系">④ 与你的主科的关系<a class="anchor" href="#④-与你的主科的关系" aria-hidden="true">#</a></h3>
+<p><strong>这是数学与逻辑交汇最紧的方向。</strong> 你的两个主科在这里会合成一条线。</p>
+<hr>
+<h4 id="d3-描述集合论">D3 · 描述集合论 ✔<a class="anchor" href="#d3-描述集合论" aria-hidden="true">#</a></h4>
+<h3 id="①-前置-2">① 前置<a class="anchor" href="#①-前置-2" aria-hidden="true">#</a></h3>
+<p>集合论（序数、基数）→ <strong>点集拓扑</strong>（Polish 空间、Baire 空间）</p>
+<h3 id="②-第一本-2">② 第一本<a class="anchor" href="#②-第一本-2" aria-hidden="true">#</a></h3>
+<p><code>✔</code> <strong>Kechris《Classical Descriptive Set Theory》</strong>（<a href="https://ebooks.mpdl.mpg.de/ebooks/Record/EB000619900/Details" target="_blank" rel="noopener">Springer 著录</a>） 或 Moschovakis《Descriptive Set Theory》</p>
+<h3 id="③-深入材料">③ 深入材料<a class="anchor" href="#③-深入材料" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>材料</th><th>说明</th></tr></thead><tbody><tr><td><code>✔</code> <a href="http://www.math.cmu.edu/~eschimme/21-624/syllabus.pdf" target="_blank" rel="noopener">CMU 21-624 课程大纲</a></td><td>看标准授课范围</td></tr><tr><td>Martin "Borel Determinacy"（Annals of Math 102(2), 1975）</td><td><strong>原始论文</strong>；你的路径 2.2 已列</td></tr><tr><td>Jech《Set Theory》相关章节</td><td>查阅</td></tr></tbody></table></div>
+<hr>
+<h4 id="d4-有限模型论与描述复杂性">D4 · 有限模型论与描述复杂性 ✔<a class="anchor" href="#d4-有限模型论与描述复杂性" aria-hidden="true">#</a></h4>
+<h3 id="①-前置-3">① 前置<a class="anchor" href="#①-前置-3" aria-hidden="true">#</a></h3>
+<p>一阶逻辑 → 可计算性/复杂度基础</p>
+<h3 id="②-第一本-3">② 第一本<a class="anchor" href="#②-第一本-3" aria-hidden="true">#</a></h3>
+<p><strong>Libkin《Elements of Finite Model Theory》</strong> 或 <strong>Immerman《Descriptive Complexity》</strong></p>
+<h3 id="③-深入材料-2">③ 深入材料<a class="anchor" href="#③-深入材料-2" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>材料</th><th>说明</th></tr></thead><tbody><tr><td><code>✔</code> <a href="http://www.cs.toronto.edu/~libkin/csc2423/f05/syll.pdf" target="_blank" rel="noopener">Toronto CSC2423 有限模型论与描述复杂性大纲</a></td><td>Libkin 本人的课程，看标准范围</td></tr><tr><td>Grädel 等《Finite Model Theory and Its Applications》</td><td>综述式</td></tr><tr><td>Fagin 1974 "Generalized First-Order Spectra..."</td><td><strong>原始论文</strong>（你的路径 3.4 已列）——<strong>描述复杂性的起点</strong></td></tr></tbody></table></div>
+<h3 id="④-价值">④ 价值<a class="anchor" href="#④-价值" aria-hidden="true">#</a></h3>
+<p><strong>逻辑 × 计算机最紧的交汇</strong>，而且<strong>与你的复杂度知识直接接上</strong>。</p>
+<hr>
+<h3 id="f-3-2-你的路径里没有标记的方向这是你指出的问题">F.3.2 你的路径里没有标记的方向（这是你指出的问题）<a class="anchor" href="#f-3-2-你的路径里没有标记的方向这是你指出的问题" aria-hidden="true">#</a></h3>
+<p>对比你那份 8 阶段路径与上表，缺标记的至少有：</p>
+<div class="tw"><table><thead><tr><th>缺失的方向</th><th>为什么值得标</th></tr></thead><tbody><tr><td><strong>代数几何</strong></td><td>你举的例子。路径只在 3.2 提了一句"模型论与代数几何"，<strong>没有前置链、没有入口</strong></td></tr><tr><td><strong>交换代数</strong></td><td>代数几何的必经跳板，<strong>路径完全没提</strong></td></tr><tr><td><strong>微分几何 / 代数拓扑 / 微分流形</strong></td><td>数学主科的另一半，<strong>路径完全没提</strong></td></tr><tr><td><strong>实分析 / 复分析 / 泛函分析</strong></td><td>数学专业骨架，<strong>路径完全没提</strong></td></tr><tr><td><strong>概率论 / 测度论</strong></td><td>描述集合论、算法随机性的前置，<strong>路径没提</strong></td></tr><tr><td><strong>数论</strong></td><td>代数几何与模型论的交汇点（Mordell–Lang），<strong>路径没提</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>这印证了你的判断：那份路径是"逻辑学"的路径，不是"数学"的路径。</strong> 你要考数学专业，<strong>数学侧的骨架必须单独铺</strong>——而《深度地图》的第二章就是干这个的。</p></blockquote>
+<hr>
+<h3 id="f-3-3-每个方向的铺标记怎么写">F.3.3 每个方向的【铺】标记怎么写<a class="anchor" href="#f-3-3-每个方向的铺标记怎么写" aria-hidden="true">#</a></h3>
+<p><strong>建议的统一格式</strong>（我会在更新《深度地图》时用）：</p>
+<pre class="code"><code>### D?. &lt;方向名&gt;
+- **前置**：&lt;链条，逐级列出&gt;
+- **现在该不该碰**：&lt;是/否 + 理由&gt;
+- **回来信号**：&lt;什么情况下你该回到这条线&gt;
+- **第一本**：&lt;书名 + 为什么是它&gt;
+- **除主教材外**：&lt;≥3 种材料的类型&gt;
+- **免费入口**：&lt;URL&gt;
+- **与主科的关系**：&lt;它连着你哪条主线&gt;
+- **大概量级**：&lt;几年 / 几个月&gt;</code></pre>
+<blockquote class="quote"><p><strong>关键</strong>："<strong>回来信号</strong>"那一栏最重要—— 它是你说"会忘记自己需要什么"的解药。</p></blockquote>
+<hr>
+<h3 id="f-4-怎么让这份文件长起来你说的知识迭代的过程">F.4 怎么让这份文件长起来（你说的"知识迭代的过程"）<a class="anchor" href="#f-4-怎么让这份文件长起来你说的知识迭代的过程" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>你说</th><th>我做</th></tr></thead><tbody><tr><td>「我要铺开 <strong>X</strong>」</td><td><strong>重新联网核实</strong> X 的书目（<strong>不凭记忆</strong>），升级入口卡，更新本文</td></tr><tr><td>「<strong>更新深度地图</strong>」</td><td>问你几个问题，<strong>增量更新，不重写</strong></td></tr><tr><td>「<strong>这条我改主意了</strong>」</td><td>改标记，<strong>保留历史</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>文件会留下痕迹</strong>——你能看见自己从 D0 走到 D3、从"值得铺开"走到"已经铺开"。 <strong>这就是可回看的成长。</strong></p></blockquote>
+<hr>
+<h2 id="f-4-副科材料表你-2026-10-16-指出的缺口">F.4 副科材料表（<strong>你 2026-10-16 指出的缺口</strong>）<a class="anchor" href="#f-4-副科材料表你-2026-10-16-指出的缺口" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>你说</strong>：「时间轴的副科学习材料基本没有，我不知道要具体学什么，主科说得很详细。」</p>
+<p><strong>确实如此</strong>——时间轴的「副科」列<strong>只有名称</strong>（数学/逻辑/计算机/语言学）， 而「材料」列只写了主科的书。<strong>这张表补那个缺口。</strong></p>
+<p>⚠️ <strong>标 <code>?</code> 的是我未核实的</strong>——用前请让我核一轮。</p></blockquote>
+<h3 id="计算机支线">计算机（支线）<a class="anchor" href="#计算机支线" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>落点</th><th>材料</th><th>备注</th></tr></thead><tbody><tr><td><strong>Y1Q2</strong>（副）</td><td><code>✔</code> <strong>MIT 6.042J</strong></td><td>与数学重叠，<strong>一份时间两科进度</strong></td></tr><tr><td><strong>Y2Q3 / Y2Q4</strong>（副→主）</td><td><code>✔</code> <strong>Sipser《Introduction to the Theory of Computation》</strong></td><td><a href="https://github.com/gaurangsaini/sipser-computation-3rd-solutions" target="_blank" rel="noopener">完整民间解答</a></td></tr><tr><td><strong>Y4Q3–Q4</strong>（副）</td><td><strong>Cutland</strong> 或 <strong>Boolos/Burgess/Jeffrey</strong></td><td>与逻辑主科同一内容的两视角</td></tr><tr><td><strong>Y5Q1–Q2</strong>（副）</td><td><code>✔</code> <a href="https://arxiv.org/abs/0804.3434" target="_blank" rel="noopener">Selinger《Lecture Notes on the Lambda Calculus》</a>（免费）</td><td>λ 演算的计算机视角</td></tr><tr><td><strong>Y5Q3</strong>（主）</td><td><code>✔</code> <strong>Lean 4</strong>：<a href="https://adam.math.hhu.de/#/g/hhu-adam/NNG4" target="_blank" rel="noopener">NNG4</a> → <a href="https://lean-lang.org/theorem_proving_in_lean4/" target="_blank" rel="noopener">TPIL4</a> → <a href="https://leanprover-community.github.io/mathematics_in_lean/" target="_blank" rel="noopener">Mathematics in Lean</a></td><td><strong>前置：VS Code + Lean 4 扩展</strong>（见 2.6）</td></tr><tr><td><strong>Y5Q4</strong></td><td><code>✔</code> <strong>Pierce《Types and Programming Languages》</strong></td><td><a href="https://github.com/mr-infty/tapl" target="_blank" rel="noopener">解答</a></td></tr></tbody></table></div>
+<h3 id="语言学支线">语言学（支线）<a class="anchor" href="#语言学支线" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>落点</th><th>材料</th><th>备注</th></tr></thead><tbody><tr><td><strong>Y3Q0</strong>（穿插）</td><td><code>✔</code> <strong>Yule《The Study of Language》</strong>（中文《语言研究》商务 2023）</td><td>语言学零基础地图</td></tr><tr><td><strong>Y3Q0.5</strong>（穿插）</td><td><code>✔</code> <strong>Carnie《Syntax》4th ed + Workbook 2nd ed</strong></td><td>⚠️ <strong>句法不能跳</strong>——否则后面卡在句法而非语义</td></tr><tr><td><strong>Y3Q3</strong></td><td><code>✔</code> <a href="http://www.christopherpotts.net/ling/teaching/lsa108P/" target="_blank" rel="noopener">Potts《Logic for Linguists》</a></td><td><strong>60 题 + 作者答案</strong>；最贴合"有逻辑基础、语言学零基础"</td></tr><tr><td><strong>Y3Q4</strong></td><td><code>✔</code> <strong>Winter《Elements of Formal Semantics》Ch.1–3</strong>（免费）→ 量词章需买书；<code>✔</code> <strong>Kroeger《Analyzing Meaning》第 3 版</strong>（免费）</td><td>Kroeger <strong>描写取向</strong>，不能替代 Winter</td></tr><tr><td><strong>Y5Q4</strong>（副）</td><td><strong>Portner《What is Meaning?》</strong> <code>?</code> 或 <strong>Heim &amp; Kratzer</strong> <code>?</code></td><td>⚠️ <strong>H&amp;K 没有答案，网上也没有</strong></td></tr></tbody></table></div>
+<h3 id="数学当它是副科时">数学（当它是副科时）<a class="anchor" href="#数学当它是副科时" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>落点</th><th>材料</th></tr></thead><tbody><tr><td>与逻辑并行的季</td><td><strong>Amann 三卷</strong>（你已有）· <strong>Axler</strong>（免费开放获取）</td></tr><tr><td>详见</td><td><strong>附录 A</strong>（七门骨架课书单）</td></tr></tbody></table></div>
+<h3 id="这张表的已知缺口">⚠️ 这张表的已知缺口<a class="anchor" href="#这张表的已知缺口" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>缺口</th><th>说明</th></tr></thead><tbody><tr><td><strong>计算机侧少了"编程/就业"那条线</strong></td><td>你说过"能自学编程对就业有帮助"——那是<strong>另一条路</strong>，材料不同（工业语言、Git、一个完整项目），<strong>尚未列</strong></td></tr><tr><td><strong>语言学后期材料薄</strong></td><td>H&amp;K / Portner 的<strong>答案情况未核实</strong>，且这一科<strong>本身答案稀缺</strong>（见附录 D）</td></tr><tr><td><strong>描述逻辑（3.5）没有落点</strong></td><td>你原路径 3.5 列了描述逻辑，但<strong>时间轴里没排</strong></td></tr><tr><td>自由逻辑、模糊逻辑、量子逻辑等</td><td>你原路径 6.1–6.7 有，<strong>都在 Y6+ 分叉里，未排材料</strong></td></tr></tbody></table></div>
+<hr>
+<h1 id="附录-a-数学骨架书单英文优先">附录 A · 数学骨架书单（英文优先）<a class="anchor" href="#附录-a-数学骨架书单英文优先" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><p><strong>这一部分是七门骨架课的标准教材。</strong> 它是<strong>所有研究方向（D1–D13）的共同前置</strong>——你要考数学专业，这七门是读研默认你会的东西。</p>
+<p><strong>语言策略（2026-10-16 定）</strong>：<strong>只要英文</strong>。不再列中译本与中文教材。 标 <strong>ⓕ</strong> = 有<strong>免费官方/合法在线版</strong>。</p>
+<p><strong>标记</strong>：<code>✔</code> = 实际核实过（有 URL）· <code>△</code> = 搜索确认存在但未逐项核实 · <code>?</code> = <strong>未核实，不要当真</strong></p></blockquote>
+<h2 id="a-0-数学书怎么读学习方法">A.0 数学书怎么读（<strong>学习方法</strong>）<a class="anchor" href="#a-0-数学书怎么读学习方法" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p><strong>2026-10-16 记</strong>：数学侧原来只有"书单"，没有"方法"。 但你<strong>其实已经在逻辑侧练出来了</strong>——只是不知道它可平移。</p>
+<p>⚠️ <strong>这一节不需要联网核实，也不会过时</strong>（不像材料清单）。</p></blockquote>
+<h3 id="a-0-1-好消息-你不用另造一套方法">A.0.1 好消息：你不用另造一套方法<a class="anchor" href="#a-0-1-好消息-你不用另造一套方法" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>你在逻辑里用的（Smith 那 432 题）</th><th>数学里<strong>同样适用</strong></th></tr></thead><tbody><tr><td><strong>先做课后题再往下</strong></td><td>✅ 一样</td></tr><tr><td><strong>不看书写出骨架</strong>（附录 B 的 D5 测试）</td><td>✅ 一样，<strong>数学更依赖这个</strong></td></tr><tr><td><strong>反例攻击</strong></td><td>✅ 一样</td></tr><tr><td>卡住就<strong>回头补前置</strong>（附录 B.2）</td><td>✅ 一样</td></tr><tr><td><strong>定义一不清楚先手算小例子</strong></td><td>✅ <strong>数学里更重要</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 数学不需要另一套方法。</strong> 这正是 <code>math-proof</code> 技能里那三条纪律的用武之地。</p></blockquote>
+<h3 id="a-0-2-但数学比逻辑多一件事-判断懂了没有更难">A.0.2 但数学比逻辑多一件事：<strong>判断"懂了没有"更难</strong><a class="anchor" href="#a-0-2-但数学比逻辑多一件事-判断懂了没有更难" aria-hidden="true">#</a></h3>
+<p>逻辑有明确判据（证明对不对、真值表能不能列）。 <strong>数学常常"看懂了但不会用"</strong>。所以照 <strong>附录 B 的七层判据</strong>来测，尤其这两条：</p>
+<div class="tw"><table><thead><tr><th>测试</th><th>数学里的用法</th></tr></thead><tbody><tr><td><strong>D2→D3 三问</strong></td><td>① 这个定理<strong>为什么被发明</strong>？② <strong>去掉某条件会出什么反例</strong>？③ 与哪三件事相连？</td></tr><tr><td><strong>D4→D5 白纸骨架</strong></td><td><strong>合上书，限时 20 分钟</strong>写出该节的"定义 → 主定理 → 证明思路 → 关键反例"</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>第 2 问（反例）是数学里最硬的判据</strong>——它要求你真的理解条件的作用。</p></blockquote>
+<h3 id="a-0-3-读数学书的四条具体规矩">A.0.3 读数学书的四条具体规矩<a class="anchor" href="#a-0-3-读数学书的四条具体规矩" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>#</th><th>规矩</th><th>为什么</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>证明读到"显然"处要停</strong></td><td>那是作者省略的地方，<strong>也常常是你没懂的地方</strong>。把它补出来再继续</td></tr><tr><td><strong>2</strong></td><td><strong>定义要能复述，并能给三个例子 + 一个非例子</strong></td><td>只会背定义等于不会</td></tr><tr><td><strong>3</strong></td><td><strong>定理要能说出"条件少了会怎样"</strong></td><td>这是区分"记住"和"理解"的分界线</td></tr><tr><td><strong>4</strong></td><td><strong>一章读完，先合书默写骨架，再做题</strong></td><td>顺序反了就会变成"照着例题套"</td></tr></tbody></table></div>
+<h3 id="a-0-4-卡住了怎么办三种卡-三种处理">A.0.4 卡住了怎么办（三种卡，三种处理）<a class="anchor" href="#a-0-4-卡住了怎么办三种卡-三种处理" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>卡的症状</th><th>真正的病因</th><th>处理</th></tr></thead><tbody><tr><td><strong>某一步看不懂</strong></td><td>前置定义/定理不熟</td><td>回头<strong>重读那一节</strong>，别硬撑</td></tr><tr><td><strong>连续三页看不懂</strong></td><td><strong>前置课缺</strong></td><td><strong>停下，回附录 A 的上游</strong>（见附录 B.2）</td></tr><tr><td><strong>看得懂但做不出题</strong></td><td>只在"读"不在"写"</td><td><strong>合书默写骨架</strong>（D5 测试），然后从最简单的题开始</td></tr></tbody></table></div>
+<h3 id="a-0-5-一个数学特有的陷阱-误把读懂证明当成会证明">A.0.5 一个数学特有的陷阱：<strong>误把"读懂证明"当成"会证明"</strong><a class="anchor" href="#a-0-5-一个数学特有的陷阱-误把读懂证明当成会证明" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>读懂是被引导，写出是自己找路。</strong></p>
+<p>数学书上每个证明都"读起来顺畅"——因为作者已经替你找好了路。 <strong>判断标准只有一个：合上书，你能自己走一遍吗。</strong></p></blockquote>
+<h3 id="a-0-6-与你已有的-math-proof-技能的关系">A.0.6 与你已有的 <code>math-proof</code> 技能的关系<a class="anchor" href="#a-0-6-与你已有的-math-proof-技能的关系" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>那个技能管什么</th><th>这里管什么</th></tr></thead><tbody><tr><td><strong>做题</strong>：分类 A/B/C、先手算、矛盾时默认怀疑自己</td><td><strong>读书</strong>：怎么读、怎么判断懂了、卡了怎么办</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 两件事互补。</strong> 你读书时用本节，做题时用 <code>math-proof</code>。</p></blockquote>
+<h2 id="a-1-七门课与顺序">A.1 七门课与顺序<a class="anchor" href="#a-1-七门课与顺序" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>#</th><th>课程</th><th>什么时候</th><th>深度地图对应</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>数学分析</strong></td><td><strong>最先</strong>（一切分析的地基）</td><td>分析学 D1→D2</td></tr><tr><td><strong>2</strong></td><td><strong>高等代数</strong>（证明导向）</td><td>与数学分析并行</td><td>代数学 D1→D2</td></tr><tr><td><strong>3</strong></td><td><strong>解析几何</strong></td><td><strong>可不读</strong>（见 5.6 的判断题）</td><td>几何 D0</td></tr><tr><td><strong>4</strong></td><td><strong>抽象代数</strong></td><td>数学分析 + 线代之后</td><td>代数学 D2→D3【铺】</td></tr><tr><td><strong>5</strong></td><td><strong>点集拓扑</strong></td><td>抽象代数之后</td><td>拓扑 D0→D2【铺】</td></tr><tr><td><strong>6</strong></td><td><strong>实分析</strong></td><td>数学分析 + 点集拓扑之后</td><td>分析学 D2→D3</td></tr><tr><td><strong>7</strong></td><td><strong>复分析</strong></td><td>数学分析之后</td><td>分析学 D2</td></tr></tbody></table></div>
+<h2 id="a-2-一个必须先知道的现实-英文经典普遍没有答案册">A.2 一个必须先知道的现实：<strong>英文经典普遍没有答案册</strong><a class="anchor" href="#a-2-一个必须先知道的现实-英文经典普遍没有答案册" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p>核实结论：<strong>Rudin / Folland / Stein / Munkres 这些英文经典，通常不附解答册。</strong> 这是<strong>通例，不是缺陷</strong>。</p>
+<p><strong>⇒ 对"答案要能查到"这个筛选条件，英文路线的现实是：靠社区解答 + 教材书后答案 + Lean 4。</strong> 下表凡标 <strong>✅</strong> 的，都是我核实到<strong>确实存在公开解答</strong>的。</p></blockquote>
+<h2 id="a-3-数学分析">A.3 数学分析<a class="anchor" href="#a-3-数学分析" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><h3 id="你手上已经有的一套-amann-escher分析三卷中文版">🎯 你手上已经有的一套：<strong>Amann &amp; Escher《分析》三卷</strong>（<strong>中文版</strong>）<a class="anchor" href="#你手上已经有的一套-amann-escher分析三卷中文版" aria-hidden="true">#</a></h3>
+<p>2026-10-16 你提供了这套（<code>【批量下载】Amann_I等.zip</code> → 已解压到 <code>_amann/</code>）。 <strong>核实结果：它比我原先推荐的 Abbott / Tao 高一档。</strong></p>
+<div class="tw"><table><thead><tr><th>卷</th><th>页数</th><th>覆盖（从 PDF 正文核实）</th></tr></thead><tbody><tr><td><strong>I</strong></td><td>352</td><td>逻辑与集合论基础、<strong>数系构造</strong>、<strong>线性代数基础</strong>、数列与级数、<strong>拓扑学基础</strong>、中值定理、多项式逼近</td></tr><tr><td><strong>II</strong></td><td>360</td><td>积分、傅里叶级数、<strong>流形</strong>、Nemytskii 算子与变分法</td></tr><tr><td><strong>III</strong></td><td>422</td><td><strong>测度论、Lebesgue 空间、Fubini、卷积、傅里叶变换、微分形式</strong></td></tr></tbody></table></div>
+<p><strong>前言原文（已核实）</strong>：</p>
+<ul><li>「我们还想提请读者注意<strong>每节末尾的大量习题</strong>。<strong>做这些习题对于透彻理解材料是绝对必要的</strong>。」</li><li>「由于我们希望本书也能<strong>用于自学</strong>和补充阅读，因此收录了远超三个学期课程所能覆盖的内容。」</li><li>「大多数概念和定义从一开始就<strong>以一般形式呈现</strong>……读者每个概念只需学习一次，</li></ul>
+<p>然后可以直接进入更高深的数学。」</p>
+<h3 id="它和-abbott-tao-rudin-的区别">⚖️ 它和 Abbott / Tao / Rudin 的区别<a class="anchor" href="#它和-abbott-tao-rudin-的区别" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th></th><th><strong>Amann &amp; Escher</strong></th><th>Abbott</th><th>Tao</th><th>Rudin</th></tr></thead><tbody><tr><td><strong>定位</strong></td><td><strong>德语传统的严格教程</strong>，三卷贯通到测度与微分形式</td><td>友好入门</td><td>友好入门，从构造数系开始</td><td>经典但<strong>极难</strong></td></tr><tr><td><strong>起点</strong></td><td>从集合论与数系<strong>构造</strong>开始，<strong>含线代基础</strong></td><td>直接进实数</td><td>从 Peano 公理构造</td><td>假定你已会</td></tr><tr><td><strong>深度</strong></td><td><strong>高</strong>——泛函、测度、流形贯通</td><td>单变量</td><td>两卷到多变量</td><td>高</td></tr><tr><td><strong>习题</strong></td><td><strong>每节末大量</strong>（前言强调"绝对必要"）</td><td>有</td><td>有</td><td>极难且答案稀缺</td></tr><tr><td><strong>答案</strong></td><td><strong><code>?</code> 未核实 —— 这是唯一风险点</strong></td><td>✅ 社区解答</td><td>✅ 社区解答</td><td>❌</td></tr></tbody></table></div>
+<p><strong>⇒ 结论（我的判断，已标注为判断）</strong>： <strong>Amann 这套足够支撑你从零走到实分析/复分析，不必再另找"第一本"。</strong></p>
+<p><strong>建议用法</strong>：用 Amann 作主线，<strong>卡住的地方用 Abbott 或 Tao 对照</strong> （这两本英文表述更"手把手"），并用它们的<strong>社区解答间接验证</strong>你的答案。 —— 这是"<strong>一套难教材 + 一套友好教材</strong>"的经典组合。</p></blockquote>
+<div class="tw"><table><thead><tr><th>其他候选</th><th>免费</th><th>答案</th><th>核实</th></tr></thead><tbody><tr><td><strong>Abbott《Understanding Analysis》2nd ed</strong></td><td>✗</td><td>✅ <a href="https://github.com/UlisseMini/understanding-analysis-solutions" target="_blank" rel="noopener">UlisseMini/understanding-analysis-solutions</a></td><td>✔</td></tr><tr><td><strong>Tao《Analysis I / II》</strong></td><td>△</td><td>✅ <a href="https://github.com/frederic-santos/taoanalysissolutions" target="_blank" rel="noopener">frederic-santos/taoanalysissolutions</a></td><td>✔</td></tr><tr><td>Rudin《Principles of Mathematical Analysis》("Baby Rudin")</td><td>✗</td><td>⚠️ <strong>答案稀缺</strong>（它最著名的痛点）</td><td>△</td></tr><tr><td>Spivak《Calculus》</td><td>✗</td><td>?</td><td>△</td></tr><tr><td>Apostol《Mathematical Analysis》</td><td>✗</td><td>?</td><td>△</td></tr><tr><td>Zorich《Mathematical Analysis I/II》</td><td>✗</td><td>?</td><td>△</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 若不用 Amann：第一本选 Abbott 或 Tao</strong>——理由是<strong>答案能查到</strong>。</p></blockquote>
+<h2 id="a-4-高等代数要证明导向-不要计算导向">A.4 高等代数（<strong>要证明导向，不要计算导向</strong>）<a class="anchor" href="#a-4-高等代数要证明导向-不要计算导向" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>书</th><th>免费</th><th>答案</th><th>核实</th></tr></thead><tbody><tr><td><strong>★ Axler《Linear Algebra Done Right》4th ed</strong></td><td><strong>ⓕ 是</strong> —— <a href="https://link.springer.com/book/10.1007/978-3-031-41026-0" target="_blank" rel="noopener">Springer 官方开放获取</a></td><td>?</td><td>✔</td></tr><tr><td>Friedberg / Insel / Spence《Linear Algebra》</td><td>✗</td><td>?</td><td>△</td></tr><tr><td>Hoffman &amp; Kunze《Linear Algebra》</td><td>✗</td><td>?</td><td>△</td></tr><tr><td>Strang《Introduction to Linear Algebra》</td><td>✗</td><td>⚠️ <strong>偏应用与计算，不完全适合数学专业</strong></td><td>△</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ Axler 是第一选择</strong>：<strong>免费开放获取 + 证明导向 + 避开行列式</strong>。三个条件同时满足。</p></blockquote>
+<h2 id="a-5-抽象代数">A.5 抽象代数<a class="anchor" href="#a-5-抽象代数" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>书</th><th>免费</th><th>答案</th><th>核实</th></tr></thead><tbody><tr><td><strong>★ Pinter《A Book of Abstract Algebra》</strong></td><td>✗（Dover 廉价）</td><td>✅ <a href="https://github.com/narodnik/abstract-algebra-pinter-solutions" target="_blank" rel="noopener">narodnik/abstract-algebra-pinter-solutions</a></td><td>✔</td></tr><tr><td><strong>Dummit &amp; Foote《Abstract Algebra》</strong></td><td>✗</td><td>✅ 两份：<a href="https://github.com/gkikola/sol-dummit-foote" target="_blank" rel="noopener">gkikola/sol-dummit-foote</a>、<a href="https://github.com/limits-to-arbitrage/sol-dummit-foote" target="_blank" rel="noopener">limits-to-arbitrage/sol-dummit-foote</a></td><td>✔</td></tr><tr><td>Artin《Algebra》</td><td>✗</td><td>✅ <a href="https://ccommans.github.io/artin" target="_blank" rel="noopener">ccommans.github.io/artin</a></td><td>✔</td></tr><tr><td>Fraleigh</td><td>✗</td><td>⚠️ 只查到第三方售卖站，<strong>不建议依赖</strong></td><td>△</td></tr><tr><td>Hungerford / Lang</td><td>✗</td><td>⚠️ <strong>Lang 属参考手册级</strong></td><td>△</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 第一本 Pinter</strong>（写得像讲义、有社区解答），再上 Dummit &amp; Foote。</p></blockquote>
+<p><strong>代数几何的前置</strong>：<strong>Atiyah &amp; Macdonald《Introduction to Commutative Algebra》</strong> —— 经典、短。答案情况 <strong>?</strong>。</p>
+<h2 id="a-6-解析几何-一个判断题">A.6 解析几何 —— 一个判断题<a class="anchor" href="#a-6-解析几何-一个判断题" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><h3 id="对打算学现代数学代数几何-拓扑的人-传统解析几何课有多少必要">❓ 对打算学现代数学（代数几何/拓扑）的人，传统"解析几何"课有多少必要？<a class="anchor" href="#对打算学现代数学代数几何-拓扑的人-传统解析几何课有多少必要" aria-hidden="true">#</a></h3>
+<p><strong>我的判断</strong>（⚠️ <strong>这是判断，无来源支持</strong>）：</p>
+<div class="tw"><table><thead><tr><th>内容</th><th>后面用不用得上</th></tr></thead><tbody><tr><td><strong>射影几何（交比、对偶、配极）</strong></td><td><strong>真的会用到</strong>——代数几何的直觉来源</td></tr><tr><td>二次曲线/二次曲面分类</td><td>代数几何的初级例子，有用但可现学</td></tr><tr><td>坐标变换、向量代数</td><td>已被线代吸收，<strong>基本可跳</strong></td></tr></tbody></table></div>
+<p><strong>⇒ 建议不必专门读一整本解析几何，重点读射影几何。</strong> 但系统读也无坏处。</p></blockquote>
+<div class="tw"><table><thead><tr><th>书</th><th>核实</th></tr></thead><tbody><tr><td>Coxeter《Introduction to Geometry》</td><td>△ 书末据官网写 <strong>"answers to most of the exercises"</strong>（<strong>是"大部分"，不是全部</strong>）</td></tr><tr><td>Ryan《Euclidean and Non-Euclidean Geometry》</td><td>?</td></tr></tbody></table></div>
+<h2 id="a-7-点集拓扑">A.7 点集拓扑<a class="anchor" href="#a-7-点集拓扑" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>书</th><th>免费</th><th>答案</th><th>核实</th></tr></thead><tbody><tr><td><strong>★ Munkres《Topology》2nd ed</strong></td><td>✗</td><td>✅ <a href="https://github.com/kyp44/Topology" target="_blank" rel="noopener">kyp44/Topology</a>、<a href="https://relatedrepos.com/gh/9beach/munkres-topology-solutions" target="_blank" rel="noopener">9beach/munkres-topology-solutions</a></td><td>✔</td></tr><tr><td>Willard《General Topology》</td><td>✗</td><td>?</td><td>△</td></tr><tr><td>Mendelson《Introduction to Topology》</td><td>✗</td><td>?</td><td>△</td></tr><tr><td>Kelley《General Topology》</td><td>✗</td><td>⚠️ <strong>参考手册级，练习以长题为主且无答案</strong></td><td>△</td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="一条要记住的前置">⚠️ 一条要记住的前置<a class="anchor" href="#一条要记住的前置" aria-hidden="true">#</a></h3>
+<p>Munkres 中译本前言说（<strong>注意：这是中译本前言的译文，不是 Munkres 的英文原话</strong>）： <strong>"除非读者学过一点数学分析或者严格微积分，否则对第一部分引入的大部分概念的动机将会感到困惑。"</strong></p>
+<p><strong>⇒ 先学数学分析，再学拓扑。</strong></p></blockquote>
+<h2 id="a-8-实分析与复分析">A.8 实分析与复分析<a class="anchor" href="#a-8-实分析与复分析" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>书</th><th>免费</th><th>答案</th><th>核实</th></tr></thead><tbody><tr><td>Folland《Real Analysis》2nd ed</td><td>✗</td><td>⚠️ <strong>无官方解答册</strong></td><td>✔ 1999，ISBN 978-0-471-31716-6</td></tr><tr><td>Rudin《Real and Complex Analysis》</td><td>✗</td><td>⚠️ 无</td><td>△</td></tr><tr><td>Stein &amp; Shakarchi《Real Analysis》</td><td>✗</td><td>⚠️ 无</td><td>△</td></tr><tr><td>Royden &amp; Fitzpatrick《Real Analysis》</td><td>✗</td><td>?</td><td>△</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 实分析先用 Abbott/Tao 类友好本打基础，再上 Folland。</strong></p></blockquote>
+<h2 id="a-9-推荐顺序">A.9 推荐顺序<a class="anchor" href="#a-9-推荐顺序" aria-hidden="true">#</a></h2>
+<pre class="code"><code>数学分析（Abbott 或 Tao —— 因为答案能查到）
+        │
+        ├─→ 高等代数（Axler，免费开放获取）
+        │
+        ▼
+   抽象代数（Pinter → Dummit &amp; Foote）
+        │
+        ├─→ 交换代数（Atiyah &amp; Macdonald）→【代数几何】
+        │
+        ▼
+   点集拓扑（Munkres；**先有数学分析基础**）
+        │
+        ├─→ 实分析（友好本 → Folland）
+        │
+        └─→ 复分析</code></pre>
+<h2 id="a-10-习题答案的总策略">A.10 习题答案的总策略<a class="anchor" href="#a-10-习题答案的总策略" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>课</th><th>答案可得性</th></tr></thead><tbody><tr><td><strong>数学分析</strong></td><td>✅ <strong>好</strong>——Abbott 与 Tao 都有社区解答</td></tr><tr><td><strong>高等代数</strong></td><td>✅ <strong>Axler 免费开放获取</strong>（答案 ?）</td></tr><tr><td><strong>抽象代数</strong></td><td>✅ <strong>好</strong>——Pinter / Dummit &amp; Foote / Artin 都有</td></tr><tr><td><strong>点集拓扑</strong></td><td>✅ 中——Munkres 有两份社区解答</td></tr><tr><td><strong>实分析 / 复分析</strong></td><td>❌ <strong>差</strong>——英文经典普遍无解答册</td></tr><tr><td><strong>解析几何</strong></td><td>可不读</td></tr></tbody></table></div>
+<p><strong>对应策略</strong>（沿用《进度判据》原则：<strong>判据必须能交出去</strong>）：</p>
+<ol><li><strong>答案好的科目</strong> → 正常做题、对答案</li><li><strong>答案差的科目</strong>（实/复分析）→ <strong>用 Lean 4 形式化关键定理当判据</strong>（汇合点 5 的实际价值）</li><li><strong>答案中等的科目</strong> → <strong>交叉验证</strong>：2–3 本书对同一概念的不同讲法，<strong>差异处就是自查点</strong></li></ol>
+<h2 id="a-11-待补完-项">A.11 待补完（<code>?</code> 项）<a class="anchor" href="#a-11-待补完-项" aria-hidden="true">#</a></h2>
+<ol><li>Rudin / Spivak / Apostol / Zorich / Friedberg / Hoffman &amp; Kunze 的<strong>答案情况</strong></li><li>Axler 的习题答案是否有公开来源</li><li><strong>抽象代数"只学群环域+理想+域扩张"各书读哪几章</strong>——<strong>我不猜章号</strong></li><li>复分析的具体推荐（本轮未做）</li></ol>
+<hr>
+<h1 id="附录-b-七层判据每一层怎么测">附录 B · 七层判据（每一层怎么测）<a class="anchor" href="#附录-b-七层判据每一层怎么测" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><p><strong>判据必须能交出去。</strong> 不能是"我感觉懂了"，必须是"<strong>这是我的 X，你（或机器）可以检查</strong>"。</p>
+<p>三种可交付物：<strong>一份文字</strong>（证明/解答）／<strong>一段 Lean 代码</strong>（编译器不会客气）／<strong>一次不看书的讲解</strong>。</p></blockquote>
+<h3 id="b-1-七层判据每层一个测试">B.1 七层判据（每层一个测试）<a class="anchor" href="#b-1-七层判据每层一个测试" aria-hidden="true">#</a></h3>
+<h3 id="d0-d1-能算出">D0 → D1：<strong>能算出</strong><a class="anchor" href="#d0-d1-能算出" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>测试</strong>：随便挑该主题的 5 道<strong>计算题</strong>，<strong>不看例题</strong>，限时做完。</p>
+<ul><li>通过 = 对 4 道以上</li><li><strong>不算通过</strong>：边看例题边做；或做的是"刚看过的那类题"</li></ul></blockquote>
+<hr>
+<h3 id="d1-d2-能写出严格证明">D1 → D2：<strong>能写出严格证明</strong><a class="anchor" href="#d1-d2-能写出严格证明" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>测试</strong>：挑 3 道<strong>证明题</strong>（不是计算题），<strong>完整写出</strong>， 然后拿教材/答案对照，或找人对。</p>
+<p>判据分两级：</p>
+<div class="tw"><table><thead><tr><th>结果</th><th>判定</th></tr></thead><tbody><tr><td>3 道都对</td><td><strong>D2 达成</strong></td></tr><tr><td>有错</td><td>看错在哪：<strong>逻辑错</strong>（说明还没到 D2）／<strong>笔误</strong>（可以算过）／<strong>跳步</strong>（"显然"用多了，还没到 D2）</td></tr></tbody></table></div>
+<p>⚠️ <strong>最常见的假通过</strong>：证明写出来了，但<strong>中间有一句"显然"是你不知道怎么写才写"显然"的</strong>。 自查方法：<strong>把每个"显然"标出来，逐个问"我真能补上吗"</strong>。</p></blockquote>
+<hr>
+<h3 id="d2-d3-懂结构这一层最容易卡-也最容易被跳过">D2 → D3：<strong>懂结构</strong>（<strong>这一层最容易卡，也最容易被跳过</strong>）<a class="anchor" href="#d2-d3-懂结构这一层最容易卡-也最容易被跳过" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>测试</strong>：<strong>不看任何书</strong>，回答这三个问题：</p>
+<div class="tw"><table><thead><tr><th>#</th><th>问题</th></tr></thead><tbody><tr><td>1</td><td><strong>这个概念/定理为什么被发明？</strong> 它解决了什么原来的麻烦？</td></tr><tr><td>2</td><td><strong>去掉它的某个条件，会出什么反例？</strong>（至少给一个具体反例）</td></tr><tr><td>3</td><td><strong>它和你会的东西里，哪三个有联系？</strong> 分别怎么连？</td></tr></tbody></table></div>
+<ul><li>三个都能答 = <strong>D3 达成</strong></li><li><strong>只答得出第 1 个</strong>（"因为要证明 XX"）→ 那是复述，不是 D3</li><li>第 2 问是<strong>最硬的判据</strong>——它要求你真的理解条件的作用</li></ul>
+<p>⚠️ <strong>D2→D3 是最大的坎。</strong> 很多人能考试（D2）但一辈子停在 D2。</p></blockquote>
+<hr>
+<h3 id="d3-d4-会用在新问题上">D3 → D4：<strong>会用在新问题上</strong><a class="anchor" href="#d3-d4-会用在新问题上" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>测试</strong>：<strong>找一个教材里没有的、但你判断能用它的具体问题</strong>， 用它解决，并且<strong>写出你是怎么想到用它的</strong>。</p>
+<ul><li>关键不是"答案对不对"，而是<strong>选择工具的过程</strong>能不能说清</li><li>通过 = 你能说出"我看到 X 特征，所以想到用 Y"这一步</li></ul>
+<p>⚠️ <strong>课后题不算</strong>——那是为这一节量身定做的，特征是给好的。</p></blockquote>
+<hr>
+<h3 id="d4-d5-能教">D4 → D5：<strong>能教</strong><a class="anchor" href="#d4-d5-能教" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>测试（最便宜、最能暴露假会）</strong>： <strong>拿出一张白纸，不看任何材料，写出该主题的完整骨架</strong>（定义 → 主定理 → 证明思路 → 关键反例）。</p>
+<ul><li><strong>限时 20 分钟</strong>（时间短才有判据力，长了你就会去"想起来"）</li><li>通过 = 骨架<strong>完整且顺序对</strong></li><li>然后<strong>对着这个骨架，假装给一个不懂的人讲一遍</strong>，录音或写下来</li></ul>
+<p>⚠️ <strong>判据力最强的一层。</strong> 因为"教"要求你把知识<strong>重新组织</strong>， 而"重新组织"骗不了人——想不起来就是空白。</p></blockquote>
+<hr>
+<h3 id="d5-d6-能做研究">D5 → D6：<strong>能做研究</strong><a class="anchor" href="#d5-d6-能做研究" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>测试</strong>：读该方向<strong>一篇研究论文或一份综述</strong>，然后回答：</p>
+<div class="tw"><table><thead><tr><th>#</th><th>问题</th></tr></thead><tbody><tr><td>1</td><td>它解决了什么问题？为什么这个问题当时没解决？</td></tr><tr><td>2</td><td>它的<strong>主要技术手段</strong>是什么？你能说出关键那一步的思路吗？</td></tr><tr><td>3</td><td>它留下了什么<strong>未解决的问题</strong>？</td></tr><tr><td>4</td><td><strong>你觉得哪一步可以换个做法？</strong></td></tr></tbody></table></div>
+<ul><li>1–3 能答 = 能读懂</li><li><strong>第 4 问能答 = 开始能做研究</strong></li></ul>
+<p>⚠️ 第 4 问不是要求你对，是要求你<strong>有自己的判断</strong>。</p></blockquote>
+<hr>
+<h3 id="b-2-什么时候可以进下一阶段阶段-层级">B.2 什么时候可以进下一阶段（阶段 ≠ 层级）<a class="anchor" href="#b-2-什么时候可以进下一阶段阶段-层级" aria-hidden="true">#</a></h3>
+<p><strong>这里要区分两件事</strong>，你之前的问题把两者混在一起了：</p>
+<div class="tw"><table><thead><tr><th></th><th>含义</th><th>判据</th></tr></thead><tbody><tr><td><strong>层级（D0–D6）</strong></td><td>你在<strong>某个主题</strong>上的深度</td><td>上表</td></tr><tr><td><strong>阶段（Y1Q1…）</strong></td><td>你在<strong>时间轴</strong>上的位置</td><td>下表</td></tr></tbody></table></div>
+<h3 id="进入下一阶段的规则">进入下一阶段的规则<a class="anchor" href="#进入下一阶段的规则" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><h3 id="主科达到-d3-就可以进下一阶段了">主科达到 <strong>D3</strong>，就可以进下一阶段了。<a class="anchor" href="#主科达到-d3-就可以进下一阶段了" aria-hidden="true">#</a></h3>
+<p>理由：<strong>D3 是"懂结构"</strong>——到了这里，你已经能自己判断"我缺什么"， 后面的路可以自己走一段了。</p>
+<p><strong>不需要等到 D4/D5。</strong> 那些是在<strong>用</strong>的过程中自然长出来的。</p></blockquote>
+<h3 id="但有三种情况不要进">但有三种情况<strong>不要</strong>进<a class="anchor" href="#但有三种情况不要进" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>情况</th><th>怎么办</th></tr></thead><tbody><tr><td><strong>主科卡在 D2 超过该阶段两倍时间</strong></td><td><strong>不是继续往前，是回头换书</strong>——很可能是书的写法和你不合</td></tr><tr><td><strong>D2 但第 2 问（反例）答不出</strong></td><td>说明你是"跟着证明走的"，没真懂。<strong>回头补反例</strong>（你已有 <code>counterexample-hunt</code> 技能）</td></tr><tr><td><strong>副科完全没动</strong></td><td>副科可以慢，但<strong>不要让它断</strong>。每季碰一次，保持联系</td></tr></tbody></table></div>
+<h3 id="什么时候必须停下来补前置">什么时候<strong>必须</strong>停下来补前置<a class="anchor" href="#什么时候必须停下来补前置" aria-hidden="true">#</a></h3>
+<p>出现下列任一，<strong>立刻停下当前线，回头补前置</strong>（不要硬撑）：</p>
+<ul><li>教材里<strong>连续三页看不懂</strong></li><li>证明里反复出现你<strong>没见过或学过但忘了</strong>的工具</li><li>你发现自己在<strong>背证明</strong>而不是<strong>理解证明</strong></li></ul>
+<hr>
+<h3 id="b-3-四种假进步必须识别的自欺">B.3 四种「假进步」（必须识别的自欺）<a class="anchor" href="#b-3-四种假进步必须识别的自欺" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>#</th><th>假象</th><th>为什么是假的</th><th>怎么破</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>读了第二遍觉得"懂了"</strong></td><td>第二遍的流畅感来自熟悉，不是理解</td><td>用 D2→D3 三问自测，<strong>不许翻书</strong></td></tr><tr><td><strong>2</strong></td><td><strong>能看懂书上每个证明</strong></td><td><strong>看懂 ≠ 能写出</strong>。看懂是被引导，写出是自己找路</td><td><strong>合上书，默写骨架</strong>（D5 测试）</td></tr><tr><td><strong>3</strong></td><td><strong>会做课后题了</strong></td><td>课后题是为该节量身定做的，<strong>特征都给你标好了</strong></td><td>用 D3→D4 测试：<strong>找个书上没有的问题</strong></td></tr><tr><td><strong>4</strong></td><td><strong>做了很多题</strong></td><td>题量不等于深度。<strong>同一类题做 100 道还是 D2</strong></td><td>换题型；<strong>做那些"没给方法提示"的题</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>这四种的共同特征：都让你感觉良好，但都不产生 D3。</strong> 你对自己的估计是 <strong>D0–D1</strong>——这个估计<strong>很可能是准的</strong>，甚至偏保守。</p></blockquote>
+<hr>
+<h3 id="b-4-你现在的具体位置与下一步">B.4 你现在的具体位置与下一步<a class="anchor" href="#b-4-你现在的具体位置与下一步" aria-hidden="true">#</a></h3>
+<h3 id="估计">估计<a class="anchor" href="#估计" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>线</th><th>你的估计</th><th>我的评估</th></tr></thead><tbody><tr><td><strong>一阶逻辑（Smith 那本）</strong></td><td>D0–D1</td><td><strong>可能偏保守。</strong> 你做完了 432 道题，说明至少到 <strong>D2</strong>（会证）的门口</td></tr><tr><td><strong>数学（分析/代数/几何）</strong></td><td>D0–D1</td><td><strong>同意 D0</strong>——你还没系统学过大学数学</td></tr><tr><td><strong>元逻辑</strong></td><td>D0</td><td>同意</td></tr><tr><td><strong>Lean 4</strong></td><td>D0</td><td>同意</td></tr></tbody></table></div>
+<h3 id="建议的下一步只做一件事">建议的下一步（<strong>只做一件事</strong>）<a class="anchor" href="#建议的下一步只做一件事" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>用 D2 测试验证你的逻辑水平到底在哪。</strong></p>
+<p>具体：挑 Smith 里 <strong>3 道你没做过、且没有答案的证明题</strong>（或换一本难度相近的）， <strong>完整写出来</strong>，然后回答 <strong>D2→D3 的三个问题</strong>（为什么发明 / 去掉条件会怎样 / 与哪三件事相连）。</p>
+<p><strong>这一步会告诉你：你该进元逻辑，还是该在逻辑上再稳一稳。</strong></p></blockquote>
+<hr>
+<h3 id="b-5-怎么用这一部分">B.5 怎么用这一部分<a class="anchor" href="#b-5-怎么用这一部分" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>什么时候</th><th>做什么</th></tr></thead><tbody><tr><td><strong>每季结束</strong></td><td>用对应层的测试自查一次，在《深度地图》里记下真实层级</td></tr><tr><td><strong>想进下一阶段</strong></td><td>看第三节的规则：主科是否到 D3？是否有三种"不要进"的情况？</td></tr><tr><td><strong>感觉卡住</strong></td><td>先查第三节"必须停下来补前置"的三条</td></tr><tr><td><strong>怀疑自己在假进步</strong></td><td>对第四节的四种假象</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>记录真实值，不要记"希望达到的值"。</strong> 你要的是「<strong>体会到知识迭代的过程</strong>」——那就必须让记录是诚实的， 否则曲线是假的，成长感也是假的。</p></blockquote>
+<hr>
+<h3 id="b-6-进下一阶段的规则">B.6 进下一阶段的规则<a class="anchor" href="#b-6-进下一阶段的规则" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><h3 id="主科达到-d3懂结构-就可以进下一阶段了">主科达到 <strong>D3（懂结构）</strong>，就可以进下一阶段了。<a class="anchor" href="#主科达到-d3懂结构-就可以进下一阶段了" aria-hidden="true">#</a></h3>
+<p>理由：<strong>D3 是"懂结构"</strong>——到了这里，你已能自己判断"我缺什么"，后面的路能自己走一段。 <strong>不需要等到 D4/D5</strong>——那些是在<strong>用</strong>的过程中自然长出来的。</p></blockquote>
+<h3 id="b-7-诚实标注">B.7 诚实标注<a class="anchor" href="#b-7-诚实标注" aria-hidden="true">#</a></h3>
+<ul><li><strong>各层的测试是我设计的</strong>，依据是"可外部验证"这一条原则；</li></ul>
+<p><strong>不是引自某本教育测量学著作</strong>。</p>
+<ul><li><strong>"主科到 D3 就进下一阶段"是我的判断</strong>，理由已写在上文。</li></ul>
+<p>这不是定理，你可以改——<strong>但改了要写下来</strong>，那样日后能看出判断本身的演变。</p>
+<ul><li>我对<strong>你当前位置的评估是估计</strong>，依据是你在对话里的自述（如"做完 432 道题"）。</li></ul>
+<p><strong>用 D2 测试一验就知道了，那比我的估计可靠。</strong></p>
+<hr>
+<hr>
+<h1 id="附录-c-选书铁律">附录 C · 选书铁律<a class="anchor" href="#附录-c-选书铁律" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><p><strong>第一筛选条件：这本书有没有题？答案能不能查到？</strong></p></blockquote>
+<p>你那份路径最实质的缺陷就是<strong>几乎全是讲解型著作</strong>。对数学，<strong>不做题等于没学</strong>—— 你自己的经历就是证据：Smith 那 432 道题才是你真正学到东西的地方。</p>
+<p><strong>选书时按这个顺序问</strong>：</p>
+<ol><li><strong>有习题吗？</strong> 没有 → 只能当参考，不能当主教材</li><li><strong>答案能查到吗？</strong> 不能 → 效率会低很多（但仍有价值，见下）</li><li><strong>是教科书还是研究级参考手册？</strong> 后者<strong>不能顺着读</strong></li><li>有中译本吗？（辅助用）</li></ol>
+<p><strong>已核实的"有答案"资源</strong>（全部经实际抓取页面 / 下载 PDF 核实）：</p>
+<div class="tw"><table><thead><tr><th>资源</th><th>核实到的事实</th></tr></thead><tbody><tr><td>✔ <strong>Velleman《How to Prove It》3rd ed</strong></td><td>ISBN <strong>978-1-108-43953-4</strong>；目录含 <strong>"Appendix: Solutions to Selected Exercises"（p.397）</strong>——<strong>解答在书后</strong>。另另有 Instructor's Solution Manual</td></tr><tr><td>✔ <strong>Hammack《Book of Proof》</strong></td><td>免费 PDF 可直下（实测下载 1.84 MB，617K 字符文本）</td></tr><tr><td>✔ <a href="https://github.com/gblikas/set-theory-solutions-manual" target="_blank" rel="noopener">Halmos《Naive Set Theory》解答</a></td><td>GitHub 公开解答</td></tr><tr><td>✔ <a href="https://raw.githubusercontent.com/zxch91/Introduction-to-the-Theory-of-Computation-Solutions/refs/heads/master/README.md" target="_blank" rel="noopener">Sipser 解答（zxch91）</a> · <a href="https://relatedrepos.com/gh/ryandougherty/Introduction-to-the-Theory-of-Computation-Solutions" target="_blank" rel="noopener">（ryandougherty）</a></td><td>两份独立公开解答</td></tr><tr><td>✔ <a href="https://github.com/mr-infty/tapl" target="_blank" rel="noopener">Pierce《TAPL》解答</a></td><td>GitHub 公开解答</td></tr><tr><td>✔ <a href="https://github.com/limits-to-arbitrage/sol-dummit-foote" target="_blank" rel="noopener">Dummit &amp; Foote《Abstract Algebra》部分解答</a> · <a href="https://github.com/gkikola/sol-dummit-foote" target="_blank" rel="noopener">另一份</a></td><td>两份独立公开解答（部分题）</td></tr><tr><td>✔ <a href="https://github.com/kyp44/Topology" target="_blank" rel="noopener">Munkres《Topology》解答</a></td><td>GitHub 公开解答</td></tr><tr><td>✔ <a href="https://arxiv.org/abs/0804.3434" target="_blank" rel="noopener">Selinger《Lecture Notes on the Lambda Calculus》</a></td><td><strong>免费</strong> λ 演算讲义（arXiv）</td></tr><tr><td>✔ <a href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/pages/readings/" target="_blank" rel="noopener">MIT 6.042J（2018 春季版完整 PDF）</a></td><td>实测可下载完整教材 PDF（13.3 MB）</td></tr><tr><td>✔ <a href="https://zenodo.org/records/22379030" target="_blank" rel="noopener">《开放逻辑文本》完整简体中文版（722 单元）</a></td><td>免费 PDF</td></tr><tr><td>✔ <a href="https://zenodo.org/records/22306469" target="_blank" rel="noopener">《开放逻辑文本》主读本 + 80 单元补充</a></td><td>免费 PDF</td></tr><tr><td>✔ <a href="https://zenodo.org/records/6855854" target="_blank" rel="noopener">Kroeger《Analyzing Meaning》</a></td><td><strong>第 3 版</strong>，开放获取（Zenodo）</td></tr><tr><td>✔ <a href="https://web.stanford.edu/~jurafsky/slp3/" target="_blank" rel="noopener">Jurafsky &amp; Martin《Speech and Language Processing》</a></td><td>第 3 版草稿<strong>免费在线</strong>（<code>ed3book_aug26.pdf</code>）</td></tr><tr><td>✔ <a href="https://logicinaction.org/" target="_blank" rel="noopener">Logic in Action</a></td><td>免费逻辑教材（<code>docs/lia.pdf</code>）</td></tr><tr><td>✔ <a href="https://ocw.mit.edu/courses/24-241-logic-i-fall-2009/pages/assignments/" target="_blank" rel="noopener">MIT 24.241 Logic I</a></td><td><strong>习题与答案全有</strong>（OCW）</td></tr><tr><td>△ <a href="https://www.cambridge.org/resources/0521701465/4742_ManualA.pdf" target="_blank" rel="noopener">Boolos《Computability and Logic》Instructor's Manual</a></td><td>Cambridge 官方教师资源，需认证（403）</td></tr><tr><td>✔ <a href="https://www.andrewcarnie.org/copy-of-textbook4e" target="_blank" rel="noopener">Carnie《Syntax》Workbook</a></td><td>配套练习册（Carnie 4e 已确认）</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>这条表改变了整个计划的可行性</strong>：你担心的"没有习题册"这个缺口， <strong>在主干的前几本书上其实都有公开解答可查</strong>（Velleman、Halmos、Sipser、TAPL、Munkres）。</p></blockquote>
+<h2 id="关于参考手册的警告核实后已修正">⚠️ 关于"参考手册"的警告（核实后<strong>已修正</strong>）<a class="anchor" href="#关于参考手册的警告核实后已修正" aria-hidden="true">#</a></h2>
+<p>你那份路径<strong>没区分"可读教科书"与"研究级参考手册"</strong>，初学者会撞墙。 但我的初稿<strong>也判错了两本</strong>——核实结果如下：</p>
+<h3 id="确实是参考手册不适合当第一本">✅ 确实是参考手册（<strong>不适合当第一本</strong>）<a class="anchor" href="#确实是参考手册不适合当第一本" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>书</th><th>依据</th></tr></thead><tbody><tr><td><code>✔</code> <strong>Shoenfield《Mathematical Logic》</strong></td><td>Smith：<strong>全清单最难</strong>，"definitely hard going"；<strong>"heaps of hard exercises (without answers)"</strong></td></tr><tr><td><code>✔</code> <strong>Jech《Set Theory》</strong></td><td>Smith：<strong>"the modern bible"</strong>，viii+769 页；建议"从第 1 页读到第 705 页"是不现实的</td></tr><tr><td><code>✔</code> <strong>Hodges《Model Theory》1993</strong></td><td>Smith：<strong>"The New Testament... encyclopedic"</strong>，772 页</td></tr><tr><td><code>✔</code> <strong>Partee《Mathematical Methods in Linguistics》</strong></td><td>未见合法免费版；<strong>Partee 本人在自己课程页把它列在 "Logic resources" 下并标注 "TOC only"</strong>；读者反馈"适合做工具书查缺补漏"</td></tr></tbody></table></div>
+<h3 id="我判错了这两本不是手册">❌ 我判错了——这两本<strong>不是</strong>手册<a class="anchor" href="#我判错了这两本不是手册" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>书</th><th>实际是</th></tr></thead><tbody><tr><td><code>✔</code> <strong>Kleene《Introduction to Metamathematics》</strong></td><td>Smith：<em>"remains <strong>particularly lucid and accessible</strong>: it is often discursive, pausing to discuss the motivation behind formal ideas. <strong>It is still a pleasure to read</strong>"</em></td></tr><tr><td><code>✔</code> <strong>Chang &amp; Keisler《Model Theory》</strong></td><td>Smith：<strong>"the Old Testament, the first systematic text on model theory"</strong>，"proceeds at an engagingly leisurely pace"，<strong>"still remains a good route in"</strong> → <strong>它是模型论的第一本，不是手册</strong></td></tr></tbody></table></div>
+<h3 id="被低估难度的别当第一本">⚠️ 被低估难度的（<strong>别当第一本</strong>）<a class="anchor" href="#被低估难度的别当第一本" aria-hidden="true">#</a></h3>
+<p><code>✔</code> <strong>Enderton《A Mathematical Introduction to Logic》</strong>（Smith："not the most approachable first pass"）、 <code>✔</code> <strong>Ebbinghaus/Flum/Thomas</strong>（Smith 不推荐作起点）、 <code>✔</code> <strong>Marker</strong>（Smith："would surely be hard going if you haven't already tackled some model theory"）</p>
+<h3 id="还有个更严重的-kunen-两本都不能当第一本">🔴 还有个更严重的：<strong>Kunen 两本都不能当第一本</strong><a class="anchor" href="#还有个更严重的-kunen-两本都不能当第一本" aria-hidden="true">#</a></h3>
+<p><code>✔</code> Kunen《Set Theory》(2011, College Publications, ISBN 978-1-84890-050-9) 出版社官方描述原文： <strong>"designed for readers who know elementary mathematical logic AND axiomatic set theory"</strong>。</p>
+<p>⇒ <strong>若最终想读 Kunen，入口应是同作者的</strong> <code>✔</code> <strong>Kunen《The Foundations of Mathematics》</strong>（2009, ISBN 978-1-904987-14-7），三章： <strong>Set Theory</strong>（ZFC、选择公理、良序、不可数基数）／<strong>Model Theory</strong>（完全性、紧致性、Löwenheim–Skolem）／ <strong>Recursion Theory</strong>（Church 定理、Gödel 不完备、Tarski 不可定义性）。 <strong>这本书正好覆盖你要学的 Enderton 数理逻辑内容 + 集合论基础。</strong></p>
+<hr>
+<hr>
+<h1 id="附录-d-没有答案时怎么办">附录 D · 没有答案时怎么办<a class="anchor" href="#附录-d-没有答案时怎么办" aria-hidden="true">#</a></h1>
+<p><strong>这是一个真实问题，不是理论问题。</strong> 核实结果：</p>
+<div class="tw"><table><thead><tr><th>科</th><th>习题答案可得性</th></tr></thead><tbody><tr><td><strong>计算机（Lean 4）</strong></td><td>✅ <strong>最好</strong>——编译器<strong>本身就是答案判据</strong>，证明不接受就是错</td></tr><tr><td><strong>逻辑（主干）</strong></td><td>✅ <strong>好</strong>——<code>✔</code> <strong>Leary &amp; Kristiansen 免费且大部分有答案</strong>；<code>✔</code> <strong>Peter Smith《IGT》免费 PDF + 免费答案册</strong>；<code>✔</code> <strong>Smith《IFL》免费 PDF + 逐章答案</strong>（<strong>你正在读的这本！</strong>）；<code>✔</code> <strong>Mendelson 6th ed</strong> 增页就是放答案；Boolos 有 Cambridge 官方教师手册（△需认证）</td></tr><tr><td><strong>数学（主干前几本）</strong></td><td>✅ <strong>好</strong>——Velleman（书后 p.397）、Hammack（<strong>书后 Solutions 专章 + 免费</strong>）、Sipser、TAPL、Munkres、Dummit &amp; Foote</td></tr><tr><td><strong>语言学</strong></td><td>⚠️ <strong>比我原先说的好一点，但结构不同</strong>——<code>✔</code> <strong>Potts 60 题带作者答案</strong>、<code>✔</code> <strong>Carnie Workbook 含答案</strong>；但 <strong>Heim &amp; Kratzer 没有答案</strong>（有人专门提问，<strong>零回答</strong>）；<strong>Winter 有题但答案未核实</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="一条你必须知道的">🔑 一条你必须知道的<a class="anchor" href="#一条你必须知道的" aria-hidden="true">#</a></h3>
+<p><strong>你正在读的 Smith《An Introduction to Formal Logic》，答案就在作者网站上，免费。</strong> <code>✔</code> <a href="https://logicmatters.net/ifl/" target="_blank" rel="noopener">logicmatters.net/ifl</a> 有 2nd ed 的<strong>修正版免费 PDF</strong> + <strong>逐章习题与详解答</strong></p>
+<p>你前面 432 道题是自己做的——<strong>如果有答案对照，效率会高一档。</strong></p></blockquote>
+<p><strong>没有答案时不能只靠"感觉对了"。</strong> 四条替代办法，<strong>按可靠性排序</strong>：</p>
+<div class="tw"><table><thead><tr><th>#</th><th>办法</th><th>可靠性</th><th>说明</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>用机器验证</strong></td><td><strong>最高</strong></td><td>Lean 4 形式化——证明对了机器接受，错了不接受。<strong>这是汇合点 5 的最大价值</strong></td></tr><tr><td><strong>2</strong></td><td><strong>交叉验证</strong></td><td>高</td><td>同一道题用<strong>两种独立方法</strong>做，比对结果</td></tr><tr><td><strong>3</strong></td><td><strong>找多份来源</strong></td><td>中高</td><td>同一内容在 2–3 本书里各有讲法，<strong>差异处就是可以自查的地方</strong></td></tr><tr><td><strong>4</strong></td><td><strong>找课程作业页</strong></td><td>中</td><td>大学课程常公开 PS 与部分答案（Coppock、Potts、MIT 24.241 都是例子）。<strong>主动搜"课程名 + problem set"</strong></td></tr></tbody></table></div>
+<p><strong>另外两条务实建议</strong>：</p>
+<ul><li><strong>语言学的"对错"标准本来就和数学不同。</strong> 语义分析常常是"这个分析是否比另一个更好"，</li></ul>
+<p>而不是"对/错"。而你已有的逻辑训练恰好能提供<strong>形式化的判据</strong>。</p>
+<ul><li><strong>把 Lean 4 提前</strong>：既然它是唯一"自带答案"的工具，而语言学阶段答案最缺，</li></ul>
+<p>可以考虑在 Y3（语言学开门）就开始用它形式化简单的语义组合。</p>
+<blockquote class="quote"><h3 id="但也要知道-lean-4-生态的一个现状">⚠️ 但也要知道 Lean 4 生态的一个现状<a class="anchor" href="#但也要知道-lean-4-生态的一个现状" aria-hidden="true">#</a></h3>
+<p><code>✔</code> <strong>Software Foundations 的 Lean 版（SF-in-Lean）现在只是 alpha</strong>—— 官方自述 <em>"not ready for ordinary readers quite yet"</em>，目标是 <strong>2026 秋季</strong>才有 LF 的完整打磨稿。 <strong>因此：主线用 TPIL4 + Mathematics in Lean，不要指望"用 Lean 学 Software Foundations"今年成为顺畅路径。</strong> （官方 SF 仍是 <strong>Rocq/Coq</strong> 版，且<strong>有中文版</strong> <code>✔</code> <a href="https://rocq-zh.github.io/SF-zh/" target="_blank" rel="noopener">rocq-zh.github.io/SF-zh</a>）</p></blockquote>
+<hr>
+<hr>
+<h1 id="附录-e-风险与应对">附录 E · 风险与应对<a class="anchor" href="#附录-e-风险与应对" aria-hidden="true">#</a></h1>
+<div class="tw"><table><thead><tr><th>风险</th><th>应对</th></tr></thead><tbody><tr><td><strong>计划过满</strong></td><td>一季一本是<strong>上限</strong></td></tr><tr><td><strong>四科都想推进</strong></td><td>硬约束：每季<strong>最多一主一副</strong></td></tr><tr><td><strong>卡住就停摆</strong></td><td>每 4 季留 1 季缓冲</td></tr><tr><td><strong>只读不做题</strong></td><td>选书第一问："有没有题"</td></tr><tr><td><strong>长期无成果</strong></td><td>每季一个里程碑，表达版优先</td></tr><tr><td><strong>路径太长失动力</strong></td><td>里程碑<strong>按季</strong>，一年 4 次"我做到了"</td></tr><tr><td><strong>把参考手册当教材</strong></td><td>见附录 C 的警告表</td></tr></tbody></table></div>
+<hr>
+<hr>
+<h1 id="附录-i-框架为什么这四科是一个知识体">附录 I · 框架（为什么这四科是一个知识体）<a class="anchor" href="#附录-i-框架为什么这四科是一个知识体" aria-hidden="true">#</a></h1>
+<h2 id="i-1-这四科不是四个学科-是一个知识体的四个投影">I.1 这四科不是四个学科，是一个知识体的四个投影<a class="anchor" href="#i-1-这四科不是四个学科-是一个知识体的四个投影" aria-hidden="true">#</a></h2>
+<blockquote class="quote"><p>⚠️ <strong>但它们的地位不对等</strong>（2026-10-16 修正）： <strong>数学与逻辑是你的两个主科</strong>，计算机与语言学是支线。 下面这张"互相对应"的表讲的是<strong>结构联系</strong>，不是投入比例。</p></blockquote>
+<div class="tw"><table><thead><tr><th>学科</th><th>共享的核心</th><th>它关心什么</th></tr></thead><tbody><tr><td><strong>逻辑</strong></td><td>形式系统、证明、语义</td><td>推理本身</td></tr><tr><td><strong>数学</strong></td><td>同上</td><td>用证明<strong>造结构</strong></td></tr><tr><td><strong>计算机</strong></td><td>同上</td><td>让证明/计算<strong>跑起来</strong></td></tr><tr><td><strong>语言学</strong></td><td>同上</td><td>自然语言<strong>怎么承载意义</strong></td></tr></tbody></table></div>
+<p><strong>证据（这是真对应，不是漂亮话）</strong>：</p>
+<div class="tw"><table><thead><tr><th>逻辑</th><th>↔</th><th>其他三科</th></tr></thead><tbody><tr><td>自然演绎证明</td><td>↔</td><td><strong>程序</strong>（Curry–Howard）</td></tr><tr><td>命题 / 类型</td><td>↔</td><td><strong>类型系统</strong></td></tr><tr><td>λ 演算</td><td>↔</td><td><strong>计算 + 类型论 + 语义学</strong>（三科交汇）</td></tr><tr><td>模型论语义</td><td>↔</td><td><strong>形式语义学</strong></td></tr><tr><td>证明助手</td><td>↔</td><td><strong>四科合一</strong></td></tr></tbody></table></div>
+<h2 id="i-2-结构-一条主干-五个汇合点">I.2 结构：一条主干 + 五个汇合点<a class="anchor" href="#i-2-结构-一条主干-五个汇合点" aria-hidden="true">#</a></h2>
+<pre class="code"><code>                    主干：逻辑
+                        │
+   ┌─────────┬──────────┼──────────┬─────────┐
+   ▼         ▼          ▼          ▼         ▼
+ 汇合点1   汇合点2    汇合点3    汇合点4   汇合点5
+ 证明=程序  可计算性   类型论     模型论    证明助手
+ 逻辑×计算  逻辑×计算  逻辑×计算  逻辑×数学  四科合一
+            ×数学      ×语言学    ×语言学</code></pre>
+<div class="tw"><table><thead><tr><th>#</th><th>汇合点</th><th>自动落点</th><th>打开哪一科</th></tr></thead><tbody><tr><td>1</td><td>证明 = 程序（Curry–Howard）</td><td>证明论 + λ 演算</td><td><strong>计算机</strong>：类型论</td></tr><tr><td>2</td><td>可计算性</td><td>阶段 4</td><td><strong>计算机</strong>：复杂度</td></tr><tr><td>3</td><td>类型论 / CCG</td><td>阶段 5.2</td><td><strong>语言学</strong>：范畴语法</td></tr><tr><td>4</td><td>模型论语义</td><td>阶段 3</td><td><strong>语言学</strong>：形式语义学</td></tr><tr><td>5</td><td>证明助手</td><td>类型论之后</td><td><strong>四科合一</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>关键</strong>：这五个点<strong>天然落在不同年份</strong>。所以"四科同时开"是不必要的—— <strong>每科的门都在主干上按时打开</strong>。</p></blockquote>
+<hr>
+<hr>
+<h1 id="附录-k-专业方向怎么分化我该为哪套入场券付几年">附录 K · 专业方向怎么分化（「我该为哪套入场券付几年」）<a class="anchor" href="#附录-k-专业方向怎么分化我该为哪套入场券付几年" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><p><strong>这一节回答的问题</strong>（2026-10-16 你提的）：</p>
+<ul><li>「如果逻辑和数学只选择一个深入，你建议选哪个？」</li><li>「那张数学分支图，我有必要大致掌握核心的东西吗？」</li><li>「我不知道该走逻辑学路线还是数学路线……也许计算机也可以？我有点迷茫。」</li><li>后来你补充：「数学 = 逻辑学 ＞ 计算机 ＞ 语言学」，</li></ul>
+<p>且「如果是计算机<strong>理论</strong>的话，数学逻辑学和计算机就都是等号了」</p>
+<p><strong>⚠️ 这一节不需要联网核实，也不会过时。</strong></p></blockquote>
+<hr>
+<h2 id="k-1-先纠正前提-逻辑-vs-数学是假的二选一">K.1 先纠正前提：「逻辑 vs 数学」是假的二选一<a class="anchor" href="#k-1-先纠正前提-逻辑-vs-数学是假的二选一" aria-hidden="true">#</a></h2>
+<p><strong>"逻辑"不是一个系。</strong> 同一个兴趣，在四个地方是四份不同的职业：</p>
+<div class="tw"><table><thead><tr><th>去处</th><th>逻辑在那里是什么</th><th><strong>要付的入场券</strong></th></tr></thead><tbody><tr><td><strong>数学系</strong></td><td>数理逻辑（模型论／集合论／递归论／证明论）——<strong>是数学的一个分支</strong></td><td><strong>数学分析、高等代数、几何拓扑</strong></td></tr><tr><td><strong>哲学系</strong></td><td>逻辑与逻辑哲学（模态、非经典、语言哲学）</td><td><strong>哲学史 + 论证性写作</strong></td></tr><tr><td><strong>计算机系</strong></td><td>类型论、程序语言、形式验证</td><td>算法 + 编程工程（<strong>理论侧另有数学</strong>）</td></tr><tr><td><strong>语言学系</strong></td><td>形式语义学、句法学</td><td><strong>句法学 + 语言学经验事实</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 真的选择是：你愿意为哪一套"入场券"付几年。</strong> <strong>而逻辑本身，四条路都可以做——只是做的东西不同、周围要会的东西不同。</strong></p></blockquote>
+<h3 id="k-1-1-一个必须看清的事实">K.1.1 一个必须看清的事实<a class="anchor" href="#k-1-1-一个必须看清的事实" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p>⚠️ <strong>在数学系，你要先成为一个数学工作者，才被允许研究逻辑。</strong> 模型论博士要先会代数；集合论博士要先会组合与拓扑。</p>
+<p><strong>⇒ 走数学路线时，"数学骨架"不是基础，是入场券。</strong></p></blockquote>
+<p>反过来：<strong>哲学系的逻辑不需要数学分析</strong>，但要你会写哲学论文、读哲学史。</p>
+<hr>
+<h2 id="k-2-你自己的排序-其实不是学科排序">K.2 你自己的排序，其实不是"学科排序"<a class="anchor" href="#k-2-你自己的排序-其实不是学科排序" aria-hidden="true">#</a></h2>
+<p>你 2026-10-16 说：「数学 = 逻辑学 ＞ 计算机 ＞ 语言学」， 并补充：<strong>「如果是计算机理论的话，那么数学逻辑学和计算机就都是等号了」</strong>。</p>
+<p><strong>⇒ 这句话的意思是：你排的从来不是学科，是"理论性"。</strong></p>
+<pre class="code"><code>数学 = 逻辑学 = 计算机理论   ← 你要的（理论）
+        ↓
+     计算机（应用）          ← 你为就业考虑的
+        ↓
+      语言学</code></pre>
+<p><strong>⇒ 真正在排的是：理论 ＞ 应用。</strong></p>
+<p>而且这统一了你的两条自述：</p>
+<div class="tw"><table><thead><tr><th>你的自述</th><th>含义</th></tr></thead><tbody><tr><td>「我更喜欢理论的东西」</td><td>理论侧</td></tr><tr><td>「计算机的考虑主要是方便就业」</td><td>应用侧——<strong>那是另一条路</strong></td></tr></tbody></table></div>
+<p><strong>⇒ 计算机在你这里同时扮演两个角色</strong>：</p>
+<div class="tw"><table><thead><tr><th>角色</th><th>内容</th><th>要不要</th></tr></thead><tbody><tr><td><strong>理论 CS</strong></td><td>类型论、可计算性、描述复杂性、有限模型论</td><td>✅ <strong>与主科等号</strong></td></tr><tr><td><strong>就业技能</strong></td><td>写代码、工程、项目</td><td>⚠️ <strong>另一条线</strong>，与理论无关</td></tr></tbody></table></div>
+<p><strong>好消息</strong>：附录 F.4 已经标了「编程/就业线未列」。 <strong>⇒ 你不必为就业去学可计算性。</strong></p>
+<hr>
+<h2 id="k-3-关于哲学-你的排除对了一半">K.3 关于哲学：你的排除<strong>对了一半</strong><a class="anchor" href="#k-3-关于哲学-你的排除对了一半" aria-hidden="true">#</a></h2>
+<p>你说读过康德、黑格尔、德勒兹、阿多诺，<strong>觉得晦涩、语言不清晰</strong>。</p>
+<p><strong>这个判断在事实层面是对的</strong>——分析哲学传统批评的<strong>正是这种文风</strong>。</p>
+<blockquote class="quote"><p>✅ <strong>"不喜欢大陆哲学的文风" 不能推出 "不喜欢哲学"</strong> ✅ <strong>分析哲学恰恰以"清晰"为第一美德</strong>（Frege、Russell、Quine、Dummett）</p></blockquote>
+<p><strong>但反向也要说清</strong>：</p>
+<div class="tw"><table><thead><tr><th>分析哲学的入场券</th><th>你的偏好</th></tr></thead><tbody><tr><td>哲学史（含亚里士多德、休谟、康德的认识论部分）</td><td>⚠️ 已说不喜欢</td></tr><tr><td><strong>论证性写作</strong>（论文是核心产出）</td><td>❓ <strong>未测</strong></td></tr><tr><td>概念辨析（"知识"到底是什么）</td><td>❓ 未测</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 你排除的是"文风"，不是"学科"。</strong> <strong>要不要排除这个学科，取决于 K.5 的测试 3。</strong></p></blockquote>
+<hr>
+<h2 id="k-4-四条路的入场券对比">K.4 四条路的入场券对比<a class="anchor" href="#k-4-四条路的入场券对比" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th></th><th><strong>数学系</strong></th><th><strong>计算机系（理论）</strong></th><th><strong>语言学系</strong></th><th><strong>哲学系</strong></th></tr></thead><tbody><tr><td><strong>核心活动</strong></td><td>证明定理</td><td>证明定理 + <strong>实现</strong></td><td>建形式模型 + <strong>观察语言事实</strong></td><td><strong>概念辨析 + 论证</strong></td></tr><tr><td><strong>入场券</strong></td><td>分析 / 代数 / 几何拓扑</td><td>算法 + 编程 + 数学</td><td>句法学 + 语言学经验</td><td>哲学史 + 写作</td></tr><tr><td><strong>写作负担</strong></td><td>中（证明）</td><td>中（论文 + 代码）</td><td>中高（论证性）</td><td><strong>高</strong></td></tr><tr><td><strong>与你的偏好</strong></td><td>✅ 理论</td><td>✅ 理论（你已会编程）</td><td>⚠️ 要碰"不那么形式"的事实</td><td>⚠️ 文风待测</td></tr><tr><td><strong>学术盘子</strong></td><td>大</td><td><strong>最大</strong>（但多在应用侧）</td><td><strong>小</strong></td><td>中</td></tr></tbody></table></div>
+<hr>
+<h2 id="k-5-三个测试比想更有效">K.5 三个测试（比想更有效）<a class="anchor" href="#k-5-三个测试比想更有效" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>#</th><th>测试</th><th>看什么</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>在抽象对象上还能不能工作</strong>（群／域／拓扑空间，<strong>看得见的东西没有了</strong>）</td><td>很多人<strong>擅长计算型数学，但第一次遇到群论／拓扑会撞墙</strong>——因为不能再靠图像和直觉。<strong>这才是分水岭</strong></td></tr><tr><td><strong>2</strong></td><td>读一篇数理逻辑研究论文，<strong>写一页摘要</strong>（问题／方法／贡献／未解决）</td><td>你是<strong>兴奋</strong>还是<strong>茫然</strong>？——区分"喜欢学"和"喜欢研究"</td></tr><tr><td><strong>3</strong></td><td>写一篇<strong>短的论证性文字</strong>（不是证明，是"为什么我认为 X 更好"）</td><td>你是<strong>顺畅</strong>还是<strong>难受</strong>？——<strong>这一条同时筛掉哲学系与语言学系</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><h3 id="测试-1-你已提前通过2026-10-16上面是修正版">⚠️ 测试 1 你已提前通过（2026-10-16）——上面是<strong>修正版</strong><a class="anchor" href="#测试-1-你已提前通过2026-10-16上面是修正版" aria-hidden="true">#</a></h3>
+<p>你说：「高中学习数学的时候我学了很多定理来攻克导数的压轴题， 在第一次学的时候我自己写过证明，<strong>当我自己写出证明的时候发现和书上提供的证明大差不差， 而且有时还给出了不一样的证明角度</strong>的时候，我觉得这很好玩。」</p>
+<div class="tw"><table><thead><tr><th>你的描述</th><th>它说明什么</th></tr></thead><tbody><tr><td>学了很多定理去攻克压轴题</td><td>你<strong>主动</strong>找工具，不是被动等讲</td></tr><tr><td>第一次学就自己写证明</td><td>你有<strong>先自己想</strong>的习惯</td></tr><tr><td>和书上<strong>大差不差</strong></td><td>推理在正轨上</td></tr><tr><td>⭐ <strong>有时角度不一样</strong></td><td><strong>最强的一条</strong>——说明你不是在复现一条路径，而是在看"这个问题还能怎么切"</td></tr></tbody></table></div>
+<p><strong>⇒ 结论：数学这一路有正向支持证据。"喜不喜欢证明"不必再问。</strong></p>
+<p><strong>但原测试有上限，要看清</strong>：</p>
+<div class="tw"><table><thead><tr><th>高中阶段</th><th>大学数学</th></tr></thead><tbody><tr><td>工具<strong>先给你</strong>（定理都学过）</td><td>工具要<strong>自己选</strong>，常常没有现成工具</td></tr><tr><td>题目<strong>有人出</strong>（保证可解）</td><td>问题要<strong>自己找</strong>，可能根本无解</td></tr><tr><td><strong>具体对象</strong>（函数、导数）</td><td><strong>抽象对象</strong>（群、域、拓扑空间）——<strong>直觉会失效</strong></td></tr></tbody></table></div>
+<p><strong>⇒ 所以真正该测的是修正版测试 1：开 Y1 后问自己</strong> <strong>"我在群／域／拓扑空间这些看不见的东西上，还能像在函数上那样思考吗？"</strong></p>
+<p><strong>附一条旁证</strong>：你的数学入门是<strong>竞赛式／定理式</strong>的（为攻克压轴题而学定理）， <strong>不是刷题型</strong>——这恰是走数学理论路线的典型起点，<strong>且特别能对上抽象代数与数理逻辑</strong>。</p></blockquote>
+<blockquote class="quote"><p><strong>第 3 条最关键</strong>：哲学系与语言学系的核心产出都是<strong>论证性写作</strong>。 若写这种文字很痛苦，<strong>那两条路就不该在选项里</strong>——不管你多喜欢逻辑。</p></blockquote>
+<hr>
+<h2 id="k-6-决策时间表">K.6 决策时间表<a class="anchor" href="#k-6-决策时间表" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>时候</th><th>做什么</th></tr></thead><tbody><tr><td><strong>现在</strong></td><td><strong>不决定</strong>。按第一部分的时间轴走 Y1–Y2</td></tr><tr><td><strong>Y1 末</strong></td><td>做<strong>测试 1</strong>。若"享受证明"→ 数学、逻辑、理论 CS 都可行；若"痛苦"→ 重新想</td></tr><tr><td><strong>Y2 末</strong></td><td>做<strong>测试 2、3</strong>。<strong>三条路口的数据齐了</strong></td></tr><tr><td><strong>Y3 初</strong></td><td><strong>再决定</strong>。那时有真凭据，不是猜测</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>你的路线图恰好是那个测试装置</strong>——它不是"为逻辑准备的"，是<strong>共用底座</strong>：</p>
+<pre class="code"><code>       Y1–Y2（数学骨架 + 元逻辑）  ← 四条路的公共部分
+                    │
+     ┌──────────┬───┴────┬──────────┐
+     ▼          ▼        ▼          ▼
+   数学系     哲学系   计算机     语言学系</code></pre>
+<p><strong>⇒ Y1–Y2 无论走哪条路都不浪费。</strong></p></blockquote>
+<hr>
+<h2 id="k-7-一条容易忽略的提醒-报考哪个系要看学校">K.7 一条容易忽略的提醒：<strong>"报考哪个系"要看学校</strong><a class="anchor" href="#k-7-一条容易忽略的提醒-报考哪个系要看学校" aria-hidden="true">#</a></h2>
+<p><strong>理论 CS 常常"住"在数学系里</strong>：</p>
+<div class="tw"><table><thead><tr><th>方向</th><th>常常在哪个系</th></tr></thead><tbody><tr><td>计算理论 / 数理逻辑</td><td><strong>数学系</strong>（有些学校）</td></tr><tr><td>类型论 / 程序语言</td><td>CS 系</td></tr><tr><td>逻辑与逻辑哲学</td><td><strong>哲学系</strong>（有些学校）</td></tr><tr><td>形式语义学</td><td>语言学系，或语言学 + 计算机联合</td></tr></tbody></table></div>
+<p><strong>⇒ 所以"报考哪个系"是查具体学校，不是选一个抽象学科。</strong></p>
+<p><strong>建议到 Y2 末再查</strong>——那时你更清楚自己要什么，查起来也有针对性。</p>
+<hr>
+<h2 id="k-8-关于语言学回应你的追加问题">K.8 关于语言学（回应你的追加问题）<a class="anchor" href="#k-8-关于语言学回应你的追加问题" aria-hidden="true">#</a></h2>
+<p>你说：「我对语言学也有一点兴趣……只知道<strong>计算语言学</strong>和<strong>形式语义学</strong>可能是我的兴趣所在。」</p>
+<h3 id="k-8-1-两点澄清">K.8.1 两点澄清<a class="anchor" href="#k-8-1-两点澄清" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>名字</th><th>现在的真相</th></tr></thead><tbody><tr><td><strong>计算语言学 / NLP</strong></td><td><strong>已大体变成 CS + 机器学习</strong>。做的人在 CS 系，技能栈是 PyTorch、数据、模型——<strong>不是逻辑</strong></td></tr><tr><td><strong>形式语义学</strong></td><td>⭐ <strong>这才是真正的"语言学"分支，而且它就是逻辑</strong>——λ 演算 + 类型论 + 自然语言</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 你对"计算语言学"的兴趣，可能其实是"对 AI/NLP 的兴趣"</strong>（那属于计算机）。 <strong>⇒ 你对"形式语义学"的兴趣，可能其实是"对逻辑的兴趣"。</strong></p></blockquote>
+<p><strong>这不是坏事</strong>——说明你<strong>不必新增一个学科</strong>。</p>
+<h3 id="k-8-2-形式语义学具体做什么">K.8.2 形式语义学具体做什么<a class="anchor" href="#k-8-2-形式语义学具体做什么" aria-hidden="true">#</a></h3>
+<blockquote class="quote"><p><strong>核心工作</strong>：给定一个句子，写出它的形式语义，并说明为什么是这个语义。</p></blockquote>
+<pre class="code"><code>"Every student read a book"
+  两个意思（辖域歧义）：
+    ① ∀y(Student(y) → ∃x(Book(x) ∧ Read(y,x)))
+    ② ∃x(Book(x) ∧ ∀y(Student(y) → Read(y,x)))
+  为什么有这两个？哪个更自然？上下文怎么消解？</code></pre>
+<p><strong>工具</strong>：λ 演算、类型论、模型论语义、<strong>句法学</strong> <strong>不做</strong>：不训练模型、不写代码、不涉及脑科学 <strong>像什么</strong>：<strong>像逻辑，只是研究对象换成了自然语言。</strong></p>
+<blockquote class="quote"><p>⚠️ <strong>关键判断</strong>：若你对形式语义学的兴趣<strong>只在"形式"那一半</strong>（λ、类型）， <strong>而不关心自然语言的具体现象</strong>，<strong>那你其实是逻辑学家，不是语言学家。</strong></p></blockquote>
+<h3 id="k-8-3-为什么语言学该留在支线">K.8.3 为什么语言学该留在支线<a class="anchor" href="#k-8-3-为什么语言学该留在支线" aria-hidden="true">#</a></h3>
+<div class="tw"><table><thead><tr><th>理由</th><th>说明</th></tr></thead><tbody><tr><td><strong>学术盘子小</strong></td><td>语言学系规模远小于数学/CS，教职与项目都少</td></tr><tr><td><strong>它的入口已在你路线里</strong></td><td><strong>形式语义学 = 模型论 + 类型论</strong>——你在 Y3、Y5 会自然撞上</td></tr><tr><td><strong>不必现在决定</strong></td><td>你 Y3 才碰语言学，那时 K.5 的测试数据已经有了</td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 语言学不必单独规划。</strong> 走到 <strong>Y3Q3（Potts《Logic for Linguists》）</strong> 时你会自然知道答案—— 那时你有<strong>真实的阅读体验</strong>，比现在猜准得多。</p></blockquote>
+<hr>
+<h2 id="k-9-这一节怎么用">K.9 这一节怎么用<a class="anchor" href="#k-9-这一节怎么用" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>你什么时候</th><th>读哪几节</th></tr></thead><tbody><tr><td>想知道"这四条路差在哪"</td><td><strong>K.1 + K.4</strong></td></tr><tr><td>觉得迷茫、想理清自己在排什么</td><td><strong>K.2</strong></td></tr><tr><td>想判断哲学/语言学要不要排除</td><td><strong>K.5 测试 3</strong></td></tr><tr><td>准备决定方向</td><td><strong>K.6 决策时间表</strong></td></tr><tr><td>想知道"报考哪个系"</td><td><strong>K.7</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 现在什么都不用做，按时间轴走就行。</strong> <strong>Y1 末回来做测试 1，那时说一句「我来做测试 1」即可。</strong></p></blockquote>
+<hr>
+<h1 id="附录-j-你收到的那份-8-阶段逻辑学路径存档">附录 J · 你收到的那份 8 阶段逻辑学路径（存档）<a class="anchor" href="#附录-j-你收到的那份-8-阶段逻辑学路径存档" aria-hidden="true">#</a></h1>
+<blockquote class="quote"><h2 id="这份存档的性质-先说清">⚠️ 这份存档的性质，先说清<a class="anchor" href="#这份存档的性质-先说清" aria-hidden="true">#</a></h2>
+<p><strong>你 2026-10-16 在对话里贴出了这份完整路径。我当时只把它当上下文用， 没有存成文件</strong> —— 所以路线图里那句「你的 8 阶段路径里已列全」是<strong>悬空引用</strong>， 你<strong>没有文件可查</strong>。这是我的维护失误，现在补上。</p>
+<p><strong>来源</strong>：你在对话里提供的原文（<strong>我逐字保留结构与书目</strong>）。 <strong>状态</strong>：</p>
+<ul><li>骨干（<strong>8 个阶段名 + 每阶段★必读 + ☆替代 + ◆专题 + 插入时机</strong>）= <strong>你原文提供，可靠</strong></li><li>★/☆/△/◆ 的<strong>标记含义</strong> = 你的原文本身就有</li><li><strong>每本书的版次 / 习题 / 答案情况</strong> = 见 <strong>附录 A</strong>（我核实过的）与 <strong>附录 G</strong>（核实状态）</li><li>⚠️ <strong>最后几项原始文献清单，我的转录可能不完整</strong>——以你手上的原件为准</li></ul>
+<p><strong>本文档的用途</strong>：<strong>查证与对照</strong>。它<strong>不是</strong>你要走的主线—— 主线是<strong>第一部分的时间轴</strong>（我把这份路径主编排进了那条时间轴）。</p></blockquote>
+<hr>
+<h2 id="阶段-1-元逻辑转向">阶段 1 · 元逻辑转向<a class="anchor" href="#阶段-1-元逻辑转向" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：把一阶逻辑本身当作数学对象，掌握<strong>可靠性、完备性、紧致性、Löwenheim–Skolem</strong> 的严格证明。</p>
+<h3 id="必读">必读<a class="anchor" href="#必读" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Enderton, _A Mathematical Introduction to Logic_, 2nd ed.</strong></li></ol>
+<ul><li>重点：第 1–3 章</li><li>完备性证明的 <strong>Henkin 构造</strong>要逐行精读</li></ul>
+<h3 id="替代">替代<a class="anchor" href="#替代" aria-hidden="true">#</a></h3>
+<ul><li>☆ van Dalen, _Logic and Structure_, 5th ed.（更代数化，第 3–4 章可更快通向模型论）</li><li>☆ Chiswell &amp; Hodges, _Mathematical Logic_</li><li>☆ Leary &amp; Kristiansen, _A Friendly Introduction to Mathematical Logic_（<strong>免费在线</strong>，卡住时查阅）</li></ul>
+<h3 id="补充">补充<a class="anchor" href="#补充" aria-hidden="true">#</a></h3>
+<ul><li>△ Hunter, _Metalogic_</li><li>△ Kleene, _Introduction to Metamathematics_</li><li>△ Mendelson, _Introduction to Mathematical Logic_, 6th ed.</li><li>△ Ebbinghaus, Flum &amp; Thomas, _Mathematical Logic_（可作相继式演算与一阶逻辑第二遍参考）</li></ul>
+<h3 id="本阶段完成后可进入的专题">本阶段完成后可进入的专题<a class="anchor" href="#本阶段完成后可进入的专题" aria-hidden="true">#</a></h3>
+<p><strong>1.1 二阶逻辑与高阶逻辑 ➕</strong></p>
+<ul><li>◆ Shapiro, _Foundations without Foundationalism_</li><li>◆ Väänänen, _Dependence Logic_</li><li>◆ Andrews, _An Introduction to Mathematical Logic and Type Theory_</li><li>◆ van Benthem &amp; Doets, "Higher-Order Logic", in _Handbook of Philosophical Logic_</li><li>◆ Leivant, "Higher-Order Logic", in _Handbook of Logic in AI and Logic Programming_</li><li>◆ SEP："Second-Order Logic"、"Higher-Order Logic"</li></ul>
+<p><strong>插入时机</strong>：Enderton 第 1–3 章完成后。</p>
+<hr>
+<h2 id="阶段-2-集合论">阶段 2 · 集合论<a class="anchor" href="#阶段-2-集合论" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：掌握<strong>序数、基数、递归定义、选择公理、传递模型、反射原理</strong>。它是后面所有分支的工作语言。</p>
+<h3 id="必读-2">必读<a class="anchor" href="#必读-2" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Halmos, _Naive Set Theory_</strong>（短，两周左右可读完）</li><li><strong>★ Kunen, _Set Theory: An Introduction to Independence Proofs_</strong>（重点：第 1 章）</li></ol>
+<h3 id="替代-2">替代<a class="anchor" href="#替代-2" aria-hidden="true">#</a></h3>
+<ul><li>☆ Shoenfield, _Mathematical Logic_, 第 6–9 章</li><li>☆ Enderton, _Elements of Set Theory_</li><li>☆ Devlin, _The Joy of Sets_, 2nd ed.</li></ul>
+<h3 id="补充-2">补充<a class="anchor" href="#补充-2" aria-hidden="true">#</a></h3>
+<ul><li>△ Jech, _Set Theory_, 3rd millennium ed.</li><li>△ Fraenkel, Bar-Hillel &amp; Levy, _Foundations of Set Theory_</li></ul>
+<h3 id="本阶段完成后可进入的专题-2">本阶段完成后可进入的专题<a class="anchor" href="#本阶段完成后可进入的专题-2" aria-hidden="true">#</a></h3>
+<p><strong>2.1 力迫法与大基数</strong></p>
+<ul><li>◆ Jech, _Set Theory_</li><li>◆ Kanamori, _The Higher Infinite_, 2nd ed.</li><li>◆ Chow, "A Beginner's Guide to Forcing", _Bulletin of Symbolic Logic_ 16(1), 2010</li></ul>
+<p><strong>2.2 描述集合论</strong></p>
+<ul><li>◆ Moschovakis, _Descriptive Set Theory_, 2nd ed.</li><li>◆ Kechris, _Classical Descriptive Set Theory_</li><li>◆ Martin, "Borel Determinacy", _Annals of Mathematics_ 102(2), 1975</li><li>◆ Jech《Set Theory》中描述集合论部分</li><li>◆ Kanamori《The Higher Infinite》中 determinacy 部分</li></ul>
+<p><strong>2.3 集合论模型论</strong></p>
+<ul><li>◆ Kunen, _Set Theory_, 第 4 章 "Elementary Submodels"</li><li>◆ Jech, _Set Theory_, 第 12 章 "Model Theory of Set Theory"</li></ul>
+<p><strong>2.4 代数逻辑 ➕</strong></p>
+<ul><li>◆ Halmos &amp; Givant, _Logic as Algebra_</li><li>◆ Font, _Abstract Algebraic Logic_</li><li>◆ SEP："Algebraic Logic"、"Boolean Algebra"、"Heyting Algebra"</li></ul>
+<p><strong>插入时机</strong>：集合论之后、模型论之前。作为语义学的代数视角。</p>
+<hr>
+<h2 id="阶段-3-模型论">阶段 3 · 模型论<a class="anchor" href="#阶段-3-模型论" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：把一阶语义发展为分析数学结构的工具。</p>
+<h3 id="必读-3">必读<a class="anchor" href="#必读-3" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Marker, _Model Theory: An Introduction_</strong></li></ol>
+<ul><li>重点：第 1–4 章</li><li>初等等价、紧致性应用、量词消去、Löwenheim–Skolem、Robinson 图、模型完备性</li></ul>
+<h3 id="替代-3">替代<a class="anchor" href="#替代-3" aria-hidden="true">#</a></h3>
+<ul><li>☆ Poizat, _A Course in Model Theory_</li><li>☆ Tent &amp; Ziegler, _A Course in Model Theory_</li><li>☆ Hodges, _A Shorter Model Theory_</li></ul>
+<h3 id="补充-3">补充<a class="anchor" href="#补充-3" aria-hidden="true">#</a></h3>
+<ul><li>△ Chang &amp; Keisler, _Model Theory_, 3rd ed.</li><li>△ Hodges, _Model Theory_</li></ul>
+<h3 id="本阶段完成后可进入的专题-3">本阶段完成后可进入的专题<a class="anchor" href="#本阶段完成后可进入的专题-3" aria-hidden="true">#</a></h3>
+<p><strong>3.1 稳定性与分类理论</strong></p>
+<ul><li>◆ Shelah, _Classification Theory_, 2nd ed.</li><li>◆ Marker, _Lectures on Infinitary Model Theory_</li></ul>
+<p><strong>3.2 模型论与代数/代数几何</strong></p>
+<ul><li>◆ Bouscaren (ed.), _Model Theory and Algebraic Geometry_</li><li>◆ Chatzidakis，模型论与代数相关讲义</li><li>◆ Hrushovski, "The Mordell–Lang Conjecture for Function Fields", _JAMS_ 9(3), 1996</li></ul>
+<p><strong>3.3 无穷逻辑与广义量词</strong></p>
+<ul><li>◆ Barwise &amp; Feferman (eds.), _Model-Theoretic Logics_</li><li>◆ Keisler, _Model Theory for Infinitary Logic_</li><li>◆ Dickmann, _Large Infinitary Languages_</li><li>◆ Peters &amp; Westerståhl, _Quantifiers in Language and Logic_</li></ul>
+<p><strong>3.4 有限模型论与描述复杂性</strong></p>
+<ul><li>◆ Immerman, _Descriptive Complexity_</li><li>◆ Lassaigne &amp; de Rougemont, _Logic and Complexity_</li><li>◆ Libkin, _Elements of Finite Model Theory_</li><li>◆ Grädel et al., _Finite Model Theory and Its Applications_</li><li>◆ Ebbinghaus &amp; Flum, _Finite Model Theory_, 2nd ed.</li><li>◆ Papadimitriou, _Computational Complexity_</li><li>◆ Arora &amp; Barak, _Computational Complexity: A Modern Approach_</li><li>◆ Fagin, "Generalized First-Order Spectra and Polynomial-Time Recognizable Sets", 1974</li></ul>
+<p><strong>3.5 描述逻辑 ➕</strong></p>
+<ul><li>◆ Baader et al., _The Description Logic Handbook_</li><li>◆ _An Introduction to Description Logic_</li><li>◆ SEP："Description Logics"</li></ul>
+<p><strong>插入时机</strong>：模型论或可计算性之后。它是<strong>语义网、知识图谱的逻辑基础</strong>。</p>
+<hr>
+<h2 id="阶段-4-可计算性理论">阶段 4 · 可计算性理论<a class="anchor" href="#阶段-4-可计算性理论" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：图灵机、递归函数、不可判定性、递归可枚举集、归约、<strong>Rice 定理</strong>、<strong>哥德尔不完备定理</strong>。</p>
+<h3 id="必读-4">必读<a class="anchor" href="#必读-4" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Cutland, _Computability: An Introduction to Recursive Function Theory_</strong></li></ol>
+<ul><li>或</li></ul>
+<ol><li><strong>★ Boolos, Burgess &amp; Jeffrey, _Computability and Logic_, 5th ed.</strong>（重点：第 1–10 章）</li><li><strong>★ Peter Smith, _An Introduction to Gödel's Theorems_, 2nd ed.</strong></li></ol>
+<h3 id="替代-4">替代<a class="anchor" href="#替代-4" aria-hidden="true">#</a></h3>
+<ul><li>☆ Cooper, _Computability Theory_</li><li>☆ Davis, _Computability and Unsolvability_</li><li>☆ Smullyan, _Gödel's Incompleteness Theorems_</li></ul>
+<h3 id="补充-4">补充<a class="anchor" href="#补充-4" aria-hidden="true">#</a></h3>
+<ul><li>△ Franzén, _Gödel's Theorem: An Incomplete Guide to Its Use and Abuse_</li><li>△ Peter Smith, _Gödel Without (Too Many) Tears_（更轻松，建议与 _IGT_ 并行）</li><li>△ Sipser, _Introduction to the Theory of Computation_（计算机视角辅助）</li></ul>
+<h3 id="本阶段完成后可进入的专题-4">本阶段完成后可进入的专题<a class="anchor" href="#本阶段完成后可进入的专题-4" aria-hidden="true">#</a></h3>
+<p><strong>4.1 度理论与优先方法</strong></p>
+<ul><li>◆ Soare, _Recursively Enumerable Sets and Degrees_</li><li>◆ Rogers, _Theory of Recursive Functions and Effective Computability_</li><li>◆ Odifreddi, _Classical Recursion Theory_, Vol. 1–2</li><li>◆ Lerman, _Degrees of Unsolvability_</li><li>◆ Soare, _Turing Computability: Theory and Applications_</li></ul>
+<p><strong>4.2 算法随机性</strong></p>
+<ul><li>◆ Downey &amp; Hirschfeldt, _Algorithmic Randomness and Complexity_</li><li>◆ Nies, _Computability and Randomness_</li></ul>
+<p><strong>4.3 可证性逻辑与不完全性深化 ➕</strong></p>
+<ul><li>◆ Boolos, _The Logic of Provability_</li><li>◆ Japaridze &amp; de Jongh, "The Logic of Provability", in _Handbook of Proof Theory_</li><li>◆ Franzén, _Inexhaustibility: A Non-Exhaustive Treatment_</li><li>◆ Franzén, _Gödel's Theorem: An Incomplete Guide to Its Use and Abuse_</li></ul>
+<p><strong>插入时机</strong>：阶段 4 完成后。_Inexhaustibility_ 是技术性伴侣，适合掌握不完全性定理后阅读。</p>
+<hr>
+<h2 id="阶段-5-证明论">阶段 5 · 证明论<a class="anchor" href="#阶段-5-证明论" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：研究形式证明本身，掌握<strong>自然演绎、相继式演算、正规化、切割消去、序数证明论</strong>。</p>
+<h3 id="必读-5">必读<a class="anchor" href="#必读-5" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Mancosu, Galvan &amp; Zach, _An Introduction to Proof Theory_</strong></li></ol>
+<ul><li>前半部分结构证明论；后半部分序数证明论与 Gentzen 一致性证明</li></ul>
+<ol><li><strong>★ Troelstra &amp; Schwichtenberg, _Basic Proof Theory_, 2nd ed.</strong></li></ol>
+<h3 id="替代-5">替代<a class="anchor" href="#替代-5" aria-hidden="true">#</a></h3>
+<ul><li>☆ Negri &amp; von Plato, _Structural Proof Theory_</li><li>☆ Girard, Lafont &amp; Taylor, _Proofs and Types_</li></ul>
+<h3 id="补充-5">补充<a class="anchor" href="#补充-5" aria-hidden="true">#</a></h3>
+<ul><li>△ Andrews, _An Introduction to Mathematical Logic and Type Theory_</li><li>△ Ebbinghaus, Flum &amp; Thomas, _Mathematical Logic_（其相继式演算章节可作过渡）</li></ul>
+<h3 id="本阶段前建议插入-λ-演算">本阶段前建议插入：λ 演算 ➕<a class="anchor" href="#本阶段前建议插入-λ-演算" aria-hidden="true">#</a></h3>
+<ul><li>◆ Hindley &amp; Seldin, _Lambda-Calculus and Combinators: An Introduction_</li><li>◆ Barendregt, _The Lambda Calculus: Its Syntax and Semantics_</li><li>◆ Selinger, _Lecture Notes on the Lambda Calculus_（<strong>免费</strong>）</li><li>◆ Pierce, _Types and Programming Languages_，前几章</li></ul>
+<p><strong>插入时机</strong>：阶段 5 之前或 5.2 开始时。<strong>先学无类型 λ 演算，再学简单类型 λ 演算。</strong></p>
+<h3 id="本阶段完成后可进入的专题-5">本阶段完成后可进入的专题<a class="anchor" href="#本阶段完成后可进入的专题-5" aria-hidden="true">#</a></h3>
+<p><strong>5.1 序数证明论</strong></p>
+<ul><li>◆ Pohlers, _Proof Theory: The First Step into Impredicativity_</li><li>◆ Schütte, _Proof Theory_</li><li>◆ Takeuti, _Proof Theory_, 2nd ed.</li></ul>
+<p><strong>5.2 类型论与 Curry–Howard</strong></p>
+<ul><li>◆ Martin-Löf, _Intuitionistic Type Theory_</li><li>◆ _Homotopy Type Theory: Univalent Foundations of Mathematics_</li><li>◆ Girard, Lafont &amp; Taylor, _Proofs and Types_</li><li>◆ Nederpelt &amp; Geuvers, _Type Theory and Formal Proof: An Introduction_</li><li>◆ Pierce, _Types and Programming Languages_</li><li>◆ Barendregt, "Lambda Calculi with Types", in _Handbook of Logic in Computer Science_</li><li>◆ <strong>Lean 4、Coq、Agda 官方教程</strong></li></ul>
+<p><strong>5.3 构造性数学与直觉主义</strong></p>
+<ul><li>◆ Dummett, _Elements of Intuitionism_, 2nd ed.</li><li>◆ Troelstra &amp; van Dalen, _Constructivism in Mathematics_</li></ul>
+<p><strong>5.4 线性逻辑 ➕</strong></p>
+<ul><li>◆ Girard, _Proofs and Types_</li><li>◆ _Handbook of Linear Logic_</li><li>◆ SEP："Linear Logic"</li></ul>
+<p><strong>插入时机</strong>：证明论与类型论之后。线性逻辑是资源敏感的子结构逻辑。</p>
+<p><strong>5.5 范畴逻辑 ➕</strong></p>
+<ul><li>◆ Awodey, _Category Theory_</li><li>◆ Goldblatt, _Topoi: The Categorial Analysis of Logic_</li><li>◆ Lambek &amp; Scott, _Introduction to Higher-Order Categorical Logic_</li><li>◆ SEP："Category Theory"、"Categorical Logic"</li></ul>
+<p><strong>插入时机</strong>：阶段 5 之后，作为统一逻辑与数学结构的高级视角。</p>
+<h3 id="原始论文">原始论文<a class="anchor" href="#原始论文" aria-hidden="true">#</a></h3>
+<ul><li>Gentzen, "Untersuchungen über das logische Schließen", _Mathematische Zeitschrift_ 39, 1935</li></ul>
+<hr>
+<h2 id="阶段-6-哲学逻辑">阶段 6 · 哲学逻辑<a class="anchor" href="#阶段-6-哲学逻辑" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：从哲学问题出发，追问经典逻辑的边界。</p>
+<h3 id="必读-6">必读<a class="anchor" href="#必读-6" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Bjorndahl, _An Introduction to Classical and Modal Logics_</strong> 或 <strong>★ Chellas, _Modal Logic: An Introduction_</strong></li><li><strong>★ Priest, _An Introduction to Non-Classical Logic_, 2nd ed.</strong></li><li><strong>★ MacFarlane, _Philosophical Logic: A Contemporary Introduction_</strong></li></ol>
+<h3 id="补充入门">补充入门<a class="anchor" href="#补充入门" aria-hidden="true">#</a></h3>
+<ul><li>△ Sider, _Logic for Philosophy_（比 Bjorndahl/Chellas 更易）</li></ul>
+<h3 id="模态逻辑扩展">模态逻辑扩展<a class="anchor" href="#模态逻辑扩展" aria-hidden="true">#</a></h3>
+<ul><li>◆ Blackburn, de Rijke &amp; Venema, _Modal Logic_</li><li>◆ Humberstone, _Philosophical Applications of Modal Logic_</li><li>◆ van Benthem, _Modal Logic for Open Minds_</li><li>◆ Hughes &amp; Cresswell, _A New Introduction to Modal Logic_</li><li>◆ Chagrov &amp; Zakharyaschev, _Modal Logic_</li><li>◆ Fitting &amp; Mendelsohn, _First-Order Modal Logic_</li><li>◆ van Benthem, _Modal Logic and Classical Logic_</li><li>◆ Garson, _Modal Logic for Philosophers_</li></ul>
+<h3 id="非经典逻辑扩展">非经典逻辑扩展<a class="anchor" href="#非经典逻辑扩展" aria-hidden="true">#</a></h3>
+<ul><li>◆ Dummett, _Elements of Intuitionism_</li><li>◆ Rescher, _Many-Valued Logic_</li><li>◆ Priest, _In Contradiction_, 2nd ed.</li><li>◆ Priest, _Doubt Truth to Be a Liar_</li><li>◆ Beall &amp; Restall, _Logical Pluralism_</li><li>◆ Restall, _An Introduction to Substructural Logics_</li><li>◆ Mares, _Relevant Logic: A Philosophical Introduction_</li><li>◆ Gabbay &amp; Guenthner (eds.), _Handbook of Philosophical Logic_</li></ul>
+<h3 id="条件句逻辑">条件句逻辑<a class="anchor" href="#条件句逻辑" aria-hidden="true">#</a></h3>
+<ul><li>◆ Lewis, _Counterfactuals_</li><li>◆ Stalnaker, _Inquiry_</li><li>◆ Bennett, _A Philosophical Guide to Conditionals_</li><li>◆ Harper, Stalnaker &amp; Pearce (eds.), _Ifs_</li><li>◆ Egré &amp; Rott, "The Logic of Conditionals", SEP</li></ul>
+<h3 id="认知逻辑与动态逻辑">认知逻辑与动态逻辑<a class="anchor" href="#认知逻辑与动态逻辑" aria-hidden="true">#</a></h3>
+<ul><li>◆ Fagin, Halpern, Moses &amp; Vardi, _Reasoning About Knowledge_</li><li>◆ van Benthem, _Logical Dynamics of Information and Interaction_</li><li>◆ van Ditmarsch, van der Hoek &amp; Kooi, _Dynamic Epistemic Logic_</li><li>◆ Meyer &amp; van der Hoek, _Epistemic Logic for AI and Computer Science_</li></ul>
+<h3 id="逻辑哲学核心扩展">逻辑哲学核心扩展<a class="anchor" href="#逻辑哲学核心扩展" aria-hidden="true">#</a></h3>
+<ul><li>◆ Quine, _Philosophy of Logic_, 2nd ed.</li><li>◆ Dummett, _The Logical Basis of Metaphysics_</li><li>◆ Haack, _Deviant Logic, Fuzzy Logic_</li><li>◆ Field, _Saving Truth from Paradox_</li><li>◆ McGee, _Truth, Vagueness, and Paradox_</li><li>◆ Beall, _Spandrels of Truth_</li><li>◆ Tarski, "The Concept of Truth in Formalized Languages", 1933</li><li>◆ Kripke, "Outline of a Theory of Truth", _Journal of Philosophy_ 72(19), 1975</li><li>◆ SEP："Logical Consequence"、"Logical Pluralism"、"Truth"、"Paradoxes"</li></ul>
+<h3 id="本阶段新增插入专题">本阶段新增插入专题 ➕<a class="anchor" href="#本阶段新增插入专题" aria-hidden="true">#</a></h3>
+<p><strong>6.1 自由逻辑</strong></p>
+<ul><li>◆ Lambert, _Free Logic: Selected Essays_</li><li>◆ Bencivenga, "Free Logics", in _Handbook of Philosophical Logic_</li><li>◆ SEP："Free Logic"</li><li><strong>插入时机</strong>：阶段 6，与相干逻辑、多值逻辑、次协调逻辑并列。先修：一阶逻辑。</li></ul>
+<p><strong>6.2 相干逻辑与子结构逻辑</strong></p>
+<ul><li>◆ Read, _Relevant Logic: A Philosophical Examination of Inference_</li><li>◆ Anderson &amp; Belnap, _Entailment: The Logic of Relevance and Necessity_</li><li>◆ Mares, _Relevant Logic: A Philosophical Introduction_</li><li>◆ Restall, _An Introduction to Substructural Logics_</li><li>◆ SEP："Relevant Logic"、"Substructural Logics"</li></ul>
+<p><strong>6.3 多元逻辑</strong></p>
+<ul><li>◆ Beall &amp; Restall, _Logical Pluralism_</li><li>◆ Shapiro, "Logical Pluralism"</li><li>◆ Cook, "Logical Pluralism"</li><li>◆ Restall, "Logical Pluralism and the Preservation of Warrant"</li><li>◆ SEP："Logical Pluralism"、"Logical Consequence"</li></ul>
+<p><strong>6.4 模糊逻辑</strong></p>
+<ul><li>◆ Klir &amp; Yuan, _Fuzzy Sets and Fuzzy Logic_</li><li>◆ Ross, _Fuzzy Logic with Engineering Applications_</li><li>◆ SEP："Fuzzy Logic"</li></ul>
+<p><strong>6.5 非单调逻辑</strong></p>
+<ul><li>◆ _Nonmonotonic Logic_ 相关专著</li><li>◆ SEP："Non-monotonic Logic"</li><li>◆ Gabbay &amp; Guenthner, _Handbook of Philosophical Logic_ 相关章节</li></ul>
+<p><strong>6.6 量子逻辑</strong></p>
+<ul><li>◆ _Quantum Logic_（Springer）相关专著</li><li>◆ SEP："Quantum Logic and Probability Theory"</li><li><strong>插入时机</strong>：阶段 6 之后，作为非经典逻辑在物理学中的应用专题。</li></ul>
+<p><strong>6.7 时序逻辑与动态逻辑</strong></p>
+<ul><li>◆ Huth &amp; Ryan, _Logic in Computer Science_</li><li>◆ Harel, Kozen &amp; Tiuryn, _Dynamic Logic_</li><li>◆ Blackburn et al., _Modal Logic_ 相关章节</li><li>◆ SEP："Temporal Logic"、"Dynamic Logic"</li><li><strong>插入时机</strong>：阶段 6 模态逻辑之后。<strong>计算机形式验证核心工具。</strong></li></ul>
+<hr>
+<h2 id="阶段-7-数学哲学">阶段 7 · 数学哲学<a class="anchor" href="#阶段-7-数学哲学" aria-hidden="true">#</a></h2>
+<p><strong>目标</strong>：理解<strong>逻辑主义、形式主义、直觉主义、结构主义、自然主义</strong>，以及集合论公理的哲学辩护。</p>
+<h3 id="必读-7">必读<a class="anchor" href="#必读-7" aria-hidden="true">#</a></h3>
+<ol><li><strong>★ Shapiro, _Thinking About Mathematics_</strong></li><li><strong>★ Benacerraf &amp; Putnam (eds.), _Philosophy of Mathematics: Selected Readings_, 2nd ed.</strong></li><li><strong>★ Maddy, _Realism in Mathematics_</strong></li><li><strong>★ Maddy, _Naturalism in Mathematics_</strong></li><li><strong>★ Mancosu (ed.), _The Philosophy of Mathematical Practice_</strong></li><li><strong>★ Detlefsen (ed.), _Proof, Logic and Formalization_</strong></li></ol>
+<h3 id="扩展">扩展<a class="anchor" href="#扩展" aria-hidden="true">#</a></h3>
+<ul><li>◆ Maddy, _Defending the Axioms_</li><li>◆ Shapiro, _Philosophy of Mathematics: Structure and Ontology_</li><li>◆ Linnebo, _Philosophy of Mathematics_</li><li>◆ Benacerraf, "Mathematical Truth", _Journal of Philosophy_ 70(19), 1973</li><li>◆ Putnam, "Mathematics without Foundations", _Journal of Philosophy_ 64(1), 1967</li><li>◆ Dummett, "The Philosophical Basis of Intuitionistic Logic", 1973</li><li>◆ SEP："Philosophy of Mathematics"、"Mathematical Realism"、"Structuralism in the Philosophy of Mathematics"、"Intuitionism in the Philosophy of Mathematics"</li></ul>
+<hr>
+<h2 id="阶段-8-资源-期刊与原始论文">阶段 8 · 资源、期刊与原始论文<a class="anchor" href="#阶段-8-资源-期刊与原始论文" aria-hidden="true">#</a></h2>
+<h3 id="在线资源">在线资源<a class="anchor" href="#在线资源" aria-hidden="true">#</a></h3>
+<ul><li>Peter Smith, Logic Matters：logicmatters.net</li><li>Open Logic Project：openlogicproject.org</li><li>Stanford Encyclopedia of Philosophy：plato.stanford.edu</li><li>Internet Encyclopedia of Philosophy：iep.utm.edu</li><li>Mathematics Stack Exchange、MathOverflow、Reddit r/logic</li></ul>
+<h3 id="期刊">期刊<a class="anchor" href="#期刊" aria-hidden="true">#</a></h3>
+<ul><li>_Journal of Symbolic Logic_</li><li>_Bulletin of Symbolic Logic_</li><li>_Annals of Pure and Applied Logic_</li><li>_Review of Symbolic Logic_</li><li>_Studia Logica_</li><li>_Notre Dame Journal of Formal Logic_</li><li>_Journal of Philosophical Logic_</li></ul>
+<h3 id="原始论文与关键论文集">原始论文与关键论文集<a class="anchor" href="#原始论文与关键论文集" aria-hidden="true">#</a></h3>
+<ul><li>Gödel, "Über formal unentscheidbare Sätze...", 1931</li><li>Gentzen, "Untersuchungen über das logische Schließen", 1935</li><li>Tarski, "The Concept of Truth in Formalized Languages", 1933</li><li>Kripke, "Outline of a Theory of Truth", 1975</li><li>Martin, "Borel Determinacy", 1975</li><li>Fagin, "Generalized First-Order Spectra...", 1974</li><li>Hrushovski, "The Mordell–Lang Conjecture for Function Fields", 1996</li><li>Barwise &amp; Feferman (eds.), _Model-Theoretic Logics_</li><li>Gabbay &amp; Guenthner (eds.), _Handbook of Philosophical Logic_</li></ul>
+<hr>
+<h2 id="补充-辅助与替代书库">补充：辅助与替代书库<a class="anchor" href="#补充-辅助与替代书库" aria-hidden="true">#</a></h2>
+<p><strong>这些书不插入主线，只在卡住或需要第二解释时查阅。</strong></p>
+<ul><li>Velleman, _How to Prove It_</li><li>Hammack, _Book of Proof_</li><li>Chiswell &amp; Hodges, _Mathematical Logic_</li><li>Leary &amp; Kristiansen, _A Friendly Introduction to Mathematical Logic_</li><li>Sider, _Logic for Philosophy_</li><li>Garson, _Modal Logic for Philosophers_</li><li>Ebbinghaus, Flum &amp; Thomas, _Mathematical Logic_</li><li>Peter Smith, _Gödel Without (Too Many) Tears_</li><li>Sipser, _Introduction to the Theory of Computation_</li><li>Enderton, _Elements of Set Theory_</li><li>Hodges, _A Shorter Model Theory_</li></ul>
+<hr>
+<h2 id="与本文其他部分的关系这张表是这份存档的用法">与本文其他部分的关系（<strong>这张表是这份存档的用法</strong>）<a class="anchor" href="#与本文其他部分的关系这张表是这份存档的用法" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>你原来的路径</th><th>本文哪里处理了它</th></tr></thead><tbody><tr><td>阶段 1–5 的主干</td><td><strong>第一部分的时间轴</strong>（我重排成逐季）</td></tr><tr><td>★ 必读的<strong>版次 / 习题 / 答案</strong></td><td><strong>附录 A</strong>（数学）与 <strong>附录 G</strong>（逻辑）——<strong>我核实过的</strong></td></tr><tr><td>「参考手册 vs 教科书」的问题</td><td><strong>附录 C</strong> 的警告表</td></tr><tr><td>每阶段后的 ◆ 专题</td><td><strong>附录 F 的 F.3 深入方向总表</strong></td></tr><tr><td>缺的<strong>数学骨架</strong>（原路径完全没有）</td><td><strong>附录 A</strong> + 第一部分时间轴</td></tr><tr><td>缺的<strong>计算机 / 语言学</strong>（原路径完全没有）</td><td>第一部分时间轴 + <strong>附录 F</strong></td></tr></tbody></table></div>
+<blockquote class="quote"><p><strong>⇒ 所以这份存档的作用是"对照与查证"。</strong> 你要走的路在<strong>第一部分</strong>；要看某本书的答案情况，查<strong>附录 A / G</strong>。</p></blockquote>
+<hr>
+<h1 id="附录-g-核实状态">附录 G · 核实状态<a class="anchor" href="#附录-g-核实状态" aria-hidden="true">#</a></h1>
+<p><strong>三轮独立核实已完成</strong>（三个代理：实际下载 PDF、抓取官网、读图书馆 OPAC 的 MARC 著录、调用 Stack Exchange API）。</p>
+<div class="tw"><table><thead><tr><th>报告</th><th>大小</th><th>内容</th></tr></thead><tbody><tr><td>[_verify_logic/逻辑学自学路径_书目核实报告.md](_verify_logic/逻辑学自学路径_书目核实报告.md)</td><td>44 KB</td><td><strong>32 本书逐本判断</strong>（教科书 vs 手册 / 有题 / 有答案 / 中译本）</td></tr><tr><td>[形式语义学与语言学_材料核实报告.md](形式语义学与语言学_材料核实报告.md)</td><td>59 KB</td><td>语言学材料全核实，<strong>含 27 条明确的"未核实"清单</strong></td></tr></tbody></table></div>
+<h2 id="已解决的关键问题">已解决的关键问题<a class="anchor" href="#已解决的关键问题" aria-hidden="true">#</a></h2>
+<div class="tw"><table><thead><tr><th>原问题</th><th>核实结果</th></tr></thead><tbody><tr><td>Velleman 答案</td><td>✔ <strong>书后 p.397</strong>；另有教师版</td></tr><tr><td>Velleman 中译本</td><td>❌ <strong>人邮 2009 那本是英文版</strong>，别按中译买</td></tr><tr><td>Halmos 答案</td><td>✔ <strong>无标准答案</strong>（作者序：全书是"一长串带提示的习题"）</td></tr><tr><td>Halmos 中译本</td><td>❌ 世图 2008 是<strong>英文版</strong></td></tr><tr><td><strong>Leary &amp; Kristiansen 是否免费</strong></td><td>✔ <strong>是</strong>，且<strong>大部分习题有解答</strong> → <strong>应作第一本元逻辑</strong></td></tr><tr><td>Open Logic Project</td><td>✔ 模块化集合（非单本教材）；<strong>有章末习题</strong></td></tr><tr><td>OLP 中文版</td><td>⚠️ <strong>AI 翻译，未经人工审校</strong>——定理以英文版为准</td></tr><tr><td><strong>Peter Smith 免费材料</strong></td><td>✔ <strong>IFL 免费 PDF + 逐章答案</strong>（你正在读的书）；IGT 免费 + 免费答案册</td></tr><tr><td>Peter Smith《IGT》习题</td><td>✔ <strong>书里故意不放题，答案在网站</strong>（"answers to most of the exercises"）</td></tr><tr><td>抽象代数答案</td><td>✔ Pinter 最可能满足；Artin / Dummit &amp; Foote 有社区解答</td></tr><tr><td><strong>Winter 是否免费</strong></td><td>⚠️ <strong>只有第 1–3 章 OA</strong>，第 4 章（量词）须买书</td></tr><tr><td><strong>Heim &amp; Kratzer 答案</strong></td><td>❌ <strong>没有，且网上也没有</strong>（提问帖零回答）</td></tr><tr><td>Carnie Workbook</td><td>✔ <strong>"over 120 problem sets with answers"</strong>（但摘要对应第 1 版）</td></tr><tr><td>Potts</td><td>✔ <strong>60 题 + 作者答案</strong>——语言学里罕见的"有答案"</td></tr><tr><td>语言学中译本</td><td>✔ Fromkin《语言引论》北大 2017；Yule《语言研究》商务 2023；蒋严/潘海华《形式语义学引论》</td></tr><tr><td>Lean 4 现状</td><td>✔ 全部链接现场核实；<strong>SF-in-Lean 仍是 alpha</strong></td></tr></tbody></table></div>
+<h2 id="仍然未核实的请勿当真">仍然未核实的（<strong>请勿当真</strong>）<a class="anchor" href="#仍然未核实的请勿当真" aria-hidden="true">#</a></h2>
+<ol><li><strong>多数书的"书后答案情况"</strong>——出版社页大面积 403/429。</li></ol>
+<p><strong>这不是"没有答案"，是"无法核实"。</strong> 建议用图书馆网络或搜 "&lt;书名&gt;" solutions2. <strong>Enderton《Elements of Set Theory》</strong>完整 9 章标题</p>
+<ol><li><strong>Tent &amp; Ziegler 疑似有官方解答</strong>（Semantic Scholar 有条目但页面打不开）——</li></ol>
+<p><strong>值得花五分钟去 Cambridge 页面确认</strong>，可能是模型论里唯一有官方答案的</p>
+<ol><li>抽象代数「只学群环域+理想+域扩张要读哪几章」——<strong>核实者拒绝凭记忆给章号</strong>（这是对的）</li><li><strong>Hunter《Metalogic》完全无法核实</strong> → 建议从路径移除</li><li>ng4.leanprover.cn\ 中文镜像的<strong>可访问性</strong></li><li>本机网络对 github / raw.githubusercontent / courses.csail.mit.edu 直连被拦</li></ol>
+<hr>
+<h1 id="附录-h-诚实声明">附录 H · 诚实声明<a class="anchor" href="#附录-h-诚实声明" aria-hidden="true">#</a></h1>
+<ul><li><strong>本路线图里的书，我一本都没读过。</strong> 推荐依据是它们在本领域的通行地位与</li></ul>
+<p>联网核实到的出版信息，<strong>不是我的阅读经验</strong>。</p>
+<ul><li>第一部分的"时间量感"、附录 C 的"选书铁律"是<strong>我的判断</strong>，不是事实陈述。</li><li>标 <code>✔</code> 的项目是我<strong>实际联网核实过</strong>的；标 <code>△</code> 是搜索确认存在但未逐项核实；</li></ul>
+<p>标 <code>?</code> 是<strong>尚未核实</strong>。</p>
+<ul><li>我过去有"凭印象编造引用"的记录，所以本文件刻意区分了这三档。</li></ul>
+<p><strong>凡是 <code>?</code> 的地方，请当作"未确认"，不要当真。</strong></p></main>
+</div>
+<button id="top" aria-label="回到顶部">↑</button>
+<script>
+const NAV=[{"level": 1, "text": "四科路线图", "id": "四科路线图", "children": [{"text": "⚠️ 2026-10-16 追加的重大修正：你的四科不是并列的", "id": "2026-10-16-追加的重大修正-你的四科不是并列的"}, {"text": "⚠️ 再往前：三处我在初稿里说错的地方", "id": "再往前-三处我在初稿里说错的地方"}]}, {"level": 1, "text": "第一部分 · 时间轴", "id": "第一部分-时间轴", "children": [{"text": "1.1 刻度与节奏", "id": "1-1-刻度与节奏"}, {"text": "1.2 深入索引：每一季打开哪些门", "id": "1-2-深入索引-每一季打开哪些门"}, {"text": "1.3 全图（核心 5–6 年，之后按兴趣分叉）", "id": "1-3-全图核心-56-年-之后按兴趣分叉"}, {"text": "1.4 逐季安排", "id": "1-4-逐季安排"}, {"text": "1.5 核心困惑：按时间轴走，还是按兴趣立刻铺开？", "id": "1-5-核心困惑-按时间轴走-还是按兴趣立刻铺开"}]}, {"level": 1, "text": "第二部分 · 怎么维护这份路线图", "id": "第二部分-怎么维护这份路线图", "children": [{"text": "2.1 你说一句，我做一件事", "id": "2-1-你说一句-我做一件事"}, {"text": "2.2 ⚠️ 一处变动，牵动哪些（防止\"只改时间轴、附录留旧数据\"）", "id": "2-2-一处变动-牵动哪些防止只改时间轴-附录留旧数据"}, {"text": "2.3 一份\"什么时候该回来\"的对照", "id": "2-3-一份什么时候该回来的对照"}, {"text": "2.4 ⚠️ 已知的待补完项", "id": "2-4-已知的待补完项"}, {"text": "2.5 早期「8 条方向清单」的处置记录", "id": "2-5-早期8-条方向清单的处置记录"}, {"text": "2.6 环境准备状态（2026-10-16 实测）", "id": "2-6-环境准备状态2026-10-16-实测"}, {"text": "2.7 这份路线图也可以当网页看（2026-10-17 加）", "id": "2-7-这份路线图也可以当网页看2026-10-17-加"}]}, {"level": 1, "text": "第三部分 · 里程碑系统", "id": "第三部分-里程碑系统", "children": [{"text": "3.1 为什么需要它", "id": "3-1-为什么需要它"}, {"text": "3.2 三种里程碑", "id": "3-2-三种里程碑"}, {"text": "3.3 五个标志性里程碑", "id": "3-3-五个标志性里程碑"}]}, {"level": 1, "text": "附录 F · 深度地图与深入方向", "id": "附录-f-深度地图与深入方向", "children": [{"text": "F.0 进度快照（每次维护时更新，带日期）", "id": "f-0-进度快照每次维护时更新-带日期"}, {"text": "F.1 三种标记的分工", "id": "f-1-三种标记的分工"}, {"text": "F.2 每条线现在停在哪（深度地图）", "id": "f-2-每条线现在停在哪深度地图"}, {"text": "F.3 深入方向总表", "id": "f-3-深入方向总表"}, {"text": "F.4 副科材料表（你 2026-10-16 指出的缺口）", "id": "f-4-副科材料表你-2026-10-16-指出的缺口"}]}, {"level": 1, "text": "附录 A · 数学骨架书单（英文优先）", "id": "附录-a-数学骨架书单英文优先", "children": [{"text": "A.0 数学书怎么读（学习方法）", "id": "a-0-数学书怎么读学习方法"}, {"text": "A.1 七门课与顺序", "id": "a-1-七门课与顺序"}, {"text": "A.2 一个必须先知道的现实：英文经典普遍没有答案册", "id": "a-2-一个必须先知道的现实-英文经典普遍没有答案册"}, {"text": "A.3 数学分析", "id": "a-3-数学分析"}, {"text": "A.4 高等代数（要证明导向，不要计算导向）", "id": "a-4-高等代数要证明导向-不要计算导向"}, {"text": "A.5 抽象代数", "id": "a-5-抽象代数"}, {"text": "A.6 解析几何 —— 一个判断题", "id": "a-6-解析几何-一个判断题"}, {"text": "A.7 点集拓扑", "id": "a-7-点集拓扑"}, {"text": "A.8 实分析与复分析", "id": "a-8-实分析与复分析"}, {"text": "A.9 推荐顺序", "id": "a-9-推荐顺序"}, {"text": "A.10 习题答案的总策略", "id": "a-10-习题答案的总策略"}, {"text": "A.11 待补完（? 项）", "id": "a-11-待补完-项"}]}, {"level": 1, "text": "附录 B · 七层判据（每一层怎么测）", "id": "附录-b-七层判据每一层怎么测", "children": []}, {"level": 1, "text": "附录 C · 选书铁律", "id": "附录-c-选书铁律", "children": [{"text": "⚠️ 关于\"参考手册\"的警告（核实后已修正）", "id": "关于参考手册的警告核实后已修正"}]}, {"level": 1, "text": "附录 D · 没有答案时怎么办", "id": "附录-d-没有答案时怎么办", "children": []}, {"level": 1, "text": "附录 E · 风险与应对", "id": "附录-e-风险与应对", "children": []}, {"level": 1, "text": "附录 I · 框架（为什么这四科是一个知识体）", "id": "附录-i-框架为什么这四科是一个知识体", "children": [{"text": "I.1 这四科不是四个学科，是一个知识体的四个投影", "id": "i-1-这四科不是四个学科-是一个知识体的四个投影"}, {"text": "I.2 结构：一条主干 + 五个汇合点", "id": "i-2-结构-一条主干-五个汇合点"}]}, {"level": 1, "text": "附录 K · 专业方向怎么分化（「我该为哪套入场券付几年」）", "id": "附录-k-专业方向怎么分化我该为哪套入场券付几年", "children": [{"text": "K.1 先纠正前提：「逻辑 vs 数学」是假的二选一", "id": "k-1-先纠正前提-逻辑-vs-数学是假的二选一"}, {"text": "K.2 你自己的排序，其实不是\"学科排序\"", "id": "k-2-你自己的排序-其实不是学科排序"}, {"text": "K.3 关于哲学：你的排除对了一半", "id": "k-3-关于哲学-你的排除对了一半"}, {"text": "K.4 四条路的入场券对比", "id": "k-4-四条路的入场券对比"}, {"text": "K.5 三个测试（比想更有效）", "id": "k-5-三个测试比想更有效"}, {"text": "K.6 决策时间表", "id": "k-6-决策时间表"}, {"text": "K.7 一条容易忽略的提醒：\"报考哪个系\"要看学校", "id": "k-7-一条容易忽略的提醒-报考哪个系要看学校"}, {"text": "K.8 关于语言学（回应你的追加问题）", "id": "k-8-关于语言学回应你的追加问题"}, {"text": "K.9 这一节怎么用", "id": "k-9-这一节怎么用"}]}, {"level": 1, "text": "附录 J · 你收到的那份 8 阶段逻辑学路径（存档）", "id": "附录-j-你收到的那份-8-阶段逻辑学路径存档", "children": [{"text": "⚠️ 这份存档的性质，先说清", "id": "这份存档的性质-先说清"}, {"text": "阶段 1 · 元逻辑转向", "id": "阶段-1-元逻辑转向"}, {"text": "阶段 2 · 集合论", "id": "阶段-2-集合论"}, {"text": "阶段 3 · 模型论", "id": "阶段-3-模型论"}, {"text": "阶段 4 · 可计算性理论", "id": "阶段-4-可计算性理论"}, {"text": "阶段 5 · 证明论", "id": "阶段-5-证明论"}, {"text": "阶段 6 · 哲学逻辑", "id": "阶段-6-哲学逻辑"}, {"text": "阶段 7 · 数学哲学", "id": "阶段-7-数学哲学"}, {"text": "阶段 8 · 资源、期刊与原始论文", "id": "阶段-8-资源-期刊与原始论文"}, {"text": "补充：辅助与替代书库", "id": "补充-辅助与替代书库"}, {"text": "与本文其他部分的关系（这张表是这份存档的用法）", "id": "与本文其他部分的关系这张表是这份存档的用法"}]}, {"level": 1, "text": "附录 G · 核实状态", "id": "附录-g-核实状态", "children": [{"text": "已解决的关键问题", "id": "已解决的关键问题"}, {"text": "仍然未核实的（请勿当真）", "id": "仍然未核实的请勿当真"}]}, {"level": 1, "text": "附录 H · 诚实声明", "id": "附录-h-诚实声明", "children": []}];
+const nav=document.getElementById('nav');
+nav.innerHTML=NAV.map(function(g){
+  if(g.level===1){
+    let sub=(g.children||[]).map(function(c){
+      return '<a href="#'+c.id+'" data-id="'+c.id+'">'+c.text+'</a>';
+    }).join('');
+    return '<div class="grp"><a href="#'+g.id+'">'+g.text+'</a>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div>';
+  }
+  return '<div class="grp"><a href="#'+g.id+'">'+g.text+'</a></div>';
+}).join('');
+
+// 滚动高亮 + 进度条
+const links=[].slice.call(nav.querySelectorAll('.sub a'));
+const heads=links.map(function(a){return document.getElementById(a.dataset.id)}).filter(Boolean);
+const bar=document.getElementById('bar');
+function onScroll(){
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
+  document.getElementById('top').style.display=window.scrollY>600?'flex':'none';
+  let cur=-1;
+  for(let i=0;i<heads.length;i++){ if(heads[i].getBoundingClientRect().top<130) cur=i; }
+  links.forEach(function(a,i){ a.classList.toggle('on', i===cur); });
+}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+document.getElementById('top').onclick=function(){scrollTo({top:0,behavior:'smooth'})};
+document.getElementById('menu').onclick=function(){nav.classList.toggle('open')};
+nav.addEventListener('click',function(e){ if(e.target.tagName==='A') nav.classList.remove('open'); });
+
+// 搜索
+const q=document.getElementById('q'), hits=document.getElementById('hits');
+const INDEX=[{"id": "四科路线图", "t": "四科路线图", "sec": ""}, {"id": "2026-10-16-追加的重大修正-你的四科不是并列的", "t": "⚠️ 2026-10-16 追加的重大修正：你的四科不是并列的", "sec": "四科路线图"}, {"id": "再往前-三处我在初稿里说错的地方", "t": "⚠️ 再往前：三处我在初稿里说错的地方", "sec": "四科路线图"}, {"id": "第一部分-时间轴", "t": "第一部分 · 时间轴", "sec": ""}, {"id": "1-1-刻度与节奏", "t": "1.1 刻度与节奏", "sec": "第一部分 · 时间轴"}, {"id": "1-2-深入索引-每一季打开哪些门", "t": "1.2 深入索引：每一季打开哪些门", "sec": "第一部分 · 时间轴"}, {"id": "1-3-全图核心-56-年-之后按兴趣分叉", "t": "1.3 全图（核心 5–6 年，之后按兴趣分叉）", "sec": "第一部分 · 时间轴"}, {"id": "1-4-逐季安排", "t": "1.4 逐季安排", "sec": "第一部分 · 时间轴"}, {"id": "1-5-核心困惑-按时间轴走-还是按兴趣立刻铺开", "t": "1.5 核心困惑：按时间轴走，还是按兴趣立刻铺开？", "sec": "第一部分 · 时间轴"}, {"id": "第二部分-怎么维护这份路线图", "t": "第二部分 · 怎么维护这份路线图", "sec": ""}, {"id": "2-1-你说一句-我做一件事", "t": "2.1 你说一句，我做一件事", "sec": "第二部分 · 怎么维"}, {"id": "2-2-一处变动-牵动哪些防止只改时间轴-附录留旧数据", "t": "2.2 ⚠️ 一处变动，牵动哪些（防止\"只改时间轴、附录留旧数据\"）", "sec": "第二部分 · 怎么维"}, {"id": "2-3-一份什么时候该回来的对照", "t": "2.3 一份\"什么时候该回来\"的对照", "sec": "第二部分 · 怎么维"}, {"id": "2-4-已知的待补完项", "t": "2.4 ⚠️ 已知的待补完项", "sec": "第二部分 · 怎么维"}, {"id": "2-5-早期8-条方向清单的处置记录", "t": "2.5 早期「8 条方向清单」的处置记录", "sec": "第二部分 · 怎么维"}, {"id": "2-6-环境准备状态2026-10-16-实测", "t": "2.6 环境准备状态（2026-10-16 实测）", "sec": "第二部分 · 怎么维"}, {"id": "2-7-这份路线图也可以当网页看2026-10-17-加", "t": "2.7 这份路线图也可以当网页看（2026-10-17 加）", "sec": "第二部分 · 怎么维"}, {"id": "第三部分-里程碑系统", "t": "第三部分 · 里程碑系统", "sec": ""}, {"id": "3-1-为什么需要它", "t": "3.1 为什么需要它", "sec": "第三部分 · 里程碑"}, {"id": "3-2-三种里程碑", "t": "3.2 三种里程碑", "sec": "第三部分 · 里程碑"}, {"id": "3-3-五个标志性里程碑", "t": "3.3 五个标志性里程碑", "sec": "第三部分 · 里程碑"}, {"id": "附录-f-深度地图与深入方向", "t": "附录 F · 深度地图与深入方向", "sec": ""}, {"id": "f-0-进度快照每次维护时更新-带日期", "t": "F.0 进度快照（每次维护时更新，带日期）", "sec": "附录 F · 深度地"}, {"id": "f-1-三种标记的分工", "t": "F.1 三种标记的分工", "sec": "附录 F · 深度地"}, {"id": "f-2-每条线现在停在哪深度地图", "t": "F.2 每条线现在停在哪（深度地图）", "sec": "附录 F · 深度地"}, {"id": "f-3-深入方向总表", "t": "F.3 深入方向总表", "sec": "附录 F · 深度地"}, {"id": "f-4-副科材料表你-2026-10-16-指出的缺口", "t": "F.4 副科材料表（你 2026-10-16 指出的缺口）", "sec": "附录 F · 深度地"}, {"id": "附录-a-数学骨架书单英文优先", "t": "附录 A · 数学骨架书单（英文优先）", "sec": ""}, {"id": "a-0-数学书怎么读学习方法", "t": "A.0 数学书怎么读（学习方法）", "sec": "附录 A · 数学骨"}, {"id": "a-1-七门课与顺序", "t": "A.1 七门课与顺序", "sec": "附录 A · 数学骨"}, {"id": "a-2-一个必须先知道的现实-英文经典普遍没有答案册", "t": "A.2 一个必须先知道的现实：英文经典普遍没有答案册", "sec": "附录 A · 数学骨"}, {"id": "a-3-数学分析", "t": "A.3 数学分析", "sec": "附录 A · 数学骨"}, {"id": "a-4-高等代数要证明导向-不要计算导向", "t": "A.4 高等代数（要证明导向，不要计算导向）", "sec": "附录 A · 数学骨"}, {"id": "a-5-抽象代数", "t": "A.5 抽象代数", "sec": "附录 A · 数学骨"}, {"id": "a-6-解析几何-一个判断题", "t": "A.6 解析几何 —— 一个判断题", "sec": "附录 A · 数学骨"}, {"id": "a-7-点集拓扑", "t": "A.7 点集拓扑", "sec": "附录 A · 数学骨"}, {"id": "a-8-实分析与复分析", "t": "A.8 实分析与复分析", "sec": "附录 A · 数学骨"}, {"id": "a-9-推荐顺序", "t": "A.9 推荐顺序", "sec": "附录 A · 数学骨"}, {"id": "a-10-习题答案的总策略", "t": "A.10 习题答案的总策略", "sec": "附录 A · 数学骨"}, {"id": "a-11-待补完-项", "t": "A.11 待补完（? 项）", "sec": "附录 A · 数学骨"}, {"id": "附录-b-七层判据每一层怎么测", "t": "附录 B · 七层判据（每一层怎么测）", "sec": ""}, {"id": "附录-c-选书铁律", "t": "附录 C · 选书铁律", "sec": ""}, {"id": "关于参考手册的警告核实后已修正", "t": "⚠️ 关于\"参考手册\"的警告（核实后已修正）", "sec": "附录 C · 选书铁"}, {"id": "附录-d-没有答案时怎么办", "t": "附录 D · 没有答案时怎么办", "sec": ""}, {"id": "附录-e-风险与应对", "t": "附录 E · 风险与应对", "sec": ""}, {"id": "附录-i-框架为什么这四科是一个知识体", "t": "附录 I · 框架（为什么这四科是一个知识体）", "sec": ""}, {"id": "i-1-这四科不是四个学科-是一个知识体的四个投影", "t": "I.1 这四科不是四个学科，是一个知识体的四个投影", "sec": "附录 I · 框架（"}, {"id": "i-2-结构-一条主干-五个汇合点", "t": "I.2 结构：一条主干 + 五个汇合点", "sec": "附录 I · 框架（"}, {"id": "附录-k-专业方向怎么分化我该为哪套入场券付几年", "t": "附录 K · 专业方向怎么分化（「我该为哪套入场券付几年」）", "sec": ""}, {"id": "k-1-先纠正前提-逻辑-vs-数学是假的二选一", "t": "K.1 先纠正前提：「逻辑 vs 数学」是假的二选一", "sec": "附录 K · 专业方"}, {"id": "k-2-你自己的排序-其实不是学科排序", "t": "K.2 你自己的排序，其实不是\"学科排序\"", "sec": "附录 K · 专业方"}, {"id": "k-3-关于哲学-你的排除对了一半", "t": "K.3 关于哲学：你的排除对了一半", "sec": "附录 K · 专业方"}, {"id": "k-4-四条路的入场券对比", "t": "K.4 四条路的入场券对比", "sec": "附录 K · 专业方"}, {"id": "k-5-三个测试比想更有效", "t": "K.5 三个测试（比想更有效）", "sec": "附录 K · 专业方"}, {"id": "k-6-决策时间表", "t": "K.6 决策时间表", "sec": "附录 K · 专业方"}, {"id": "k-7-一条容易忽略的提醒-报考哪个系要看学校", "t": "K.7 一条容易忽略的提醒：\"报考哪个系\"要看学校", "sec": "附录 K · 专业方"}, {"id": "k-8-关于语言学回应你的追加问题", "t": "K.8 关于语言学（回应你的追加问题）", "sec": "附录 K · 专业方"}, {"id": "k-9-这一节怎么用", "t": "K.9 这一节怎么用", "sec": "附录 K · 专业方"}, {"id": "附录-j-你收到的那份-8-阶段逻辑学路径存档", "t": "附录 J · 你收到的那份 8 阶段逻辑学路径（存档）", "sec": ""}, {"id": "这份存档的性质-先说清", "t": "⚠️ 这份存档的性质，先说清", "sec": "附录 J · 你收到"}, {"id": "阶段-1-元逻辑转向", "t": "阶段 1 · 元逻辑转向", "sec": "附录 J · 你收到"}, {"id": "阶段-2-集合论", "t": "阶段 2 · 集合论", "sec": "附录 J · 你收到"}, {"id": "阶段-3-模型论", "t": "阶段 3 · 模型论", "sec": "附录 J · 你收到"}, {"id": "阶段-4-可计算性理论", "t": "阶段 4 · 可计算性理论", "sec": "附录 J · 你收到"}, {"id": "阶段-5-证明论", "t": "阶段 5 · 证明论", "sec": "附录 J · 你收到"}, {"id": "阶段-6-哲学逻辑", "t": "阶段 6 · 哲学逻辑", "sec": "附录 J · 你收到"}, {"id": "阶段-7-数学哲学", "t": "阶段 7 · 数学哲学", "sec": "附录 J · 你收到"}, {"id": "阶段-8-资源-期刊与原始论文", "t": "阶段 8 · 资源、期刊与原始论文", "sec": "附录 J · 你收到"}, {"id": "补充-辅助与替代书库", "t": "补充：辅助与替代书库", "sec": "附录 J · 你收到"}, {"id": "与本文其他部分的关系这张表是这份存档的用法", "t": "与本文其他部分的关系（这张表是这份存档的用法）", "sec": "附录 J · 你收到"}, {"id": "附录-g-核实状态", "t": "附录 G · 核实状态", "sec": ""}, {"id": "已解决的关键问题", "t": "已解决的关键问题", "sec": "附录 G · 核实状"}, {"id": "仍然未核实的请勿当真", "t": "仍然未核实的（请勿当真）", "sec": "附录 G · 核实状"}, {"id": "附录-h-诚实声明", "t": "附录 H · 诚实声明", "sec": ""}];
+function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+function run(){
+  const v=q.value.trim().toLowerCase();
+  if(!v){ hits.style.display='none'; hits.innerHTML=''; return; }
+  const res=INDEX.filter(function(x){return x.t.toLowerCase().indexOf(v)>=0}).slice(0,40);
+  hits.innerHTML = res.length
+    ? res.map(function(x){return '<a href="#'+x.id+'"><span class="sec">'+esc(x.sec)+'</span>'+esc(x.t)+'</a>'}).join('')
+    : '<a>没有匹配结果</a>';
+  hits.style.display='block';
+}
+q.addEventListener('input',run);
+q.addEventListener('keydown',function(e){ if(e.key==='Escape'){q.value='';run();q.blur()} });
+document.addEventListener('click',function(e){ if(!hits.contains(e.target)&&e.target!==q) hits.style.display='none' });
+addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); q.focus(); q.select(); }
+});
+// 搜索跳转后高亮
+hits.addEventListener('click',function(){ setTimeout(function(){q.value='';run()},200) });
+
+document.getElementById('meta').textContent='237 节';
+</script>
+</body></html>
